@@ -13,8 +13,8 @@ final class JqlUrlBuilderTest extends TestCase
     public function inOpenSprints(): void
     {
         $this->assertEquals(
-            'https://sevensenders.atlassian.net/rest/api/3/search?jql=sprint in openSprints()',
-            JqlUrlBuilder::inOpenSprints()->build()
+            'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()',
+            JqlUrlBuilder::inOpenSprints('company-name')->build()
         );
     }
 
@@ -22,8 +22,8 @@ final class JqlUrlBuilderTest extends TestCase
     public function forCoreServiceTeamProject(): void
     {
         $this->assertEquals(
-            'https://sevensenders.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND project IN ("Core Service Team ")',
-            JqlUrlBuilder::inOpenSprints()->inProject('Core Service Team ')->build()
+            'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND project IN ("Core Service Team ")',
+            JqlUrlBuilder::inOpenSprints('company-name')->inProject('Core Service Team ')->build()
         );
     }
 
@@ -31,8 +31,8 @@ final class JqlUrlBuilderTest extends TestCase
     public function forReviewStatus(): void
     {
         $this->assertEquals(
-            'https://sevensenders.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND project IN ("Core Service Team ") AND status IN ("In Review")',
-            JqlUrlBuilder::inOpenSprints()
+            'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND project IN ("Core Service Team ") AND status IN ("In Review")',
+            JqlUrlBuilder::inOpenSprints('company-name')
                 ->inProject('Core Service Team ')
                 ->withStatus("In Review")
                 ->build()
@@ -43,8 +43,8 @@ final class JqlUrlBuilderTest extends TestCase
     public function statusDidNotChangeSinceDays(): void
     {
         $this->assertEquals(
-            'https://sevensenders.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND project IN ("Core Service Team ") AND status IN ("In Review") AND NOT status changed after -1d',
-            JqlUrlBuilder::inOpenSprints()
+            'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND project IN ("Core Service Team ") AND status IN ("In Review") AND NOT status changed after -1d',
+            JqlUrlBuilder::inOpenSprints('company-name')
                 ->inProject('Core Service Team ')
                 ->withStatus("In Review")
                 ->statusDidNotChangeSinceDays(1)

@@ -6,7 +6,10 @@ namespace App\ScrumMaster\Jira;
 
 final class JqlUrlBuilder
 {
-    private const BASE_URL = 'https://sevensenders.atlassian.net/rest/api/3/search';
+    private const BASE_URL = 'https://%s.atlassian.net/rest/api/3/search';
+
+    /** @var string */
+    private $companyName;
 
     /** @var string */
     private $jqlInitParam;
@@ -20,13 +23,14 @@ final class JqlUrlBuilder
     /** @var int */
     private $statusDidNotChangeSinceDays;
 
-    public static function inOpenSprints(): JqlUrlBuilder
+    public static function inOpenSprints(string $companyName): JqlUrlBuilder
     {
-        return new self('?jql=sprint in openSprints()');
+        return new self($companyName, '?jql=sprint in openSprints()');
     }
 
-    public function __construct(string $jqlInitParam)
+    private function __construct(string $companyName, string $jqlInitParam)
     {
+        $this->companyName = $companyName;
         $this->jqlInitParam = $jqlInitParam;
     }
 
@@ -53,7 +57,7 @@ final class JqlUrlBuilder
 
     public function build(): string
     {
-        $finalUrl = self::BASE_URL . $this->jqlInitParam;
+        $finalUrl = sprintf(self::BASE_URL, $this->companyName) . $this->jqlInitParam;
 
         if ($this->projectName) {
             $finalUrl .= sprintf(' AND project IN ("%s")', $this->projectName);
