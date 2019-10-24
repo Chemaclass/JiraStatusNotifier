@@ -1,17 +1,27 @@
-<?php
+<?php declare(strict_types=1);
+
 require_once '../vendor/autoload.php';
 
+use App\ScrumMaster\JiraTickets;
+use App\ScrumMaster\JqlUrlBuilder;
 use Symfony\Component\HttpClient\HttpClient;
 
-$username = "j.valera@sevensenders.com";
-$password = "ZzwVdEtyrDH3bT1WpXmG84DF";
+$dotEnv = Dotenv\Dotenv::create(__DIR__ . '/..');
+$dotEnv->load();
 
 $client = HttpClient::create([
-    'auth_basic' => [$username, $password],
+    'auth_basic' => [getenv('JIRA_USERNAME'), getenv('JIRA_PASSWORD')],
 ]);
 
-$url = 'https://sevensenders.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
-$url .= ' AND project IN ("Core Service Team ") AND status = Verified AND NOT status changed after -1d';
+$url = JqlUrlBuilder::inOpenSprints()
+    ->inProject('Core Service Team ')
+    ->withStatus("In Review")
+    ->statusDidNotChangeSinceDays(1)
+    ->build();
+
 $response = $client->request('GET', $url);
 $content = $response->toArray();
-dump($content);
+$jiraTickets = JiraTickets::fromJira($content);
+dump($jiraTickets);
+dd($content);
+
