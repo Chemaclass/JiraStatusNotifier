@@ -8,20 +8,23 @@ use App\ScrumMaster\Jira\ReadModel\JiraTicket;
 
 final class SlackMessage
 {
-    public static function fromJiraTickets(array $jiraTickets)
+    public static function fromJiraTickets(array $jiraTickets): string
     {
         $result = '';
 
-        /** @var JiraTicket $jiraTicket */
         foreach ($jiraTickets as $jiraTicket) {
-            $result .= <<<TXT
-The ticket "{$jiraTicket->title()}" ({$jiraTicket->key()}) is still in review since one day.
-Assignee to {$jiraTicket->assignee()->displayName()} ({$jiraTicket->assignee()->name()}), please take of it!
-
-
-TXT;
+            $result .= static::generateMessageFromTicket($jiraTicket) . PHP_EOL;
         }
 
         return $result;
+    }
+
+    private static function generateMessageFromTicket(JiraTicket $jiraTicket): string
+    {
+        return <<<TXT
+The ticket "{$jiraTicket->title()}" ({$jiraTicket->key()}) is still in review since one day.
+Assignee to {$jiraTicket->assignee()->displayName()} ({$jiraTicket->assignee()->name()}), please take of it!
+
+TXT;
     }
 }

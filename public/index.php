@@ -2,26 +2,19 @@
 
 require_once '../vendor/autoload.php';
 
-use App\ScrumMaster\JiraTickets;
-use App\ScrumMaster\JqlUrlBuilder;
+use App\ScrumMaster\Jira\JiraHttpClient;
+use App\ScrumMaster\Slack\SlackHttpClient;
 use Symfony\Component\HttpClient\HttpClient;
 
 $dotEnv = Dotenv\Dotenv::create(__DIR__ . '/..');
 $dotEnv->load();
 
-$client = HttpClient::create([
+$jiraTickets = (new JiraHttpClient(HttpClient::create([
     'auth_basic' => [getenv('JIRA_USERNAME'), getenv('JIRA_PASSWORD')],
-]);
+])))->inReview(getenv('COMPANY_NAME'), 'Core Service Team ');
 
-$url = JqlUrlBuilder::inOpenSprints()
-    ->inProject('Core Service Team ')
-    ->withStatus("In Review")
-    ->statusDidNotChangeSinceDays(1)
-    ->build();
+$response = (new SlackHttpClient(HttpClient::create([
+    'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
+])))->postToChannel('master-of-scrums', $jiraTickets);
 
-$response = $client->request('GET', $url);
-$content = $response->toArray();
-$jiraTickets = JiraTickets::fromJira($content);
-dump($jiraTickets);
-dd($content);
-
+dd($response->getContent());
