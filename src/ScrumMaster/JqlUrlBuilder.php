@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\ScrumMaster;
 
-final class JiraUrlBuilder
+final class JqlUrlBuilder
 {
-    private const BASE_URL = 'https://sevensenders.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
+    private const BASE_URL = 'https://sevensenders.atlassian.net/rest/api/3/search';
+
+    /** @var string */
+    private $jqlInitParam;
 
     /** @var string */
     private $projectName;
@@ -17,31 +20,21 @@ final class JiraUrlBuilder
     /** @var int */
     private $statusDidNotChangeSinceDays;
 
-    public static function inProject(string $name): JiraUrlBuilder
+    public static function inOpenSprints(): JqlUrlBuilder
     {
-        $self = new self();
-        $self->projectName = $name;
-
-        return $self;
+        return new self('?jql=sprint in openSprints()');
     }
 
-    public function build(): string
+    public function __construct(string $jqlInitParam)
     {
-        $finalUrl = self::BASE_URL;
+        $this->jqlInitParam = $jqlInitParam;
+    }
 
-        if ($this->projectName) {
-            $finalUrl .= sprintf(' AND project IN ("%s")', $this->projectName);
-        }
+    public function inProject(string $name): self
+    {
+        $this->projectName = $name;
 
-        if ($this->status) {
-            $finalUrl .= sprintf(' AND status IN ("%s")', $this->status);
-        }
-
-        if ($this->statusDidNotChangeSinceDays) {
-            $finalUrl .= sprintf(' AND NOT status changed after -%dd', $this->statusDidNotChangeSinceDays);
-        }
-
-        return $finalUrl;
+        return $this;
     }
 
     public function withStatus(string $status): self
@@ -56,5 +49,24 @@ final class JiraUrlBuilder
         $this->statusDidNotChangeSinceDays = $days;
 
         return $this;
+    }
+
+    public function build(): string
+    {
+        $finalUrl = self::BASE_URL . $this->jqlInitParam;
+
+        if ($this->projectName) {
+            $finalUrl .= sprintf(' AND project IN ("%s")', $this->projectName);
+        }
+
+        if ($this->status) {
+            $finalUrl .= sprintf(' AND status IN ("%s")', $this->status);
+        }
+
+        if ($this->statusDidNotChangeSinceDays) {
+            $finalUrl .= sprintf(' AND NOT status changed after -%dd', $this->statusDidNotChangeSinceDays);
+        }
+
+        return $finalUrl;
     }
 }
