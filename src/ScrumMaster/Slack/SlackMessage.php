@@ -19,21 +19,20 @@ final class SlackMessage
         return $result;
     }
 
-    private static function generateMessageFromTicket(JiraTicket $ticket, ?string $companyName = null): string
+    private static function generateMessageFromTicket(JiraTicket $ticket, string $companyName): string
     {
         $assignee = $ticket->assignee();
         $status = $ticket->status();
         $daysDiff = $status->changeDate()->diff(new \DateTimeImmutable())->days;
+        $url = "https://{$companyName}.atlassian.net/browse/{$ticket->key()}";
+        $dayWord = ($daysDiff > 1) ? 'days' : 'day';
 
-        $text = <<<TXT
-The ticket "{$ticket->title()}" ({$ticket->key()})[{$ticket->storyPoints()}SP] is still {$status->name()} since {$daysDiff} day.
-Assignee to {$assignee->displayName()} ({$assignee->name()}), please take of it!
+        return <<<TXT
+{$assignee->displayName()} ({$assignee->name()}), please take care of your work!
+*Ticket*: {$ticket->title()}[<{$url}|{$ticket->key()}>]
+*Current status*: *{$status->name()}* since *{$daysDiff} $dayWord*
+*Story Points*: {$ticket->storyPoints()}
 
 TXT;
-        if ($companyName) {
-            $text .= "URL: https://{$companyName}.atlassian.net/browse/{$ticket->key()}" . PHP_EOL;
-        }
-
-        return $text;
     }
 }

@@ -14,73 +14,31 @@ use PHPUnit\Framework\TestCase;
 final class SlackMessageTest extends TestCase
 {
     /** @test */
-    public function messageWithCompanyName(): void
+    public function renderAMessageForATicket(): void
     {
         $expectedMessage = <<<TXT
-The ticket "Ticket Title" (CST-KEY)[5SP] is still IN QA since one day.
-Assignee to Name Surname (assignee-name), please take of it!
-URL: https://company-name.atlassian.net/browse/CST-KEY
-
-
+Full Name (assignee.name), please take care of your work!
+*Ticket*: Ticket Title[<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>]
+*Current status*: *IN QA* since *2 days*
+*Story Points*: 5
+\n
 TXT;
+
         $jiraTickets = [
             new JiraTicket(
                 $title = 'Ticket Title',
                 $key = 'CST-KEY',
-                new TicketStatus('IN QA', new DateTimeImmutable("2019-10-22T17:07:52.459+0200")),
+                new TicketStatus('IN QA', new DateTimeImmutable("2019-10-22")),
                 new Assignee(
-                    $name = 'assignee-name',
+                    $name = 'assignee.name',
                     $key = 'assignee-key',
                     $emailAddress = 'person@companymail.com',
-                    $displayName = 'Name Surname'
+                    $displayName = 'Full Name'
                 ),
                 $storyPoints = 5
             ),
         ];
 
         $this->assertEquals($expectedMessage, SlackMessage::fromJiraTickets($jiraTickets, 'company-name'));
-    }
-
-    /** @test */
-    public function generateAMessageFromTwoTicket(): void
-    {
-        $expectedMessage = <<<TXT
-The ticket "Ticket Title" (CST-KEY)[1SP] is still IN REVIEW since one day.
-Assignee to Name Surname (assignee-name), please take of it!
-
-The ticket "Ticket Title2" (CST-KEY2)[2SP] is still IN QA since one day.
-Assignee to Name Surname2 (assignee-name2), please take of it!
-
-
-TXT;
-
-        $jiraTickets = [
-            new JiraTicket(
-                $title = 'Ticket Title',
-                $key = 'CST-KEY',
-                new TicketStatus('IN REVIEW', new DateTimeImmutable("2019-10-22T17:07:52.459+0200")),
-                new Assignee(
-                    $name = 'assignee-name',
-                    $key = 'assignee-key',
-                    $emailAddress = 'person@companymail.com',
-                    $displayName = 'Name Surname'
-                ),
-                $storyPoints = 1
-            ),
-            new JiraTicket(
-                $title = 'Ticket Title2',
-                $key = 'CST-KEY2',
-                new TicketStatus('IN QA', new DateTimeImmutable("2019-10-22T17:07:52.459+0200")),
-                new Assignee(
-                    $name = 'assignee-name2',
-                    $key = 'assignee-key2',
-                    $emailAddress = 'person@companymail.com2',
-                    $displayName = 'Name Surname2'
-                ),
-                $storyPoints = 2
-            ),
-        ];
-
-        $this->assertEquals($expectedMessage, SlackMessage::fromJiraTickets($jiraTickets));
     }
 }
