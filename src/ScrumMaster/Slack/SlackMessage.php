@@ -22,7 +22,7 @@ final class SlackMessage
     private static function generateMessageFromTicket(JiraTicket $jiraTicket): string
     {
         return <<<TXT
-The ticket "{$jiraTicket->title()}" ({$jiraTicket->key()}) is still in review since one day.
+The ticket "{$jiraTicket->title()}" ({$jiraTicket->key()}) is still {$jiraTicket->status()} since one day.
 Assignee to {$jiraTicket->assignee()->displayName()} ({$jiraTicket->assignee()->name()}), please take of it!
 
 TXT;

@@ -12,16 +12,25 @@ final class JiraTicket
     /** @var string */
     private $key;
 
+    /** @var string */
+    private $status;
+
     /** @var Assignee */
     private $assignee;
 
     /** @var int|null */
     private $storyPoints;
 
-    public function __construct(string $title, string $key, Assignee $assignee, ?int $storyPoints)
-    {
+    public function __construct(
+        string $title,
+        string $key,
+        string $status,
+        Assignee $assignee,
+        ?int $storyPoints
+    ) {
         $this->title = $title;
         $this->key = $key;
+        $this->status = $status;
         $this->assignee = $assignee;
         $this->storyPoints = $storyPoints;
     }
@@ -34,6 +43,11 @@ final class JiraTicket
     public function key(): string
     {
         return $this->key;
+    }
+
+    public function status(): string
+    {
+        return $this->status;
     }
 
     public function assignee(): Assignee

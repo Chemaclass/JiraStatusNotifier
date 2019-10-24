@@ -15,7 +15,7 @@ final class SlackMessageTest extends TestCase
     public function generateAMessageFromATicket(): void
     {
         $expectedMessage = <<<TXT
-The ticket "Ticket Title" (CST-KEY) is still in review since one day.
+The ticket "Ticket Title" (CST-KEY) is still IN QA since one day.
 Assignee to Name Surname (assignee-name), please take of it!
 
 
@@ -25,6 +25,7 @@ TXT;
             new JiraTicket(
                 $title = 'Ticket Title',
                 $key = 'CST-KEY',
+                $status = 'IN QA',
                 new Assignee(
                     $name = 'assignee-name',
                     $key = 'assignee-key',
@@ -42,10 +43,10 @@ TXT;
     public function generateAMessageFromTwoTicket(): void
     {
         $expectedMessage = <<<TXT
-The ticket "Ticket Title" (CST-KEY) is still in review since one day.
+The ticket "Ticket Title" (CST-KEY) is still IN REVIEW since one day.
 Assignee to Name Surname (assignee-name), please take of it!
 
-The ticket "Ticket Title2" (CST-KEY2) is still in review since one day.
+The ticket "Ticket Title2" (CST-KEY2) is still IN QA since one day.
 Assignee to Name Surname2 (assignee-name2), please take of it!
 
 
@@ -55,6 +56,7 @@ TXT;
             new JiraTicket(
                 $title = 'Ticket Title',
                 $key = 'CST-KEY',
+                $status = 'IN REVIEW',
                 new Assignee(
                     $name = 'assignee-name',
                     $key = 'assignee-key',
@@ -66,6 +68,7 @@ TXT;
             new JiraTicket(
                 $title = 'Ticket Title2',
                 $key = 'CST-KEY2',
+                $status = 'IN QA',
                 new Assignee(
                     $name = 'assignee-name2',
                     $key = 'assignee-key2',

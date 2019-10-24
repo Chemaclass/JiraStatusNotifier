@@ -14,4 +14,13 @@ final class UrlFactory
             ->statusDidNotChangeSinceDays(1)
             ->build();
     }
+
+    public static function inQA(string $comanyName, string $project)
+    {
+        return JqlUrlBuilder::inOpenSprints($comanyName)
+            ->inProject($project)
+            ->withStatus("In QA")
+            ->statusDidNotChangeSinceDays(1)
+            ->build();
+    }
 }

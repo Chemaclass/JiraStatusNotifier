@@ -20,6 +20,7 @@ final class JiraTickets
             $jiraTickets[] = new JiraTicket(
                 $title = $fields['summary'],
                 $key = $item['key'],
+                $status = $fields['status']['name'],
                 new Assignee(
                     $name = $fields['assignee']['name'],
                     $key = $fields['assignee']['key'],

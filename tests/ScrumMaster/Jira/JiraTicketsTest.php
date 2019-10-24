@@ -20,6 +20,7 @@ final class JiraTicketsTest extends TestCase
             new JiraTicket(
                 $title = 'Ticket title :)',
                 $key = 'CST-244',
+                $status = 'In Review',
                 new Assignee(
                     $name = 'assignee-name',
                     $key = 'assignee-key',
