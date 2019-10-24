@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\ScrumMaster;
 
-use App\ScrumMaster\JqlUrlBuilder;
+use App\ScrumMaster\Jira\JqlUrlBuilder;
 use PHPUnit\Framework\TestCase;
 
 final class JqlUrlBuilderTest extends TestCase

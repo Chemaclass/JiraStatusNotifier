@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\ReadModel;
+namespace App\ScrumMaster\Jira\ReadModel;
 
 final class Assignee
 {

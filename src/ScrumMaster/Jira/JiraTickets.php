@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster;
+namespace App\ScrumMaster\Jira;
 
-use App\ScrumMaster\ReadModel\Assignee;
-use App\ScrumMaster\ReadModel\JiraTicket;
+use App\ScrumMaster\Jira\ReadModel\Assignee;
+use App\ScrumMaster\Jira\ReadModel\JiraTicket;
 
 final class JiraTickets
 {
