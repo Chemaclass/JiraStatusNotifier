@@ -8,23 +8,30 @@ use App\ScrumMaster\Jira\ReadModel\JiraTicket;
 
 final class SlackMessage
 {
-    public static function fromJiraTickets(array $jiraTickets): string
+    public static function fromJiraTickets(array $jiraTickets, ?string $companyName = null): string
     {
         $result = '';
 
         foreach ($jiraTickets as $jiraTicket) {
-            $result .= static::generateMessageFromTicket($jiraTicket) . PHP_EOL;
+            $result .= static::generateMessageFromTicket($jiraTicket, $companyName) . PHP_EOL;
         }
 
         return $result;
     }
 
-    private static function generateMessageFromTicket(JiraTicket $jiraTicket): string
+    private static function generateMessageFromTicket(JiraTicket $ticket, ?string $companyName = null): string
     {
-        return <<<TXT
-The ticket "{$jiraTicket->title()}" ({$jiraTicket->key()}) is still {$jiraTicket->status()} since one day.
-Assignee to {$jiraTicket->assignee()->displayName()} ({$jiraTicket->assignee()->name()}), please take of it!
+        $assignee = $ticket->assignee();
+
+        $text = <<<TXT
+The ticket "{$ticket->title()}" ({$ticket->key()})[{$ticket->storyPoints()}SP] is still {$ticket->status()} since one day.
+Assignee to {$assignee->displayName()} ({$assignee->name()}), please take of it!
 
 TXT;
+        if ($companyName) {
+            $text .= "URL: https://{$companyName}.atlassian.net/browse/{$ticket->key()}'" . PHP_EOL;
+        }
+
+        return $text;
     }
 }

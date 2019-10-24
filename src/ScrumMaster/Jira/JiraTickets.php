@@ -16,16 +16,17 @@ final class JiraTickets
 
         foreach ($rawArray['issues'] as $key => $item) {
             $fields = $item['fields'];
+            $assignee = $fields['assignee'];
 
             $jiraTickets[] = new JiraTicket(
-                $title = $fields['summary'],
-                $key = $item['key'],
-                $status = $fields['status']['name'],
+                $fields['summary'],
+                $item['key'],
+                $fields['status']['name'],
                 new Assignee(
-                    $name = $fields['assignee']['name'],
-                    $key = $fields['assignee']['key'],
-                    $emailAddress = $fields['assignee']['emailAddress'],
-                    $displayName = $fields['assignee']['displayName']
+                    $assignee['name'],
+                    $assignee['key'],
+                    $assignee['emailAddress'],
+                    $assignee['displayName']
                 ),
                 $storyPoints = (int)$fields['customfield_10005']
             );

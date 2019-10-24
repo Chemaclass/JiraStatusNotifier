@@ -17,12 +17,13 @@ final class SlackHttpClient
         $this->client = $client;
     }
 
-    public function postToChannel(string $channel, array $jiraTickets): ResponseInterface
+    public function postToChannel(string $channel, string $text): ResponseInterface
     {
         return $this->client->request('POST', 'https://slack.com/api/chat.postMessage', [
             'json' => [
-                'channel' => 'master-of-scrums',
-                'text' => SlackMessage::fromJiraTickets($jiraTickets),
+                'as_user' => true,
+                'channel' => $channel,
+                'text' => $text,
             ],
         ]);
     }

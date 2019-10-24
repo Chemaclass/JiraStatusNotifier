@@ -15,12 +15,11 @@ final class SlackMessageTest extends TestCase
     public function generateAMessageFromATicket(): void
     {
         $expectedMessage = <<<TXT
-The ticket "Ticket Title" (CST-KEY) is still IN QA since one day.
+The ticket "Ticket Title" (CST-KEY)[5SP] is still IN QA since one day.
 Assignee to Name Surname (assignee-name), please take of it!
 
 
 TXT;
-
         $jiraTickets = [
             new JiraTicket(
                 $title = 'Ticket Title',
@@ -32,7 +31,7 @@ TXT;
                     $emailAddress = 'person@companymail.com',
                     $displayName = 'Name Surname'
                 ),
-                $storyPoints = 1
+                $storyPoints = 5
             ),
         ];
 
@@ -43,10 +42,10 @@ TXT;
     public function generateAMessageFromTwoTicket(): void
     {
         $expectedMessage = <<<TXT
-The ticket "Ticket Title" (CST-KEY) is still IN REVIEW since one day.
+The ticket "Ticket Title" (CST-KEY)[1SP] is still IN REVIEW since one day.
 Assignee to Name Surname (assignee-name), please take of it!
 
-The ticket "Ticket Title2" (CST-KEY2) is still IN QA since one day.
+The ticket "Ticket Title2" (CST-KEY2)[2SP] is still IN QA since one day.
 Assignee to Name Surname2 (assignee-name2), please take of it!
 
 
