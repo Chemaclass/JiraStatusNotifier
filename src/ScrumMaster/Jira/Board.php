@@ -42,7 +42,9 @@ final class Board
 
     public const SLA_IN_RC = 4;
 
-    public const SLA = [
+    public const MAX_DAYS_FALLBACK = 1;
+
+    public const MAX_DAYS_IN_STATUS = [
         self::TODO => self::SLA_TO_DO,
         self::BLOCKED => self::SLA_BLOCKED,
         self::IN_PROGRESS => self::SLA_IN_PROGRESS,
@@ -53,4 +55,9 @@ final class Board
         self::READY_FOR_RC => self::SLA_READY_FOR_RC,
         self::IN_RC => self::SLA_IN_RC,
     ];
+
+    public static function maxDaysInStatus(string $status): int
+    {
+        return self::MAX_DAYS_IN_STATUS[$status] ?? self::MAX_DAYS_FALLBACK;
+    }
 }

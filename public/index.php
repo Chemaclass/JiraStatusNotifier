@@ -20,13 +20,15 @@ $companyName = getenv('COMPANY_NAME');
 $projectName = 'Core Service Team ';
 $slackMapping = new SlackMapping(json_decode(getenv('SLACK_MAPPING_IDS'), true));
 
-foreach (Board::SLA as $statusName => $maxDays) {
+foreach (Board::MAX_DAYS_IN_STATUS as $statusName => $maxDays) {
     $tickets = $jiraClient->getTickets($statusName, $companyName, $projectName);
 
     foreach ($tickets as $ticket) {
-        (new SlackHttpClient(HttpClient::create([
+        $slackClient = new SlackHttpClient(HttpClient::create([
             'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
-        ])))->postToChannel(
+        ]));
+
+        $slackClient->postToChannel(
             $slackMapping->toSlackId($ticket->assignee()->name()),
             SlackMessage::fromJiraTicket($ticket, getenv('COMPANY_NAME'))
         );
