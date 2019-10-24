@@ -12,11 +12,12 @@ use PHPUnit\Framework\TestCase;
 final class SlackMessageTest extends TestCase
 {
     /** @test */
-    public function generateAMessageFromATicket(): void
+    public function messageWithCompanyName(): void
     {
         $expectedMessage = <<<TXT
 The ticket "Ticket Title" (CST-KEY)[5SP] is still IN QA since one day.
 Assignee to Name Surname (assignee-name), please take of it!
+URL: https://company-name.atlassian.net/browse/CST-KEY
 
 
 TXT;
@@ -35,7 +36,7 @@ TXT;
             ),
         ];
 
-        $this->assertEquals($expectedMessage, SlackMessage::fromJiraTickets($jiraTickets));
+        $this->assertEquals($expectedMessage, SlackMessage::fromJiraTickets($jiraTickets, 'company-name'));
     }
 
     /** @test */

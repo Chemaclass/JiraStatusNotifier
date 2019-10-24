@@ -29,7 +29,7 @@ Assignee to {$assignee->displayName()} ({$assignee->name()}), please take of it!
 
 TXT;
         if ($companyName) {
-            $text .= "URL: https://{$companyName}.atlassian.net/browse/{$ticket->key()}'" . PHP_EOL;
+            $text .= "URL: https://{$companyName}.atlassian.net/browse/{$ticket->key()}" . PHP_EOL;
         }
 
         return $text;
