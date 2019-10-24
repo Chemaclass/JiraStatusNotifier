@@ -31,11 +31,8 @@ final class JqlUrlBuilderTest extends TestCase
     public function forReviewStatus(): void
     {
         $this->assertEquals(
-            'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND project IN ("Core Service Team ") AND status IN ("In Review")',
-            JqlUrlBuilder::inOpenSprints('company-name')
-                ->inProject('Core Service Team ')
-                ->withStatus("In Review")
-                ->build()
+            'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND status IN ("In Review")',
+            JqlUrlBuilder::inOpenSprints('company-name')->withStatus("In Review")->build()
         );
     }
 
@@ -43,11 +40,19 @@ final class JqlUrlBuilderTest extends TestCase
     public function statusDidNotChangeSinceDays(): void
     {
         $this->assertEquals(
-            'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND project IN ("Core Service Team ") AND status IN ("In Review") AND NOT status changed after -1d',
+            'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND NOT status changed after -1d',
+            JqlUrlBuilder::inOpenSprints('company-name')->statusDidNotChangeSinceDays(1)->build()
+        );
+    }
+
+    /** @test */
+    public function statusDidNotChangeSinceDaysAndStartSprintDate(): void
+    {
+        $this->assertEquals(
+            'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND status IN ("IN QA") AND ((status changed TO IN QA before 2019-10-14 AND NOT status changed after -4d) OR (status changed TO IN QA after 2019-10-14 AND NOT status changed after -2d))',
             JqlUrlBuilder::inOpenSprints('company-name')
-                ->inProject('Core Service Team ')
-                ->withStatus("In Review")
-                ->statusDidNotChangeSinceDays(1)
+                ->withStatus('IN QA')
+                ->statusDidNotChangeSinceDays(2, $startSprintDate = '2019-10-14')
                 ->build()
         );
     }

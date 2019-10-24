@@ -20,7 +20,7 @@ final class UrlFactory
         return JqlUrlBuilder::inOpenSprints($comanyName)
             ->inProject($project)
             ->withStatus("In QA")
-            ->statusDidNotChangeSinceDays(1)
+            ->statusDidNotChangeSinceDays(2)
             ->build();
     }
 }

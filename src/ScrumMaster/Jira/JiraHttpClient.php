@@ -24,7 +24,7 @@ final class JiraHttpClient
         return JiraTickets::fromJira($response->toArray());
     }
 
-    public function inQA(string $comanyName, string $projectName)
+    public function inQA(string $comanyName, string $projectName): array
     {
         $url = UrlFactory::inQA($comanyName, $projectName);
         $response = $this->client->request('GET', $url);

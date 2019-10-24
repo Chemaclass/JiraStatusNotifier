@@ -23,6 +23,9 @@ final class JqlUrlBuilder
     /** @var int */
     private $statusDidNotChangeSinceDays;
 
+    /** @var string|null */
+    private $startSprintDate;
+
     public static function inOpenSprints(string $companyName): JqlUrlBuilder
     {
         return new self($companyName, '?jql=sprint in openSprints()');
@@ -48,9 +51,10 @@ final class JqlUrlBuilder
         return $this;
     }
 
-    public function statusDidNotChangeSinceDays(int $days): self
+    public function statusDidNotChangeSinceDays(int $days, ?string $startSprintDate = null): self
     {
         $this->statusDidNotChangeSinceDays = $days;
+        $this->startSprintDate = $startSprintDate;
 
         return $this;
     }
@@ -68,7 +72,18 @@ final class JqlUrlBuilder
         }
 
         if ($this->statusDidNotChangeSinceDays) {
-            $finalUrl .= sprintf(' AND NOT status changed after -%dd', $this->statusDidNotChangeSinceDays);
+            if ($this->status && $this->startSprintDate) {
+                $finalUrl .= sprintf(' AND ((status changed TO %s before %s AND NOT status changed after -%dd) OR (status changed TO %s after %s AND NOT status changed after -%dd))',
+                    $this->status,
+                    $this->startSprintDate,
+                    $this->statusDidNotChangeSinceDays + 2,
+                    $this->status,
+                    $this->startSprintDate,
+                    $this->statusDidNotChangeSinceDays
+                );
+            } else {
+                $finalUrl .= sprintf(' AND NOT status changed after -%dd', $this->statusDidNotChangeSinceDays);
+            }
         }
 
         return $finalUrl;
