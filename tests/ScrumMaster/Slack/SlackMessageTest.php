@@ -6,7 +6,9 @@ namespace App\Tests\ScrumMaster\Slack;
 
 use App\ScrumMaster\Jira\ReadModel\Assignee;
 use App\ScrumMaster\Jira\ReadModel\JiraTicket;
+use App\ScrumMaster\Jira\ReadModel\TicketStatus;
 use App\ScrumMaster\Slack\SlackMessage;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 final class SlackMessageTest extends TestCase
@@ -25,7 +27,7 @@ TXT;
             new JiraTicket(
                 $title = 'Ticket Title',
                 $key = 'CST-KEY',
-                $status = 'IN QA',
+                new TicketStatus('IN QA', new DateTimeImmutable("2019-10-22T17:07:52.459+0200")),
                 new Assignee(
                     $name = 'assignee-name',
                     $key = 'assignee-key',
@@ -56,7 +58,7 @@ TXT;
             new JiraTicket(
                 $title = 'Ticket Title',
                 $key = 'CST-KEY',
-                $status = 'IN REVIEW',
+                new TicketStatus('IN REVIEW', new DateTimeImmutable("2019-10-22T17:07:52.459+0200")),
                 new Assignee(
                     $name = 'assignee-name',
                     $key = 'assignee-key',
@@ -68,7 +70,7 @@ TXT;
             new JiraTicket(
                 $title = 'Ticket Title2',
                 $key = 'CST-KEY2',
-                $status = 'IN QA',
+                new TicketStatus('IN QA', new DateTimeImmutable("2019-10-22T17:07:52.459+0200")),
                 new Assignee(
                     $name = 'assignee-name2',
                     $key = 'assignee-key2',

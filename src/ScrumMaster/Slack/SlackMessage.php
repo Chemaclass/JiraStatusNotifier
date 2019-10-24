@@ -22,9 +22,11 @@ final class SlackMessage
     private static function generateMessageFromTicket(JiraTicket $ticket, ?string $companyName = null): string
     {
         $assignee = $ticket->assignee();
+        $status = $ticket->status();
+        $daysDiff = $status->changeDate()->diff(new \DateTimeImmutable())->days;
 
         $text = <<<TXT
-The ticket "{$ticket->title()}" ({$ticket->key()})[{$ticket->storyPoints()}SP] is still {$ticket->status()} since one day.
+The ticket "{$ticket->title()}" ({$ticket->key()})[{$ticket->storyPoints()}SP] is still {$status->name()} since {$daysDiff} day.
 Assignee to {$assignee->displayName()} ({$assignee->name()}), please take of it!
 
 TXT;

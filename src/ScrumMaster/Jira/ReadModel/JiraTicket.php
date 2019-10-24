@@ -12,7 +12,7 @@ final class JiraTicket
     /** @var string */
     private $key;
 
-    /** @var string */
+    /** @var TicketStatus */
     private $status;
 
     /** @var Assignee */
@@ -24,7 +24,7 @@ final class JiraTicket
     public function __construct(
         string $title,
         string $key,
-        string $status,
+        TicketStatus $status,
         Assignee $assignee,
         ?int $storyPoints
     ) {
@@ -45,7 +45,7 @@ final class JiraTicket
         return $this->key;
     }
 
-    public function status(): string
+    public function status(): TicketStatus
     {
         return $this->status;
     }

@@ -6,6 +6,8 @@ namespace App\ScrumMaster\Jira;
 
 use App\ScrumMaster\Jira\ReadModel\Assignee;
 use App\ScrumMaster\Jira\ReadModel\JiraTicket;
+use App\ScrumMaster\Jira\ReadModel\TicketStatus;
+use DateTimeImmutable;
 
 final class JiraTickets
 {
@@ -21,7 +23,10 @@ final class JiraTickets
             $jiraTickets[] = new JiraTicket(
                 $fields['summary'],
                 $item['key'],
-                $fields['status']['name'],
+                new TicketStatus(
+                    $fields['status']['name'],
+                    new DateTimeImmutable($fields['statuscategorychangedate'])
+                ),
                 new Assignee(
                     $assignee['name'],
                     $assignee['key'],

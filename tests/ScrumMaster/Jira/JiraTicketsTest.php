@@ -7,6 +7,8 @@ namespace App\Tests\ScrumMaster;
 use App\ScrumMaster\Jira\JiraTickets;
 use App\ScrumMaster\Jira\ReadModel\Assignee;
 use App\ScrumMaster\Jira\ReadModel\JiraTicket;
+use App\ScrumMaster\Jira\ReadModel\TicketStatus;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 final class JiraTicketsTest extends TestCase
@@ -20,7 +22,7 @@ final class JiraTicketsTest extends TestCase
             new JiraTicket(
                 $title = 'Ticket title :)',
                 $key = 'CST-244',
-                $status = 'In Review',
+                new TicketStatus('In Review', new DateTimeImmutable("2019-10-22T17:07:52.459+0200")),
                 new Assignee(
                     $name = 'assignee-name',
                     $key = 'assignee-key',
