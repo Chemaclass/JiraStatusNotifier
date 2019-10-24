@@ -2,7 +2,9 @@
 
 require_once '../vendor/autoload.php';
 
+use App\ScrumMaster\Jira\Board;
 use App\ScrumMaster\Jira\JiraHttpClient;
+use App\ScrumMaster\Slack\SlackMapping;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use App\ScrumMaster\Slack\SlackMessage;
 use Symfony\Component\HttpClient\HttpClient;
@@ -14,14 +16,22 @@ $jiraClient = new JiraHttpClient(HttpClient::create([
     'auth_basic' => [getenv('JIRA_USERNAME'), getenv('JIRA_PASSWORD')],
 ]));
 
-$ticketsInReview = $jiraClient->inReview(getenv('COMPANY_NAME'), 'Core Service Team ');
-$ticketsInQA = $jiraClient->inQA(getenv('COMPANY_NAME'), 'Core Service Team ');
+$companyName = getenv('COMPANY_NAME');
+$projectName = 'Core Service Team ';
+$slackMapping = new SlackMapping(json_decode(getenv('SLACK_MAPPING_IDS'), true));
 
-$response = (new SlackHttpClient(HttpClient::create([
-    'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
-])))->postToChannel(
-    'UL84M0H9P',
-    SlackMessage::fromJiraTickets($ticketsInQA, getenv('COMPANY_NAME'))
-);
+foreach (Board::SLA as $statusName => $maxDays) {
+    $tickets = $jiraClient->getTickets($statusName, $companyName, $projectName);
 
-dd($response->getContent());
+    foreach ($tickets as $ticket) {
+        (new SlackHttpClient(HttpClient::create([
+            'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
+        ])))->postToChannel(
+            $slackMapping->toSlackId($ticket->assignee()->name()),
+            SlackMessage::fromJiraTicket($ticket, getenv('COMPANY_NAME'))
+        );
+    }
+}
+
+echo 'Take a look at Slack ;)' . PHP_EOL;
+echo date('Y-m-d H:i:s.u');

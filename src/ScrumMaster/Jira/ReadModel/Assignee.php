@@ -6,23 +6,23 @@ namespace App\ScrumMaster\Jira\ReadModel;
 
 final class Assignee
 {
-    /** @var string */
+    /** @var null|string */
     private $name;
 
-    /** @var string */
+    /** @var null|string */
     private $key;
 
-    /** @var string */
+    /** @var null|string */
     private $emailAddress;
 
-    /** @var string */
+    /** @var null|string */
     private $displayName;
 
     public function __construct(
-        string $name,
-        string $key,
-        string $emailAddress,
-        string $displayName
+        ?string $name,
+        ?string $key,
+        ?string $emailAddress,
+        ?string $displayName
     ) {
         $this->name = $name;
         $this->key = $key;
@@ -30,22 +30,22 @@ final class Assignee
         $this->displayName = $displayName;
     }
 
-    public function name(): string
+    public function name(): ?string
     {
         return $this->name;
     }
 
-    public function key(): string
+    public function key(): ?string
     {
         return $this->key;
     }
 
-    public function emailAddress(): string
+    public function emailAddress(): ?string
     {
         return $this->emailAddress;
     }
 
-    public function displayName(): string
+    public function displayName(): ?string
     {
         return $this->displayName;
     }
