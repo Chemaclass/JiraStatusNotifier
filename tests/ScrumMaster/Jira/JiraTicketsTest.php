@@ -22,7 +22,7 @@ final class JiraTicketsTest extends TestCase
             new JiraTicket(
                 $title = 'Ticket title :)',
                 $key = 'CST-244',
-                new TicketStatus('In Review', new DateTimeImmutable("2019-10-22T17:07:52.459+0200")),
+                new TicketStatus('In Review', new DateTimeImmutable('2019-10-22T17:07:52.459+0200')),
                 new Assignee(
                     $name = 'assignee-name',
                     $key = 'assignee-key',

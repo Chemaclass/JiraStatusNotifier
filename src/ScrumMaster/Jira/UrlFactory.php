@@ -6,7 +6,6 @@ namespace App\ScrumMaster\Jira;
 
 final class UrlFactory
 {
-
     public static function factory(string $status, string $comanyName, string $project): string
     {
         return JqlUrlBuilder::inOpenSprints($comanyName)
@@ -20,7 +19,7 @@ final class UrlFactory
     {
         return JqlUrlBuilder::inOpenSprints($comanyName)
             ->inProject($project)
-            ->withStatus("In Review")
+            ->withStatus('In Review')
             ->statusDidNotChangeSinceDays(1)
             ->build();
     }
@@ -29,7 +28,7 @@ final class UrlFactory
     {
         return JqlUrlBuilder::inOpenSprints($comanyName)
             ->inProject($project)
-            ->withStatus("In QA")
+            ->withStatus('In QA')
             ->statusDidNotChangeSinceDays(2)
             ->build();
     }

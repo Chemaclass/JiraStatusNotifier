@@ -27,7 +27,7 @@ TXT;
         $jiraTicket = new JiraTicket(
             $title = 'Ticket Title',
             $key = 'CST-KEY',
-            new TicketStatus('IN QA', new DateTimeImmutable("2019-10-22")),
+            new TicketStatus('IN QA', new DateTimeImmutable('2019-10-22')),
             new Assignee(
                 $name = 'assignee.name',
                 $key = 'assignee-key',
@@ -54,7 +54,7 @@ TXT;
         $jiraTicket = new JiraTicket(
             $title = 'Ticket Title',
             $key = 'CST-KEY',
-            new TicketStatus('IN QA', new DateTimeImmutable("2019-10-22")),
+            new TicketStatus('IN QA', new DateTimeImmutable('2019-10-22')),
             new Assignee(
                 $name = null,
                 $key = null,

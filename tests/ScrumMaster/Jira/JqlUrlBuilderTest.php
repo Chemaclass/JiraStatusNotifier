@@ -32,7 +32,7 @@ final class JqlUrlBuilderTest extends TestCase
     {
         $this->assertEquals(
             'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND status IN ("In Review")',
-            JqlUrlBuilder::inOpenSprints('company-name')->withStatus("In Review")->build()
+            JqlUrlBuilder::inOpenSprints('company-name')->withStatus('In Review')->build()
         );
     }
 

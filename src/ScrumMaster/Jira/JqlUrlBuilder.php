@@ -23,10 +23,10 @@ final class JqlUrlBuilder
     /** @var int */
     private $statusDidNotChangeSinceDays;
 
-    /** @var string|null */
+    /** @var null|string */
     private $startSprintDate;
 
-    public static function inOpenSprints(string $companyName): JqlUrlBuilder
+    public static function inOpenSprints(string $companyName): self
     {
         return new self($companyName, '?jql=sprint in openSprints()');
     }
@@ -74,7 +74,8 @@ final class JqlUrlBuilder
         if ($this->statusDidNotChangeSinceDays) {
             if ($this->status && $this->startSprintDate) {
                 // In order to ignore the weekend between the two working weeks sprint
-                $finalUrl .= sprintf(' AND ((status changed TO "%s" before %s AND NOT status changed after -%dd) OR (status changed TO "%s" after %s AND NOT status changed after -%dd))',
+                $finalUrl .= sprintf(
+                    ' AND ((status changed TO "%s" before %s AND NOT status changed after -%dd) OR (status changed TO "%s" after %s AND NOT status changed after -%dd))',
                     $this->status,
                     $this->startSprintDate,
                     $this->statusDidNotChangeSinceDays + 2,

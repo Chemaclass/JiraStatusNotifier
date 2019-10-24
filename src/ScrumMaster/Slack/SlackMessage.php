@@ -35,6 +35,6 @@ TXT;
             return "Hey, {$assignee->displayName()} ({$assignee->name()}), please have a look" . PHP_EOL;
         }
 
-        return "Hey Team, please have a look" . PHP_EOL;
+        return 'Hey Team, please have a look' . PHP_EOL;
     }
 }

@@ -18,7 +18,7 @@ final class JiraTicket
     /** @var Assignee */
     private $assignee;
 
-    /** @var int|null */
+    /** @var null|int */
     private $storyPoints;
 
     public function __construct(

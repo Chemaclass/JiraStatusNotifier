@@ -33,7 +33,7 @@ final class JiraTickets
                     $assignee['emailAddress'],
                     $assignee['displayName']
                 ),
-                $storyPoints = (int)$fields['customfield_10005']
+                $storyPoints = (int) $fields['customfield_10005']
             );
         }
 
