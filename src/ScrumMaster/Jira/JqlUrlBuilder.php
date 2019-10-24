@@ -73,7 +73,8 @@ final class JqlUrlBuilder
 
         if ($this->statusDidNotChangeSinceDays) {
             if ($this->status && $this->startSprintDate) {
-                $finalUrl .= sprintf(' AND ((status changed TO %s before %s AND NOT status changed after -%dd) OR (status changed TO %s after %s AND NOT status changed after -%dd))',
+                // In order to ignore the weekend between the two working weeks sprint
+                $finalUrl .= sprintf(' AND ((status changed TO "%s" before %s AND NOT status changed after -%dd) OR (status changed TO "%s" after %s AND NOT status changed after -%dd))',
                     $this->status,
                     $this->startSprintDate,
                     $this->statusDidNotChangeSinceDays + 2,

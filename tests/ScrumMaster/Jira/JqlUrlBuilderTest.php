@@ -49,7 +49,7 @@ final class JqlUrlBuilderTest extends TestCase
     public function statusDidNotChangeSinceDaysAndStartSprintDate(): void
     {
         $this->assertEquals(
-            'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND status IN ("IN QA") AND ((status changed TO IN QA before 2019-10-14 AND NOT status changed after -4d) OR (status changed TO IN QA after 2019-10-14 AND NOT status changed after -2d))',
+            'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND status IN ("IN QA") AND ((status changed TO "IN QA" before 2019-10-14 AND NOT status changed after -4d) OR (status changed TO "IN QA" after 2019-10-14 AND NOT status changed after -2d))',
             JqlUrlBuilder::inOpenSprints('company-name')
                 ->withStatus('IN QA')
                 ->statusDidNotChangeSinceDays(2, $startSprintDate = '2019-10-14')
