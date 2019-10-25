@@ -21,7 +21,7 @@ final class JqlUrlFactory implements UrlFactoryInterface
         return JqlUrlBuilder::inOpenSprints($company->companyName())
             ->inProject($company->project())
             ->withStatus($status)
-            ->statusDidNotChangeSinceDays($this->board->maxDaysInStatus($status))
+            ->statusDidNotChangeSinceDays($this->board->getDaysForStatus($status))
             ->build();
     }
 }

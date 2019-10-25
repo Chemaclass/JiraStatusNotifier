@@ -6,5 +6,8 @@ namespace App\ScrumMaster\Jira;
 
 interface BoardInterface
 {
-    public function maxDaysInStatus(string $status): int;
+    /** @return array<string, int> */
+    public function maxDaysInStatus(): array;
+
+    public function getDaysForStatus(string $status): int;
 }

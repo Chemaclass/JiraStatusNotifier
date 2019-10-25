@@ -16,12 +16,25 @@ use Symfony\Component\HttpClient\HttpClient;
 $dotEnv = Dotenv\Dotenv::create(__DIR__ . '/..');
 $dotEnv->load();
 
+$jiraBoard = new Board([
+    'To Do' => 6,
+    'Blocked' => 7,
+    'In Progress' => 4,
+    'In Review' => 1,
+    'Ready for QA' => 1,
+    'IN QA' => 2,
+    'Verified' => 1,
+    'Ready For RC' => 1,
+    'IN RC' => 3,
+]);
+
 $slackNotifier = new SlackNotifier(
+    $jiraBoard,
     new JiraHttpClient(
         HttpClient::create([
             'auth_basic' => [getenv('JIRA_USERNAME'), getenv('JIRA_PASSWORD')],
         ]),
-        new JqlUrlFactory(new Board())
+        new JqlUrlFactory($jiraBoard)
     ),
     new SlackHttpClient(HttpClient::create([
         'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
