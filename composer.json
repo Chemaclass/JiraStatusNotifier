@@ -2,7 +2,7 @@
     "name": "chemaclass/scrum-master",
     "authors": [
         {
-            "name": "Chema",
+            "name": "Jose Maria Valera Reales",
             "email": "chemaclass@outlook.es"
         }
     ],
@@ -19,7 +19,6 @@
     "autoload-dev": {
         "psr-4": {
             "App\\": "src/",
-            "App\\Config\\": "config/",
             "App\\Tests\\": "tests/"
         }
     }
