@@ -6,7 +6,7 @@ namespace App\ScrumMaster\Jira;
 
 final class Board implements BoardInterface
 {
-    /** @var array */
+    /** @var array <string,int> */
     private $maxDaysInStatus;
 
     /** @var int */
@@ -18,13 +18,14 @@ final class Board implements BoardInterface
         $this->fallbackValue = $fallbackValue;
     }
 
+    public function getDaysForStatus(string $status): int
+    {
+        return $this->maxDaysInStatus()[$status] ?? $this->fallbackValue;
+    }
+
     public function maxDaysInStatus(): array
     {
         return $this->maxDaysInStatus;
     }
 
-    public function getDaysForStatus(string $status): int
-    {
-        return $this->maxDaysInStatus[$status] ?? $this->fallbackValue;
-    }
 }
