@@ -6,7 +6,7 @@ namespace App\ScrumMaster\Jira;
 
 use App\ScrumMaster\Jira\ReadModel\CompanyProject;
 
-final class UrlFactory implements UrlFactoryInterface
+final class JqlUrlFactory implements UrlFactoryInterface
 {
     /** @var Board */
     private $board;
@@ -16,7 +16,7 @@ final class UrlFactory implements UrlFactoryInterface
         $this->board = $board;
     }
 
-    public function buildJql(CompanyProject $company, string $status): string
+    public function buildUrl(CompanyProject $company, string $status): string
     {
         return JqlUrlBuilder::inOpenSprints($company->companyName())
             ->inProject($company->project())

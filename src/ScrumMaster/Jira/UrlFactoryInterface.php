@@ -8,5 +8,5 @@ use App\ScrumMaster\Jira\ReadModel\CompanyProject;
 
 interface UrlFactoryInterface
 {
-    public function buildJql(CompanyProject $company, string $status): string;
+    public function buildUrl(CompanyProject $company, string $status): string;
 }
