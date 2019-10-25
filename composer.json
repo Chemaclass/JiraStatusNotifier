@@ -7,12 +7,13 @@
         }
     ],
     "require": {
-        "symfony/http-client": "^4.3",
-        "vlucas/phpdotenv": "^3.6",
+        "php": "7.2.*",
         "ext-json": "*",
-        "friendsofphp/php-cs-fixer": "^2.15"
+        "symfony/http-client": "^4.3",
+        "vlucas/phpdotenv": "^3.6"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.15",
         "phpunit/phpunit": "^8.4",
         "symfony/var-dumper": "^4.3"
     },
