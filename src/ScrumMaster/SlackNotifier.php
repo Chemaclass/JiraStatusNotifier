@@ -30,17 +30,17 @@ final class SlackNotifier
     }
 
     public function sendNotifications(
-        CompanyProject $companyProject,
+        CompanyProject $company,
         SlackMapping $slackMapping,
         SlackMessage $slackMessage
     ): void {
         foreach ($this->board->maxDaysInStatus() as $statusName => $maxDays) {
-            $tickets = $this->jiraClient->getTickets($companyProject, $statusName);
+            $tickets = $this->jiraClient->getTickets($company, $statusName);
 
             foreach ($tickets as $ticket) {
                 $this->slackClient->postToChannel(
                     $slackMapping->toSlackId($ticket->assignee()->name()),
-                    $slackMessage->fromJiraTicket($ticket, getenv('COMPANY_NAME'))
+                    $slackMessage->fromJiraTicket($ticket, $company->companyName())
                 );
             }
         }

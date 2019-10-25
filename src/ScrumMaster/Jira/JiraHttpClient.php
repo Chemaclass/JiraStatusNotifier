@@ -23,9 +23,9 @@ final class JiraHttpClient
     }
 
     /** @return JiraTicket[] */
-    public function getTickets(CompanyProject $companyProject, string $status): array
+    public function getTickets(CompanyProject $company, string $status): array
     {
-        $url = $this->urlFactory->buildUrl($companyProject, $status);
+        $url = $this->urlFactory->buildUrl($company, $status);
         $response = $this->jiraClient->request('GET', $url);
 
         return JiraTickets::fromJira($response->toArray());
