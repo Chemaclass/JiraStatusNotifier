@@ -19,15 +19,16 @@ final class SlackMessageTest extends TestCase
         $expectedMessage = <<<TXT
 Hey, Full Name (assignee.name), please have a look
 *Ticket*: Ticket Title[<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>]
-*Current status*: IN QA since 2 days
+*Current status*: IN QA since 1 day
 *Story Points*: 5
 
 TXT;
+        $statusDateChange = new DateTimeImmutable();
 
         $jiraTicket = new JiraTicket(
             $title = 'Ticket Title',
             $key = 'CST-KEY',
-            new TicketStatus('IN QA', new DateTimeImmutable('2019-10-22')),
+            new TicketStatus('IN QA', $statusDateChange->modify('-1 days')),
             new Assignee(
                 $name = 'assignee.name',
                 $key = 'assignee-key',
@@ -37,7 +38,8 @@ TXT;
             $storyPoints = 5
         );
 
-        $this->assertEquals($expectedMessage, SlackMessage::fromJiraTicket($jiraTicket, 'company-name'));
+        $slackMessage = new SlackMessage($statusDateChange);
+        $this->assertEquals($expectedMessage, $slackMessage->fromJiraTicket($jiraTicket, 'company-name'));
     }
 
     /** @test */
@@ -50,11 +52,12 @@ Hey Team, please have a look
 *Story Points*: 5
 
 TXT;
+        $statusDateChange = new DateTimeImmutable();
 
         $jiraTicket = new JiraTicket(
             $title = 'Ticket Title',
             $key = 'CST-KEY',
-            new TicketStatus('IN QA', new DateTimeImmutable('2019-10-22')),
+            new TicketStatus('IN QA', $statusDateChange->modify('-2 days')),
             new Assignee(
                 $name = null,
                 $key = null,
@@ -64,6 +67,7 @@ TXT;
             $storyPoints = 5
         );
 
-        $this->assertEquals($expectedMessage, SlackMessage::fromJiraTicket($jiraTicket, 'company-name'));
+        $slackMessage = new SlackMessage($statusDateChange);
+        $this->assertEquals($expectedMessage, $slackMessage->fromJiraTicket($jiraTicket, 'company-name'));
     }
 }

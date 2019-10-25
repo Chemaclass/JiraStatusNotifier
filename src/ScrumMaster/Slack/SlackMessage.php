@@ -6,22 +6,29 @@ namespace App\ScrumMaster\Slack;
 
 use App\ScrumMaster\Jira\ReadModel\Assignee;
 use App\ScrumMaster\Jira\ReadModel\JiraTicket;
+use DateTimeImmutable;
 
 final class SlackMessage
 {
-    public static function fromJiraTicket(JiraTicket $ticket, string $companyName): string
+    /** @var DateTimeImmutable */
+    private $timeToDiff;
+
+    public function __construct(DateTimeImmutable $timeToDiff)
+    {
+        $this->timeToDiff = $timeToDiff;
+    }
+
+    public function fromJiraTicket(JiraTicket $ticket, string $companyName): string
     {
         $assignee = $ticket->assignee();
         $status = $ticket->status();
-        $daysDiff = $status->changeDate()->diff(new \DateTimeImmutable())->days;
+        $daysDiff = $status->changeDate()->diff($this->timeToDiff)->days;
         $url = "https://{$companyName}.atlassian.net/browse/{$ticket->key()}";
         $dayWord = ($daysDiff > 1) ? 'days' : 'day';
 
-        $text = static::headerText($assignee);
-
-        $text .= <<<TXT
+        $text = static::headerText($assignee) . <<<TXT
 *Ticket*: {$ticket->title()}[<{$url}|{$ticket->key()}>]
-*Current status*: {$status->name()} since {$daysDiff} $dayWord
+*Current status*: {$status->name()} since {$daysDiff} {$dayWord}
 *Story Points*: {$ticket->storyPoints()}
 
 TXT;
