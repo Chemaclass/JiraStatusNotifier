@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\ScrumMaster\Slack;
+namespace App\Tests\Unit\ScrumMaster\Slack;
 
 use App\ScrumMaster\Jira\ReadModel\Assignee;
 use App\ScrumMaster\Jira\ReadModel\JiraTicket;

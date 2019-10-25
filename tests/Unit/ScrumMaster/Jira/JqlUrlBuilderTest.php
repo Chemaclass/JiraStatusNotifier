@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\ScrumMaster;
+namespace App\Tests\Unit\ScrumMaster;
 
 use App\ScrumMaster\Jira\JqlUrlBuilder;
 use PHPUnit\Framework\TestCase;
