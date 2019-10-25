@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->in('public/')
+    ->in('bin/')
     ->in('src/')
     ->in('tests/')
 ;

@@ -27,5 +27,4 @@ final class Board implements BoardInterface
     {
         return $this->maxDaysInStatus;
     }
-
 }
