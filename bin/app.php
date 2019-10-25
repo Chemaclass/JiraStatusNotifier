@@ -16,17 +16,7 @@ use Symfony\Component\HttpClient\HttpClient;
 $dotEnv = Dotenv\Dotenv::create(__DIR__ . '/..');
 $dotEnv->load();
 
-$jiraBoard = new Board([
-    'To Do' => 6,
-    'Blocked' => 7,
-    'In Progress' => 4,
-    'In Review' => 1,
-    'Ready for QA' => 1,
-    'IN QA' => 2,
-    'Verified' => 1,
-    'Ready For RC' => 1,
-    'IN RC' => 3,
-]);
+$jiraBoard = new Board(json_decode(getenv('DAYS_FOR_STATUS'), true));
 
 $slackNotifier = new SlackNotifier(
     $jiraBoard,
