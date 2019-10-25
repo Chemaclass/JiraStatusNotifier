@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 require_once '../vendor/autoload.php';
 
 use App\ScrumMaster\Jira\Board;
 use App\ScrumMaster\Jira\JiraHttpClient;
-use App\ScrumMaster\Slack\SlackMapping;
+use App\ScrumMaster\Jira\UrlFactory;
 use App\ScrumMaster\Slack\SlackHttpClient;
+use App\ScrumMaster\Slack\SlackMapping;
 use App\ScrumMaster\Slack\SlackMessage;
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -14,14 +16,15 @@ $dotEnv->load();
 
 $jiraClient = new JiraHttpClient(HttpClient::create([
     'auth_basic' => [getenv('JIRA_USERNAME'), getenv('JIRA_PASSWORD')],
-]));
+]), new UrlFactory(new Board()));
 
 $companyName = getenv('COMPANY_NAME');
 $projectName = 'Core Service Team ';
 $slackMapping = new SlackMapping(json_decode(getenv('SLACK_MAPPING_IDS'), true));
+$slackMessage = new SlackMessage(new DateTimeImmutable());
 
 foreach (Board::MAX_DAYS_IN_STATUS as $statusName => $maxDays) {
-    $tickets = $jiraClient->getTickets($statusName, $companyName, $projectName);
+    $tickets = $jiraClient->getTickets($companyName, $statusName, $projectName);
 
     foreach ($tickets as $ticket) {
         $slackClient = new SlackHttpClient(HttpClient::create([
@@ -30,10 +33,10 @@ foreach (Board::MAX_DAYS_IN_STATUS as $statusName => $maxDays) {
 
         $slackClient->postToChannel(
             $slackMapping->toSlackId($ticket->assignee()->name()),
-            SlackMessage::fromJiraTicket($ticket, getenv('COMPANY_NAME'))
+            $slackMessage->fromJiraTicket($ticket, getenv('COMPANY_NAME'))
         );
     }
 }
 
-echo 'Take a look at Slack ;)' . PHP_EOL;
-echo date('Y-m-d H:i:s.u');
+print 'Take a look at Slack ;)' . PHP_EOL;
+print date('Y-m-d H:i:s.u') . PHP_EOL;

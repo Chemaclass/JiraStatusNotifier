@@ -4,14 +4,22 @@ declare(strict_types=1);
 
 namespace App\ScrumMaster\Jira;
 
-final class UrlFactory
+final class UrlFactory implements UrlFactoryInterface
 {
-    public static function factory(string $status, string $comanyName, string $project): string
+    /** @var Board */
+    private $board;
+
+    public function __construct(Board $board)
     {
-        return JqlUrlBuilder::inOpenSprints($comanyName)
+        $this->board = $board;
+    }
+
+    public function buildJql(string $companyName, string $status, string $project): string
+    {
+        return JqlUrlBuilder::inOpenSprints($companyName)
             ->inProject($project)
             ->withStatus($status)
-            ->statusDidNotChangeSinceDays(Board::maxDaysInStatus($status))
+            ->statusDidNotChangeSinceDays($this->board->maxDaysInStatus($status))
             ->build();
     }
 }

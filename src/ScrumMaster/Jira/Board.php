@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\ScrumMaster\Jira;
 
-final class Board
+final class Board implements BoardInterface
 {
     public const TODO = 'To Do';
 
@@ -56,7 +56,7 @@ final class Board
         self::IN_RC => self::SLA_IN_RC,
     ];
 
-    public static function maxDaysInStatus(string $status): int
+    public function maxDaysInStatus(string $status): int
     {
         return self::MAX_DAYS_IN_STATUS[$status] ?? self::MAX_DAYS_FALLBACK;
     }
