@@ -22,7 +22,7 @@ $slackNotifier = new SlackNotifier(
     $jiraBoard,
     new JiraHttpClient(
         HttpClient::create([
-            'auth_basic' => [getenv('JIRA_USERNAME'), getenv('JIRA_PASSWORD')],
+            'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
         ]),
         new JqlUrlFactory($jiraBoard)
     ),
@@ -34,7 +34,7 @@ $slackNotifier = new SlackNotifier(
 $slackNotifier->sendNotifications(
     new CompanyProject(
         getenv('COMPANY_NAME'),
-        $projectName = 'Core Service Team '
+        getenv('JIRA_PROJECT_NAME')
     ),
     new SlackMapping(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
     new SlackMessage(new DateTimeImmutable())
