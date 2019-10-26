@@ -50,38 +50,53 @@ final class SlackNotifierTest extends TestCase
     {
         $jiraBoard = new Board(['status1' => 1]);
 
+        $jiraIssues = [
+            $this->createAnIssueAsArray('user.1.jira'),
+            $this->createAnIssueAsArray('user.2.jira'),
+        ];
+
+        $totalIssues = count($jiraIssues);
+
+        /** @var HttpClientInterface|MockObject $mockSlackClient */
         $mockSlackClient = $this->createMock(HttpClientInterface::class);
-        $mockSlackClient->expects($this->once())->method('request')->with(
-            $this->equalTo('POST'),
-            $this->equalTo(SlackHttpClient::SLACK_API_POST_MESSAGE),
-            $this->equalTo([
-                'json' => [
-                    'as_user' => true,
-                    'channel' => 'channel.id',
-                    'text' => 'any text',
-                ],
-            ])
-        );
+        $mockSlackClient->expects($this->exactly($totalIssues))
+            ->method('request')
+            ->with(
+                $this->equalTo('POST'),
+                $this->equalTo(SlackHttpClient::SLACK_API_POST_MESSAGE),
+                $this->equalTo([
+                    'json' => [
+                        'as_user' => true,
+                        'channel' => 'channel.id',
+                        'text' => 'any text',
+                    ],
+                ])
+            );
 
         $slackNotifier = new SlackNotifier(
             $jiraBoard,
             new JiraHttpClient(
-                $this->mockJiraClient([$this->createAnIssueAsArray('username.jira')]),
+                $this->mockJiraClient($jiraIssues),
                 $this->createMock(UrlFactoryInterface::class)
             ),
             new SlackHttpClient($mockSlackClient)
         );
 
         $messageGenerator = $this->createMock(MessageGeneratorInterface::class);
-        $messageGenerator->method('forJiraTicket')->willReturn('any text');
+        $messageGenerator->expects($this->exactly($totalIssues))
+            ->method('forJiraTicket')->willReturn('any text');
 
         $responses = $slackNotifier->sendNotifications(
             $this->aCompany(),
-            SlackMapping::jiraNameWithSlackId(['username.jira' => 'channel.id']),
+            SlackMapping::jiraNameWithSlackId([
+                'user.1.jira' => 'channel.id',
+                'user.2.jira' => 'channel.id',
+                'user.3.jira' => 'other.channel.id',
+            ]),
             $messageGenerator
         );
 
-        $this->assertNotEmpty($responses, '1 notification should have been sent');
+        $this->assertCount($totalIssues, $responses, 'Some notifications should have been sent');
     }
 
     private function mockJiraClient(array $issues): HttpClientInterface
