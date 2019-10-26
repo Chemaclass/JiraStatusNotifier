@@ -16,8 +16,7 @@
         "friendsofphp/php-cs-fixer": "^2.15",
         "phpunit/phpunit": "^8.4",
         "symfony/var-dumper": "^4.3",
-        "infection/infection": "^0.14.2",
-        "phpstan/phpstan": "^0.11.19"
+        "infection/infection": "^0.14.2"
     },
     "autoload-dev": {
         "psr-4": {
