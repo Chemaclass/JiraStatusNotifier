@@ -23,8 +23,11 @@ final class SlackNotifier
     /** @var SlackHttpClient */
     private $slackClient;
 
-    public function __construct(BoardInterface $board, JiraHttpClient $jiraClient, SlackHttpClient $slackClient)
-    {
+    public function __construct(
+        BoardInterface $board,
+        JiraHttpClient $jiraClient,
+        SlackHttpClient $slackClient
+    ) {
         $this->board = $board;
         $this->jiraClient = $jiraClient;
         $this->slackClient = $slackClient;

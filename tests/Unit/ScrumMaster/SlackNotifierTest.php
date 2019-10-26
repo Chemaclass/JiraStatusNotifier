@@ -20,16 +20,13 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class SlackNotifierTest extends TestCase
 {
     /** @test */
-    public function sendNotifications(): void
+    public function noNotificationsAreSentOutIfNoJiraIssuesWhereFound(): void
     {
-        // TODO: WIP
         $jiraBoard = new Board(['status1' => 1]);
 
         $jiraResponse = $this->createMock(ResponseInterface::class);
         $jiraResponse->method('toArray')->willReturn([
-            'issues' => [
-
-            ],
+            'issues' => [],
         ]);
 
         $jiraClient = $this->createMock(HttpClientInterface::class);
@@ -38,7 +35,7 @@ final class SlackNotifierTest extends TestCase
         $slackNotifier = new SlackNotifier(
             $jiraBoard,
             new JiraHttpClient(
-                $this->createMock(HttpClientInterface::class),
+                $jiraClient,
                 $this->createMock(UrlFactoryInterface::class)
             ),
             new SlackHttpClient(
@@ -55,6 +52,6 @@ final class SlackNotifierTest extends TestCase
             new SlackMessage(new DateTimeImmutable())
         );
 
-        $this->assertEquals([], $responses);
+        $this->assertEmpty($responses, 'No notifications should have been sent');
     }
 }
