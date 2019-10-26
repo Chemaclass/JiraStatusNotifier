@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\ScrumMaster\Jira;
 
-use App\ScrumMaster\Jira\ReadModel\Company;
 use App\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -23,9 +22,9 @@ final class JiraHttpClient
     }
 
     /** @return JiraTicket[] */
-    public function getTickets(Company $company, string $status): array
+    public function getTickets(string $status): array
     {
-        $url = $this->urlFactory->buildUrl($company, $status);
+        $url = $this->urlFactory->buildUrl($status);
         $response = $this->jiraClient->request('GET', $url);
 
         return Tickets::fromJiraResponse($response);

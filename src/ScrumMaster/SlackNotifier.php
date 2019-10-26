@@ -42,7 +42,7 @@ final class SlackNotifier
         $responses = [];
 
         foreach ($this->board->maxDaysInStatus() as $statusName => $maxDays) {
-            $tickets = $this->jiraClient->getTickets($company, $statusName);
+            $tickets = $this->jiraClient->getTickets($statusName);
 
             foreach ($tickets as $ticket) {
                 $responses[] = $this->slackClient->postToChannel(

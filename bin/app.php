@@ -5,6 +5,7 @@ require_once '../vendor/autoload.php';
 
 use App\ScrumMaster\Jira\Board;
 use App\ScrumMaster\Jira\JiraHttpClient;
+use App\ScrumMaster\Jira\JqlUrlBuilder;
 use App\ScrumMaster\Jira\JqlUrlFactory;
 use App\ScrumMaster\Jira\ReadModel\Company;
 use App\ScrumMaster\Slack\SlackHttpClient;
@@ -18,13 +19,18 @@ $dotEnv->load();
 
 $jiraBoard = new Board(json_decode(getenv('DAYS_FOR_STATUS'), true));
 
+$company = Company::withNameAndProject(
+    getenv('COMPANY_NAME'),
+    getenv('JIRA_PROJECT_NAME')
+);
+
 $slackNotifier = new SlackNotifier(
     $jiraBoard,
     new JiraHttpClient(
         HttpClient::create([
             'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
         ]),
-        new JqlUrlFactory($jiraBoard)
+        new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company))
     ),
     new SlackHttpClient(HttpClient::create([
         'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
@@ -32,10 +38,7 @@ $slackNotifier = new SlackNotifier(
 );
 
 $slackNotifier->sendNotifications(
-    Company::withNameAndProject(
-        getenv('COMPANY_NAME'),
-        getenv('JIRA_PROJECT_NAME')
-    ),
+    $company,
     SlackMapping::jiraNameWithSlackId(
         json_decode(getenv('SLACK_MAPPING_IDS'), true)
     ),
