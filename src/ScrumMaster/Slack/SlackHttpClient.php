@@ -9,6 +9,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackHttpClient
 {
+    private const SLACK_API_POST_MESSAGE = 'https://slack.com/api/chat.postMessage';
+
     /** @var HttpClientInterface */
     private $client;
 
@@ -19,7 +21,7 @@ final class SlackHttpClient
 
     public function postToChannel(string $channel, string $text): ResponseInterface
     {
-        return $this->client->request('POST', 'https://slack.com/api/chat.postMessage', [
+        return $this->client->request('POST', self::SLACK_API_POST_MESSAGE, [
             'json' => [
                 'as_user' => true,
                 'channel' => $channel,
