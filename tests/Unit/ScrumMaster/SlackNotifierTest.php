@@ -105,6 +105,7 @@ final class SlackNotifierTest extends TestCase
         $jiraResponse = $this->createMock(ResponseInterface::class);
         $jiraResponse->method('toArray')->willReturn(['issues' => $issues]);
 
+        /** @var HttpClientInterface $jiraClient */
         $jiraClient = $this->createMock(HttpClientInterface::class);
         $jiraClient->method('request')->willReturn($jiraResponse);
 
