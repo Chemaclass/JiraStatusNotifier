@@ -11,6 +11,8 @@ final class SlackMapping
 {
     private const FALLBACK_SLACK_ID_KEY = 'fallback';
 
+    private const FALLBACK_SLACK_ID_VALUE = 'unknown';
+
     /** @var array<string,string> */
     private $ids;
 
@@ -30,6 +32,6 @@ final class SlackMapping
             return $this->ids[$name];
         }
 
-        return $this->ids[self::FALLBACK_SLACK_ID_KEY];
+        return $this->ids[self::FALLBACK_SLACK_ID_KEY] ?? self::FALLBACK_SLACK_ID_VALUE;
     }
 }

@@ -8,7 +8,7 @@ use App\ScrumMaster\Jira\ReadModel\Assignee;
 use App\ScrumMaster\Jira\ReadModel\JiraTicket;
 use DateTimeImmutable;
 
-final class SlackMessage
+final class SlackMessage implements MessageGeneratorInterface
 {
     /** @var DateTimeImmutable */
     private $timeToDiff;
@@ -18,17 +18,12 @@ final class SlackMessage
         return new self($timeToDiff);
     }
 
-    public static function create(): self
-    {
-        return new self(new DateTimeImmutable());
-    }
-
     private function __construct(DateTimeImmutable $timeToDiff)
     {
         $this->timeToDiff = $timeToDiff;
     }
 
-    public function fromJiraTicket(JiraTicket $ticket, string $companyName): string
+    public function forJiraTicket(JiraTicket $ticket, string $companyName): string
     {
         $assignee = $ticket->assignee();
         $status = $ticket->status();

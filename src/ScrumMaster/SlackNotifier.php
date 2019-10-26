@@ -7,9 +7,9 @@ namespace App\ScrumMaster;
 use App\ScrumMaster\Jira\BoardInterface;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Jira\ReadModel\CompanyProject;
+use App\ScrumMaster\Slack\MessageGeneratorInterface;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use App\ScrumMaster\Slack\SlackMapping;
-use App\ScrumMaster\Slack\SlackMessage;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifier
@@ -37,7 +37,7 @@ final class SlackNotifier
     public function sendNotifications(
         CompanyProject $company,
         SlackMapping $slackMapping,
-        SlackMessage $slackMessage
+        MessageGeneratorInterface $messageGenerator
     ): array {
         $responses = [];
 
@@ -45,9 +45,9 @@ final class SlackNotifier
             $tickets = $this->jiraClient->getTickets($company, $statusName);
 
             foreach ($tickets as $ticket) {
-                $responses = $this->slackClient->postToChannel(
+                $responses[] = $this->slackClient->postToChannel(
                     $slackMapping->toSlackId($ticket->assignee()->name()),
-                    $slackMessage->fromJiraTicket($ticket, $company->companyName())
+                    $messageGenerator->forJiraTicket($ticket, $company->companyName())
                 );
             }
         }

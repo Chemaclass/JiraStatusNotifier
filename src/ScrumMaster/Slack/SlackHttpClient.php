@@ -9,7 +9,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackHttpClient
 {
-    private const SLACK_API_POST_MESSAGE = 'https://slack.com/api/chat.postMessage';
+    public const SLACK_API_POST_MESSAGE = 'https://slack.com/api/chat.postMessage';
 
     /** @var HttpClientInterface */
     private $client;

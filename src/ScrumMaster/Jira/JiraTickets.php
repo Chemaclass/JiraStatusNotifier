@@ -16,7 +16,7 @@ final class JiraTickets
     {
         $jiraTickets = [];
 
-        foreach ($rawArray['issues'] as $key => $item) {
+        foreach ($rawArray['issues'] as $item) {
             $fields = $item['fields'];
             $assignee = $fields['assignee'];
 
