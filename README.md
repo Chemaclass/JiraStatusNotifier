@@ -6,8 +6,6 @@ remains in the same status for more than `N` days.
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/build-status/master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
-
 
 ## ENV Variables
 
