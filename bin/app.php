@@ -36,8 +36,10 @@ $slackNotifier->sendNotifications(
         getenv('COMPANY_NAME'),
         getenv('JIRA_PROJECT_NAME')
     ),
-    new SlackMapping(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
-    new SlackMessage(new DateTimeImmutable())
+    SlackMapping::jiraNameWithSlackId(
+        json_decode(getenv('SLACK_MAPPING_IDS'), true)
+    ),
+    SlackMessage::withTimeToDiff(new DateTimeImmutable())
 );
 
 print sprintf('Finished at %s | Take a look at Slack ;)', date('Y-m-d H:i:s'));

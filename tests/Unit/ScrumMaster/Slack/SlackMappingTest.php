@@ -14,7 +14,7 @@ final class SlackMappingTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mapping = new SlackMapping([
+        $this->mapping = SlackMapping::jiraNameWithSlackId([
             'fallback' => 'slack.group.id',
             'jira.person.id' => 'slack.person.id',
         ]);

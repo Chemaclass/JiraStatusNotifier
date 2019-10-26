@@ -18,6 +18,16 @@ final class Assignee
     /** @var null|string */
     private $displayName;
 
+    public static function empty(): self
+    {
+        return new self(
+            $name = null,
+            $key = null,
+            $emailAddress = null,
+            $displayName = null
+        );
+    }
+
     public function __construct(
         ?string $name,
         ?string $key,

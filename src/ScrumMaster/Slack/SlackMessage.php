@@ -13,7 +13,17 @@ final class SlackMessage
     /** @var DateTimeImmutable */
     private $timeToDiff;
 
-    public function __construct(DateTimeImmutable $timeToDiff)
+    public static function withTimeToDiff(DateTimeImmutable $timeToDiff): self
+    {
+        return new self($timeToDiff);
+    }
+
+    public static function create(): self
+    {
+        return new self(new DateTimeImmutable());
+    }
+
+    private function __construct(DateTimeImmutable $timeToDiff)
     {
         $this->timeToDiff = $timeToDiff;
     }

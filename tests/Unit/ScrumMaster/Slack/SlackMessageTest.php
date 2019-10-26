@@ -38,7 +38,7 @@ TXT;
             $storyPoints = 5
         );
 
-        $slackMessage = new SlackMessage($statusDateChange);
+        $slackMessage = SlackMessage::withTimeToDiff($statusDateChange);
         $this->assertEquals($expectedMessage, $slackMessage->fromJiraTicket($jiraTicket, 'company-name'));
     }
 
@@ -58,16 +58,11 @@ TXT;
             $title = 'Ticket Title',
             $key = 'CST-KEY',
             new TicketStatus('IN QA', $statusDateChange->modify('-2 days')),
-            new Assignee(
-                $name = null,
-                $key = null,
-                $emailAddress = null,
-                $displayName = null
-            ),
+            Assignee::empty(),
             $storyPoints = 5
         );
 
-        $slackMessage = new SlackMessage($statusDateChange);
+        $slackMessage = SlackMessage::withTimeToDiff($statusDateChange);
         $this->assertEquals($expectedMessage, $slackMessage->fromJiraTicket($jiraTicket, 'company-name'));
     }
 }

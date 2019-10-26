@@ -12,7 +12,6 @@ use App\ScrumMaster\Slack\SlackHttpClient;
 use App\ScrumMaster\Slack\SlackMapping;
 use App\ScrumMaster\Slack\SlackMessage;
 use App\ScrumMaster\SlackNotifier;
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -48,8 +47,8 @@ final class SlackNotifierTest extends TestCase
                 'COMPANY_NAME',
                 'JIRA_PROJECT_NAME'
             ),
-            new SlackMapping(['key' => 'value']),
-            new SlackMessage(new DateTimeImmutable())
+            SlackMapping::jiraNameWithSlackId(['key' => 'value']),
+            SlackMessage::create()
         );
 
         $this->assertEmpty($responses, 'No notifications should have been sent');

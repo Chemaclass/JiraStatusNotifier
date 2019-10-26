@@ -9,10 +9,17 @@ namespace App\ScrumMaster\Slack;
  */
 final class SlackMapping
 {
-    /** @var array */
+    private const FALLBACK_SLACK_ID_KEY = 'fallback';
+
+    /** @var array<string,string> */
     private $ids;
 
-    public function __construct(array $ids)
+    public static function jiraNameWithSlackId(array $ids): self
+    {
+        return new self($ids);
+    }
+
+    private function __construct(array $ids)
     {
         $this->ids = $ids;
     }
@@ -23,6 +30,6 @@ final class SlackMapping
             return $this->ids[$name];
         }
 
-        return $this->ids['fallback'];
+        return $this->ids[self::FALLBACK_SLACK_ID_KEY];
     }
 }
