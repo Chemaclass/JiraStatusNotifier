@@ -31,19 +31,17 @@ final class SlackMessage implements MessageGeneratorInterface
         $url = "https://{$companyName}.atlassian.net/browse/{$ticket->key()}";
         $dayWord = ($daysDiff > 1) ? 'days' : 'day';
 
-        $text = static::headerText($assignee) . <<<TXT
+        return $this->headerText($assignee) . <<<TXT
 *Ticket*: {$ticket->title()}[<{$url}|{$ticket->key()}>]
 *Current status*: {$status->name()} since {$daysDiff} {$dayWord}
 *Story Points*: {$ticket->storyPoints()}
 
 TXT;
-
-        return $text;
     }
 
-    private static function headerText(Assignee $assignee): string
+    private function headerText(Assignee $assignee): string
     {
-        if ($assignee->name()) {
+        if ($assignee->key()) {
             return "Hey, {$assignee->displayName()} ({$assignee->name()}), please have a look" . PHP_EOL;
         }
 

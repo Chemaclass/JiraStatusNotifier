@@ -32,7 +32,6 @@ TXT;
             new Assignee(
                 $name = 'assignee.name',
                 $key = 'assignee-key',
-                $emailAddress = 'person@companymail.com',
                 $displayName = 'Full Name'
             ),
             $storyPoints = 5

@@ -8,13 +8,17 @@ use App\ScrumMaster\Jira\ReadModel\Assignee;
 use App\ScrumMaster\Jira\ReadModel\JiraTicket;
 use App\ScrumMaster\Jira\ReadModel\TicketStatus;
 use DateTimeImmutable;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final class JiraTickets
+final class Tickets
 {
+    public const FIELD_STORY_POINTS = 'customfield_10005';
+
     /** @return JiraTicket[] */
-    public static function fromJira(array $rawArray): array
+    public static function fromJiraResponse(ResponseInterface $response): array
     {
         $jiraTickets = [];
+        $rawArray = $response->toArray();
 
         foreach ($rawArray['issues'] as $item) {
             $fields = $item['fields'];
@@ -30,10 +34,9 @@ final class JiraTickets
                 new Assignee(
                     $assignee['name'],
                     $assignee['key'],
-                    $assignee['emailAddress'],
                     $assignee['displayName']
                 ),
-                $storyPoints = (int) $fields['customfield_10005']
+                $storyPoints = (int) $fields[self::FIELD_STORY_POINTS]
             );
         }
 

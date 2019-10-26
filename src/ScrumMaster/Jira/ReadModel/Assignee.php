@@ -13,9 +13,6 @@ final class Assignee
     private $key;
 
     /** @var null|string */
-    private $emailAddress;
-
-    /** @var null|string */
     private $displayName;
 
     public static function empty(): self
@@ -23,7 +20,6 @@ final class Assignee
         return new self(
             $name = null,
             $key = null,
-            $emailAddress = null,
             $displayName = null
         );
     }
@@ -31,12 +27,10 @@ final class Assignee
     public function __construct(
         ?string $name,
         ?string $key,
-        ?string $emailAddress,
         ?string $displayName
     ) {
         $this->name = $name;
         $this->key = $key;
-        $this->emailAddress = $emailAddress;
         $this->displayName = $displayName;
     }
 
@@ -48,11 +42,6 @@ final class Assignee
     public function key(): ?string
     {
         return $this->key;
-    }
-
-    public function emailAddress(): ?string
-    {
-        return $this->emailAddress;
     }
 
     public function displayName(): ?string

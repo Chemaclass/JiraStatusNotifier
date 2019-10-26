@@ -28,6 +28,6 @@ final class JiraHttpClient
         $url = $this->urlFactory->buildUrl($company, $status);
         $response = $this->jiraClient->request('GET', $url);
 
-        return JiraTickets::fromJira($response->toArray());
+        return Tickets::fromJiraResponse($response);
     }
 }

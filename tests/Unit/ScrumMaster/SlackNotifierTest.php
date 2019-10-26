@@ -7,6 +7,7 @@ namespace App\Tests\Unit\ScrumMaster;
 use App\ScrumMaster\Jira\Board;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Jira\ReadModel\CompanyProject;
+use App\ScrumMaster\Jira\Tickets;
 use App\ScrumMaster\Jira\UrlFactoryInterface;
 use App\ScrumMaster\Slack\MessageGeneratorInterface;
 use App\ScrumMaster\Slack\SlackHttpClient;
@@ -65,25 +66,7 @@ final class SlackNotifierTest extends TestCase
         $slackNotifier = new SlackNotifier(
             $jiraBoard,
             new JiraHttpClient(
-                $this->mockJiraClient($issues = [
-                    [
-                        'key' => 'KEY-123',
-                        'fields' => [
-                            'customfield_10005' => '5.0',
-                            'status' => [
-                                'name' => 'In Progress',
-                            ],
-                            'summary' => 'The ticket title',
-                            'statuscategorychangedate' => '2019-06-15T10:35:00+00',
-                            'assignee' => [
-                                'name' => 'username.jira',
-                                'key' => 'user.key.jira',
-                                'emailAddress' => 'user@email.jira',
-                                'displayName' => 'display.name.jira',
-                            ],
-                        ],
-                    ],
-                ]),
+                $this->mockJiraClient([$this->createAnIssueAsArray('username.jira')]),
                 $this->createMock(UrlFactoryInterface::class)
             ),
             new SlackHttpClient($mockSlackClient)
@@ -116,5 +99,26 @@ final class SlackNotifierTest extends TestCase
     private function aCompanyProject(): CompanyProject
     {
         return new CompanyProject('COMPANY_NAME', 'JIRA_PROJECT_NAME');
+    }
+
+    private function createAnIssueAsArray(string $assigneeName): array
+    {
+        return [
+            'key' => 'KEY-123',
+            'fields' => [
+                Tickets::FIELD_STORY_POINTS => '5.0',
+                'status' => [
+                    'name' => 'In Progress',
+                ],
+                'summary' => 'The ticket title',
+                'statuscategorychangedate' => '2019-06-15T10:35:00+00',
+                'assignee' => [
+                    'name' => $assigneeName,
+                    'key' => 'user.key.jira',
+                    'emailAddress' => 'user@email.jira',
+                    'displayName' => 'display.name.jira',
+                ],
+            ],
+        ];
     }
 }
