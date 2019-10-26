@@ -12,6 +12,7 @@ use App\ScrumMaster\Slack\MessageGeneratorInterface;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use App\ScrumMaster\Slack\SlackMapping;
 use App\ScrumMaster\SlackNotifier;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -105,7 +106,7 @@ final class SlackNotifierTest extends TestCase
         $jiraResponse = $this->createMock(ResponseInterface::class);
         $jiraResponse->method('toArray')->willReturn(['issues' => $issues]);
 
-        /** @var HttpClientInterface $jiraClient */
+        /** @var HttpClientInterface|MockObject $jiraClient */
         $jiraClient = $this->createMock(HttpClientInterface::class);
         $jiraClient->method('request')->willReturn($jiraResponse);
 
