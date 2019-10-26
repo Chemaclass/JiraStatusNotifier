@@ -35,11 +35,10 @@ You can create your own Slack App here: https://api.slack.com/apps (inside "Oaut
 
 Value example: `'{"fallback":"slack.group.id", "jira.person.id":"slack.member.id"}'`
 
-It's mapping between the "person.id" from JIRA to the "channel name" or "person member_id" in slack .
+It is the mapping between the "person.id" from JIRA to the "channel name" or "person member_id" in slack .
 
-Extra: in case you want to post something using a slack bot into a slack channel, you have to
-first allow this bot (as an app) to publish messages into that channel:
-
+> Important: in case you want to post something using a slack-bot into a slack channel, you have to
+allow first this bot (as an app) to publish messages into that channel:
 `Channel > Configuration > Add an app`
 
 ### DAYS_FOR_STATUS
