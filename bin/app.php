@@ -6,7 +6,7 @@ require_once '../vendor/autoload.php';
 use App\ScrumMaster\Jira\Board;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Jira\JqlUrlFactory;
-use App\ScrumMaster\Jira\ReadModel\CompanyProject;
+use App\ScrumMaster\Jira\ReadModel\Company;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use App\ScrumMaster\Slack\SlackMapping;
 use App\ScrumMaster\Slack\SlackMessage;
@@ -32,7 +32,7 @@ $slackNotifier = new SlackNotifier(
 );
 
 $slackNotifier->sendNotifications(
-    new CompanyProject(
+    Company::withNameAndProject(
         getenv('COMPANY_NAME'),
         getenv('JIRA_PROJECT_NAME')
     ),

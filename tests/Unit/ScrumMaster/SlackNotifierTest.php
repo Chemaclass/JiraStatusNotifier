@@ -6,7 +6,7 @@ namespace App\Tests\Unit\ScrumMaster;
 
 use App\ScrumMaster\Jira\Board;
 use App\ScrumMaster\Jira\JiraHttpClient;
-use App\ScrumMaster\Jira\ReadModel\CompanyProject;
+use App\ScrumMaster\Jira\ReadModel\Company;
 use App\ScrumMaster\Jira\Tickets;
 use App\ScrumMaster\Jira\UrlFactoryInterface;
 use App\ScrumMaster\Slack\MessageGeneratorInterface;
@@ -37,7 +37,7 @@ final class SlackNotifierTest extends TestCase
         );
 
         $responses = $slackNotifier->sendNotifications(
-            $this->aCompanyProject(),
+            $this->aCompany(),
             SlackMapping::jiraNameWithSlackId(['key' => 'value']),
             $this->createMock(MessageGeneratorInterface::class)
         );
@@ -76,7 +76,7 @@ final class SlackNotifierTest extends TestCase
         $messageGenerator->method('forJiraTicket')->willReturn('any text');
 
         $responses = $slackNotifier->sendNotifications(
-            $this->aCompanyProject(),
+            $this->aCompany(),
             SlackMapping::jiraNameWithSlackId(['username.jira' => 'channel.id']),
             $messageGenerator
         );
@@ -96,9 +96,9 @@ final class SlackNotifierTest extends TestCase
         return $jiraClient;
     }
 
-    private function aCompanyProject(): CompanyProject
+    private function aCompany(): Company
     {
-        return new CompanyProject('COMPANY_NAME', 'JIRA_PROJECT_NAME');
+        return Company::withNameAndProject('COMPANY_NAME', 'JIRA_PROJECT_NAME');
     }
 
     private function createAnIssueAsArray(string $assigneeName): array

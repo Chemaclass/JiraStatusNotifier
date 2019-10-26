@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\ScrumMaster\Jira;
 
 use App\ScrumMaster\Jira\JqlUrlBuilder;
+use App\ScrumMaster\Jira\ReadModel\Company;
 use PHPUnit\Framework\TestCase;
 
 final class JqlUrlBuilderTest extends TestCase
@@ -14,7 +15,9 @@ final class JqlUrlBuilderTest extends TestCase
     {
         $this->assertEquals(
             'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()',
-            JqlUrlBuilder::inOpenSprints('company-name')->build()
+            JqlUrlBuilder::inOpenSprints(
+                Company::withName('company-name')
+            )->build()
         );
     }
 
@@ -23,7 +26,9 @@ final class JqlUrlBuilderTest extends TestCase
     {
         $this->assertEquals(
             'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND project IN ("Core Service Team ")',
-            JqlUrlBuilder::inOpenSprints('company-name')->inProject('Core Service Team ')->build()
+            JqlUrlBuilder::inOpenSprints(
+                Company::withNameAndProject('company-name', 'Core Service Team ')
+            )->build()
         );
     }
 
@@ -32,7 +37,9 @@ final class JqlUrlBuilderTest extends TestCase
     {
         $this->assertEquals(
             'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND status IN ("In Review")',
-            JqlUrlBuilder::inOpenSprints('company-name')->withStatus('In Review')->build()
+            JqlUrlBuilder::inOpenSprints(Company::withName('company-name'))
+                ->withStatus('In Review')
+                ->build()
         );
     }
 
@@ -41,7 +48,9 @@ final class JqlUrlBuilderTest extends TestCase
     {
         $this->assertEquals(
             'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND NOT status changed after -1d',
-            JqlUrlBuilder::inOpenSprints('company-name')->statusDidNotChangeSinceDays(1)->build()
+            JqlUrlBuilder::inOpenSprints(Company::withName('company-name'))
+                ->statusDidNotChangeSinceDays(1)
+                ->build()
         );
     }
 
@@ -50,7 +59,7 @@ final class JqlUrlBuilderTest extends TestCase
     {
         $this->assertEquals(
             'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() AND status IN ("IN QA") AND ((status changed TO "IN QA" before 2019-10-14 AND NOT status changed after -4d) OR (status changed TO "IN QA" after 2019-10-14 AND NOT status changed after -2d))',
-            JqlUrlBuilder::inOpenSprints('company-name')
+            JqlUrlBuilder::inOpenSprints(Company::withName('company-name'))
                 ->withStatus('IN QA')
                 ->statusDidNotChangeSinceDays(2, $startSprintDate = '2019-10-14')
                 ->build()

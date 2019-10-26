@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\ScrumMaster\Jira;
 
+use App\ScrumMaster\Jira\ReadModel\Company;
+
 final class JqlUrlBuilder
 {
     private const BASE_URL = 'https://%s.atlassian.net/rest/api/3/search';
 
-    /** @var string */
-    private $companyName;
+    /** @var Company */
+    private $company;
 
     /** @var string */
     private $jqlInitParam;
-
-    /** @var string */
-    private $projectName;
 
     /** @var string */
     private $status;
@@ -26,22 +25,15 @@ final class JqlUrlBuilder
     /** @var null|string */
     private $startSprintDate;
 
-    public static function inOpenSprints(string $companyName): self
+    public static function inOpenSprints(Company $company): self
     {
-        return new self($companyName, '?jql=sprint in openSprints()');
+        return new self($company, '?jql=sprint in openSprints()');
     }
 
-    private function __construct(string $companyName, string $jqlInitParam)
+    private function __construct(Company $company, string $jqlInitParam)
     {
-        $this->companyName = $companyName;
+        $this->company = $company;
         $this->jqlInitParam = $jqlInitParam;
-    }
-
-    public function inProject(string $name): self
-    {
-        $this->projectName = $name;
-
-        return $this;
     }
 
     public function withStatus(string $status): self
@@ -61,10 +53,10 @@ final class JqlUrlBuilder
 
     public function build(): string
     {
-        $finalUrl = sprintf(self::BASE_URL, $this->companyName) . $this->jqlInitParam;
+        $finalUrl = sprintf(self::BASE_URL, $this->company->companyName()) . $this->jqlInitParam;
 
-        if ($this->projectName) {
-            $finalUrl .= sprintf(' AND project IN ("%s")', $this->projectName);
+        if ($this->company->projectName()) {
+            $finalUrl .= sprintf(' AND project IN ("%s")', $this->company->projectName());
         }
 
         if ($this->status) {

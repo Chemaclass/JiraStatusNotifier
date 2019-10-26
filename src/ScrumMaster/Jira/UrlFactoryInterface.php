@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\ScrumMaster\Jira;
 
-use App\ScrumMaster\Jira\ReadModel\CompanyProject;
+use App\ScrumMaster\Jira\ReadModel\Company;
 
 interface UrlFactoryInterface
 {
-    public function buildUrl(CompanyProject $company, string $status): string;
+    public function buildUrl(Company $company, string $status): string;
 }

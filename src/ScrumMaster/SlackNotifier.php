@@ -6,7 +6,7 @@ namespace App\ScrumMaster;
 
 use App\ScrumMaster\Jira\BoardInterface;
 use App\ScrumMaster\Jira\JiraHttpClient;
-use App\ScrumMaster\Jira\ReadModel\CompanyProject;
+use App\ScrumMaster\Jira\ReadModel\Company;
 use App\ScrumMaster\Slack\MessageGeneratorInterface;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use App\ScrumMaster\Slack\SlackMapping;
@@ -35,7 +35,7 @@ final class SlackNotifier
 
     /** @return ResponseInterface[] */
     public function sendNotifications(
-        CompanyProject $company,
+        Company $company,
         SlackMapping $slackMapping,
         MessageGeneratorInterface $messageGenerator
     ): array {
