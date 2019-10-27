@@ -14,6 +14,7 @@ final class BoardTest extends TestCase
     {
         $board = new Board(['status1' => 1, 'status2' => 2]);
         $this->assertEquals(2, $board->getDaysForStatus('status2'));
+        $this->assertEquals(1, $board->getDaysForStatus('statusNotFound'));
     }
 
     /** @test */
