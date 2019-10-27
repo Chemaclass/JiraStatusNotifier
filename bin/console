@@ -1,7 +1,9 @@
+#!/usr/bin/env php
 <?php
+
 declare(strict_types=1);
 
-require_once '../vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
 use App\ScrumMaster\Jira\Board;
 use App\ScrumMaster\Jira\JiraHttpClient;

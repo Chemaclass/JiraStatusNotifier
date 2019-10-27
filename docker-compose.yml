@@ -1,0 +1,8 @@
+scrum_master_php:
+  build: .
+  dockerfile: devops/dev/php.dockerfile
+  container_name: scrum_master_php
+  hostname: php
+  volumes:
+    - .:/srv/scrum-master:delegated
+    - ~/.ssh:/home/dev/.ssh
