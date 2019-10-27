@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+docker exec -ti -u dev scrum_master_php sh -c "cd /srv/scrum-master && vendor/bin/php-cs-fixer fix"
