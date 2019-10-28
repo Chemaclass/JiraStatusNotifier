@@ -29,7 +29,7 @@ trait JiraApiResource
     private function createAnIssueAsArray(string $assigneeName): array
     {
         return [
-            'key' => 'KEY-123',
+            'key' => 'ANY-123',
             'fields' => [
                 Tickets::FIELD_STORY_POINTS => '5.0',
                 'status' => [
