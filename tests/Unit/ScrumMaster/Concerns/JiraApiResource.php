@@ -26,10 +26,10 @@ trait JiraApiResource
         return $jiraClient;
     }
 
-    private function createAnIssueAsArray(string $assigneeName): array
+    private function createAnIssueAsArray(string $assigneeName, string $key): array
     {
         return [
-            'key' => 'KEY-123',
+            'key' => $key,
             'fields' => [
                 Tickets::FIELD_STORY_POINTS => '5.0',
                 'status' => [

@@ -32,14 +32,14 @@ final class SlackNotifierTest extends TestCase
             new SlackHttpClient($this->createMock(HttpClientInterface::class))
         );
 
-        $responses = $slackNotifier->sendNotifications(
+        $result = $slackNotifier->sendNotifications(
             $this->aCompany(),
             $this->createMock(UrlFactoryInterface::class),
             SlackMapping::jiraNameWithSlackId(['key' => 'value']),
             $this->createMock(MessageGeneratorInterface::class)
         );
 
-        $this->assertEmpty($responses, 'No notifications should have been sent');
+        $this->assertEmpty($result->list(), 'No notifications should have been sent');
     }
 
     /** @test */
@@ -48,8 +48,8 @@ final class SlackNotifierTest extends TestCase
         $jiraBoard = new Board(['status1' => 1]);
 
         $jiraIssues = [
-            $this->createAnIssueAsArray('user.1.jira'),
-            $this->createAnIssueAsArray('user.2.jira'),
+            $this->createAnIssueAsArray('user.1.jira', 'KEY-1'),
+            $this->createAnIssueAsArray('user.2.jira', 'KEY-2'),
         ];
 
         $totalIssues = count($jiraIssues);
@@ -80,7 +80,7 @@ final class SlackNotifierTest extends TestCase
         $messageGenerator->expects($this->exactly($totalIssues))
             ->method('forJiraTicket')->willReturn('any text');
 
-        $responses = $slackNotifier->sendNotifications(
+        $result = $slackNotifier->sendNotifications(
             $this->aCompany(),
             $this->createMock(UrlFactoryInterface::class),
             SlackMapping::jiraNameWithSlackId([
@@ -91,7 +91,7 @@ final class SlackNotifierTest extends TestCase
             $messageGenerator
         );
 
-        $this->assertCount($totalIssues, $responses, 'Some notifications should have been sent');
+        $this->assertCount($totalIssues, $result->list(), 'Some notifications should have been sent');
     }
 
     private function aCompany(): Company

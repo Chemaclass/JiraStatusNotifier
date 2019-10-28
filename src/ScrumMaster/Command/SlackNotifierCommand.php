@@ -14,6 +14,7 @@ use App\ScrumMaster\Slack\SlackHttpClient;
 use App\ScrumMaster\Slack\SlackMapping;
 use App\ScrumMaster\Slack\SlackMessage;
 use App\ScrumMaster\Slack\SlackNotifier;
+use App\ScrumMaster\Slack\SlackNotifierResult;
 use DateTimeImmutable;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -37,21 +38,25 @@ final class SlackNotifierCommand
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());
         $slackNotifier = new SlackNotifier($jiraBoard, $this->jiraHttpClient, $this->slackHttpClient);
 
-        $responses = $slackNotifier->sendNotifications(
+        $result = $slackNotifier->sendNotifications(
             $company,
             new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company)),
             SlackMapping::jiraNameWithSlackId($input->slackMappingIds()),
             SlackMessage::withTimeToDiff(new DateTimeImmutable())
         );
 
-        $output->writeln('Total notifications: ' . count($responses));
-        $output->writeln('Total successful notifications sent: ' . $this->countWithStatusCode($responses, 200));
-        $output->writeln('Total failed notifications sent: ' . $this->countWithStatusCode($responses, 400));
+        $output->writeln(sprintf(
+            'Total notifications: %d (%s)',
+            count($result->list()),
+            implode(', ', array_keys($result->list()))
+        ));
+        $output->writeln('Total successful notifications sent: ' . $this->countWithStatusCode($result, 200));
+        $output->writeln('Total failed notifications sent: ' . $this->countWithStatusCode($result, 400));
     }
 
-    private function countWithStatusCode(array $responses, int $statusCode): int
+    private function countWithStatusCode(SlackNotifierResult $result, int $statusCode): int
     {
-        return count(array_filter($responses, function (ResponseInterface $response) use ($statusCode) {
+        return count(array_filter($result->list(), function (ResponseInterface $response) use ($statusCode) {
             return $response->getStatusCode() === $statusCode;
         }));
     }
