@@ -7,19 +7,20 @@ namespace App\Tests\Unit\ScrumMaster\Slack;
 use App\ScrumMaster\Jira\Board;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Jira\ReadModel\Company;
-use App\ScrumMaster\Jira\Tickets;
 use App\ScrumMaster\Jira\UrlFactoryInterface;
 use App\ScrumMaster\Slack\MessageGeneratorInterface;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use App\ScrumMaster\Slack\SlackMapping;
 use App\ScrumMaster\Slack\SlackNotifier;
+use App\Tests\Unit\ScrumMaster\JiraApiResource;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifierTest extends TestCase
 {
+    use JiraApiResource;
+
     /** @test */
     public function noNotificationsAreSentOutIfNoJiraIssuesWhereFound(): void
     {
@@ -93,41 +94,8 @@ final class SlackNotifierTest extends TestCase
         $this->assertCount($totalIssues, $responses, 'Some notifications should have been sent');
     }
 
-    private function mockJiraClient(array $issues): HttpClientInterface
-    {
-        $jiraResponse = $this->createMock(ResponseInterface::class);
-        $jiraResponse->method('toArray')->willReturn(['issues' => $issues]);
-
-        /** @var HttpClientInterface|MockObject $jiraClient */
-        $jiraClient = $this->createMock(HttpClientInterface::class);
-        $jiraClient->method('request')->willReturn($jiraResponse);
-
-        return $jiraClient;
-    }
-
     private function aCompany(): Company
     {
         return Company::withNameAndProject('COMPANY_NAME', 'JIRA_PROJECT_NAME');
-    }
-
-    private function createAnIssueAsArray(string $assigneeName): array
-    {
-        return [
-            'key' => 'KEY-123',
-            'fields' => [
-                Tickets::FIELD_STORY_POINTS => '5.0',
-                'status' => [
-                    'name' => 'In Progress',
-                ],
-                'summary' => 'The ticket title',
-                'statuscategorychangedate' => '2019-06-15T10:35:00+00',
-                'assignee' => [
-                    'name' => $assigneeName,
-                    'key' => 'user.key.jira',
-                    'emailAddress' => 'user@email.jira',
-                    'displayName' => 'display.name.jira',
-                ],
-            ],
-        ];
     }
 }
