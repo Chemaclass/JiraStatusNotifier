@@ -12,7 +12,7 @@ use App\ScrumMaster\Slack\MessageGeneratorInterface;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use App\ScrumMaster\Slack\SlackMapping;
 use App\ScrumMaster\Slack\SlackNotifier;
-use App\Tests\Unit\ScrumMaster\JiraApiResource;
+use App\Tests\Unit\ScrumMaster\Concerns\JiraApiResource;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;

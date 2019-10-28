@@ -8,7 +8,7 @@ use App\ScrumMaster\Command\SlackNotifierCommand;
 use App\ScrumMaster\Command\SlackNotifierInput;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Slack\SlackHttpClient;
-use App\Tests\Unit\ScrumMaster\JiraApiResource;
+use App\Tests\Unit\ScrumMaster\Concerns\JiraApiResource;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
