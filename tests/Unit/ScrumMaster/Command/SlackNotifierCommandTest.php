@@ -27,17 +27,13 @@ final class SlackNotifierCommandTest extends TestCase
         );
 
         $command->execute(SlackNotifierInput::fromArray([
-            'COMPANY_NAME' => 'company',
-            'JIRA_PROJECT_NAME' => 'project',
-            'DAYS_FOR_STATUS' => '{"status":1}',
-            'SLACK_MAPPING_IDS' => '{"jira.id":"slack.id"}',
+            SlackNotifierInput::COMPANY_NAME => 'company',
+            SlackNotifierInput::JIRA_PROJECT_NAME => 'project',
+            SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
+            SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
         ]), $output);
 
-        $this->assertEquals([
-            'Total notifications: 0 ()',
-            'Total successful notifications sent: 0',
-            'Total failed notifications sent: 0',
-        ], $output->lines());
+        $this->assertContains('Total notifications: 0 ()', $output->lines());
     }
 
     /** @test */
@@ -56,10 +52,10 @@ final class SlackNotifierCommandTest extends TestCase
         );
 
         $command->execute(SlackNotifierInput::fromArray([
-            'COMPANY_NAME' => 'company',
-            'JIRA_PROJECT_NAME' => 'project',
-            'DAYS_FOR_STATUS' => '{"status":1}',
-            'SLACK_MAPPING_IDS' => '{"jira.id":"slack.id"}',
+            SlackNotifierInput::COMPANY_NAME => 'company',
+            SlackNotifierInput::JIRA_PROJECT_NAME => 'project',
+            SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
+            SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
         ]), $output);
 
         $this->assertContains('Total notifications: 2 (KEY-111, KEY-222)', $output->lines());

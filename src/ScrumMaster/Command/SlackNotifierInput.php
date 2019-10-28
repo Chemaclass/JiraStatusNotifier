@@ -8,13 +8,14 @@ use App\ScrumMaster\Command\Exception\UndefinedParameter;
 
 final class SlackNotifierInput
 {
-    private const COMPANY_NAME = 'COMPANY_NAME';
 
-    private const JIRA_PROJECT_NAME = 'JIRA_PROJECT_NAME';
+    public const COMPANY_NAME = 'COMPANY_NAME';
 
-    private const DAYS_FOR_STATUS = 'DAYS_FOR_STATUS';
+    public const JIRA_PROJECT_NAME = 'JIRA_PROJECT_NAME';
 
-    private const SLACK_MAPPING_IDS = 'SLACK_MAPPING_IDS';
+    public const DAYS_FOR_STATUS = 'DAYS_FOR_STATUS';
+
+    public const SLACK_MAPPING_IDS = 'SLACK_MAPPING_IDS';
 
     private const MANDATORY_PARAMETERS = [
         self::COMPANY_NAME,
