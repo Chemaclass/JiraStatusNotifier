@@ -10,66 +10,66 @@ use PHPUnit\Framework\TestCase;
 final class SlackNotifierInputTest extends TestCase
 {
     /** @test */
-    public function undefinedCompanyName(): void
+    public function allParametersDefined(): void
     {
-        $this->expectExceptionMessage('Undefined parameter: COMPANY_NAME');
-        SlackNotifierInput::fromArray([])->companyName();
+        $input = SlackNotifierInput::fromArray([
+            'COMPANY_NAME' => 'company',
+            'JIRA_PROJECT_NAME' => 'project',
+            'DAYS_FOR_STATUS' => '{"status":2}',
+            'SLACK_MAPPING_IDS' => '{"jira.id":"slack.id"}',
+        ]);
+
+        $this->assertEquals('company', $input->companyName());
+        $this->assertEquals('project', $input->jiraProjectName());
+        $this->assertEquals(['status' => 2], $input->daysForStatus());
+        $this->assertEquals(['jira.id' => 'slack.id'], $input->slackMappingIds());
     }
 
     /** @test */
-    public function definedCompanyName(): void
+    public function undefinedCompanyName(): void
     {
-        $this->assertEquals(
-            'company',
-            SlackNotifierInput::fromArray(['COMPANY_NAME' => 'company'])->companyName()
-        );
+        $this->expectExceptionMessage('Undefined parameter: COMPANY_NAME');
+
+        SlackNotifierInput::fromArray([
+            'JIRA_PROJECT_NAME' => 'project',
+            'DAYS_FOR_STATUS' => '{"status":2}',
+            'SLACK_MAPPING_IDS' => '{"jira.id":"slack.id"}',
+        ]);
     }
 
     /** @test */
     public function undefinedJiraProjectName(): void
     {
         $this->expectExceptionMessage('Undefined parameter: JIRA_PROJECT_NAME');
-        SlackNotifierInput::fromArray([])->jiraProjectName();
-    }
 
-    /** @test */
-    public function definedJiraProjectName(): void
-    {
-        $this->assertEquals(
-            'project',
-            SlackNotifierInput::fromArray(['JIRA_PROJECT_NAME' => 'project'])->jiraProjectName()
-        );
+        SlackNotifierInput::fromArray([
+            'COMPANY_NAME' => 'company',
+            'DAYS_FOR_STATUS' => '{"status":2}',
+            'SLACK_MAPPING_IDS' => '{"jira.id":"slack.id"}',
+        ]);
     }
 
     /** @test */
     public function undefinedDaysForStatus(): void
     {
         $this->expectExceptionMessage('Undefined parameter: DAYS_FOR_STATUS');
-        SlackNotifierInput::fromArray([])->daysForStatus();
-    }
 
-    /** @test */
-    public function definedDaysForStatus(): void
-    {
-        $this->assertEquals(
-            ['status' => 2],
-            SlackNotifierInput::fromArray(['DAYS_FOR_STATUS' => '{"status":2}'])->daysForStatus()
-        );
+        SlackNotifierInput::fromArray([
+            'COMPANY_NAME' => 'company',
+            'JIRA_PROJECT_NAME' => 'project',
+            'SLACK_MAPPING_IDS' => '{"jira.id":"slack.id"}',
+        ]);
     }
 
     /** @test */
     public function undefinedSlackMappingIds(): void
     {
         $this->expectExceptionMessage('Undefined parameter: SLACK_MAPPING_IDS');
-        SlackNotifierInput::fromArray([])->slackMappingIds();
-    }
 
-    /** @test */
-    public function definedSlackMappingIds(): void
-    {
-        $this->assertEquals(
-            ['jira.id' => 'slack.id'],
-            SlackNotifierInput::fromArray(['SLACK_MAPPING_IDS' => '{"jira.id":"slack.id"}'])->slackMappingIds()
-        );
+        SlackNotifierInput::fromArray([
+            'COMPANY_NAME' => 'company',
+            'JIRA_PROJECT_NAME' => 'project',
+            'DAYS_FOR_STATUS' => '{"status":2}',
+        ]);
     }
 }

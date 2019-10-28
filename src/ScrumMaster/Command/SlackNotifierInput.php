@@ -8,25 +8,42 @@ use App\ScrumMaster\Command\Exception\UndefinedParameter;
 
 final class SlackNotifierInput
 {
-    /** @var null|string */
+    private const COMPANY_NAME = 'COMPANY_NAME';
+
+    private const JIRA_PROJECT_NAME = 'JIRA_PROJECT_NAME';
+
+    private const DAYS_FOR_STATUS = 'DAYS_FOR_STATUS';
+
+    private const SLACK_MAPPING_IDS = 'SLACK_MAPPING_IDS';
+
+    private const MANDATORY_PARAMETERS = [
+        self::COMPANY_NAME,
+        self::JIRA_PROJECT_NAME,
+        self::DAYS_FOR_STATUS,
+        self::SLACK_MAPPING_IDS,
+    ];
+
+    /** @var string */
     private $companyName;
 
-    /** @var null|string */
+    /** @var string */
     private $jiraProjectName;
 
-    /** @var null|string */
+    /** @var string */
     private $daysForStatus;
 
-    /** @var null|string */
+    /** @var string */
     private $slackMappingIds;
 
-    public static function fromArray(array $array): self
+    public static function fromArray(array $params): self
     {
+        static::validateKeys($params);
+
         $self = new self();
-        $self->companyName = $array['COMPANY_NAME'] ?? null;
-        $self->jiraProjectName = $array['JIRA_PROJECT_NAME'] ?? null;
-        $self->daysForStatus = $array['DAYS_FOR_STATUS'] ?? null;
-        $self->slackMappingIds = $array['SLACK_MAPPING_IDS'] ?? null;
+        $self->companyName = $params[self::COMPANY_NAME];
+        $self->jiraProjectName = $params[self::JIRA_PROJECT_NAME];
+        $self->daysForStatus = $params[self::DAYS_FOR_STATUS];
+        $self->slackMappingIds = $params[self::SLACK_MAPPING_IDS];
 
         return $self;
     }
@@ -37,37 +54,30 @@ final class SlackNotifierInput
 
     public function companyName(): string
     {
-        if (!$this->companyName) {
-            throw new UndefinedParameter('COMPANY_NAME');
-        }
-
         return $this->companyName;
     }
 
     public function jiraProjectName(): string
     {
-        if (!$this->jiraProjectName) {
-            throw new UndefinedParameter('JIRA_PROJECT_NAME');
-        }
-
         return $this->jiraProjectName;
     }
 
     public function daysForStatus(): array
     {
-        if (!$this->daysForStatus) {
-            throw new UndefinedParameter('DAYS_FOR_STATUS');
-        }
-
         return json_decode($this->daysForStatus, true);
     }
 
     public function slackMappingIds(): array
     {
-        if (!$this->slackMappingIds) {
-            throw new UndefinedParameter('SLACK_MAPPING_IDS');
-        }
-
         return json_decode($this->slackMappingIds, true);
+    }
+
+    private static function validateKeys(array $params): void
+    {
+        foreach (self::MANDATORY_PARAMETERS as $name) {
+            if (!isset($params[$name])) {
+                throw new UndefinedParameter($name);
+            }
+        }
     }
 }
