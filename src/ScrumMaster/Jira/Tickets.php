@@ -20,7 +20,7 @@ final class Tickets
         $jiraTickets = [];
         $rawArray = $response->toArray();
 
-        foreach ($rawArray['issues'] as $item) {
+        foreach ($rawArray['issues'] ?? [] as $item) {
             $fields = $item['fields'];
             $assignee = $fields['assignee'];
 

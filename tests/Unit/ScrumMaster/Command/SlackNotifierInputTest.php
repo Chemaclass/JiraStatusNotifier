@@ -42,54 +42,6 @@ final class SlackNotifierInputTest extends TestCase
     }
 
     /** @test */
-    public function undefinedJiraApiLabel(): void
-    {
-        $this->expectExceptionMessage('Undefined parameter: JIRA_API_LABEL');
-        SlackNotifierInput::fromArray([])->jiraApiLabel();
-    }
-
-    /** @test */
-    public function definedJiraApiLabel(): void
-    {
-        $this->assertEquals(
-            'label',
-            SlackNotifierInput::fromArray(['JIRA_API_LABEL' => 'label'])->jiraApiLabel()
-        );
-    }
-
-    /** @test */
-    public function undefinedJiraApiPassword(): void
-    {
-        $this->expectExceptionMessage('Undefined parameter: JIRA_API_PASSWORD');
-        SlackNotifierInput::fromArray([])->jiraApiPassword();
-    }
-
-    /** @test */
-    public function definedJiraApiPassword(): void
-    {
-        $this->assertEquals(
-            'passwd',
-            SlackNotifierInput::fromArray(['JIRA_API_PASSWORD' => 'passwd'])->jiraApiPassword()
-        );
-    }
-
-    /** @test */
-    public function undefinedSlackBotUserOauthAccessToken(): void
-    {
-        $this->expectExceptionMessage('Undefined parameter: SLACK_BOT_USER_OAUTH_ACCESS_TOKEN');
-        SlackNotifierInput::fromArray([])->slackBotUserOauthAccessToken();
-    }
-
-    /** @test */
-    public function definedSlackBotUserOauthAccessToken(): void
-    {
-        $this->assertEquals(
-            'label',
-            SlackNotifierInput::fromArray(['SLACK_BOT_USER_OAUTH_ACCESS_TOKEN' => 'label'])->slackBotUserOauthAccessToken()
-        );
-    }
-
-    /** @test */
     public function undefinedDaysForStatus(): void
     {
         $this->expectExceptionMessage('Undefined parameter: DAYS_FOR_STATUS');

@@ -27,17 +27,13 @@ final class SlackNotifierTest extends TestCase
 
         $slackNotifier = new SlackNotifier(
             $jiraBoard,
-            new JiraHttpClient(
-                $this->mockJiraClient($issues = []),
-                $this->createMock(UrlFactoryInterface::class)
-            ),
-            new SlackHttpClient(
-                $this->createMock(HttpClientInterface::class)
-            )
+            new JiraHttpClient($this->mockJiraClient($issues = [])),
+            new SlackHttpClient($this->createMock(HttpClientInterface::class))
         );
 
         $responses = $slackNotifier->sendNotifications(
             $this->aCompany(),
+            $this->createMock(UrlFactoryInterface::class),
             SlackMapping::jiraNameWithSlackId(['key' => 'value']),
             $this->createMock(MessageGeneratorInterface::class)
         );
@@ -75,10 +71,7 @@ final class SlackNotifierTest extends TestCase
 
         $slackNotifier = new SlackNotifier(
             $jiraBoard,
-            new JiraHttpClient(
-                $this->mockJiraClient($jiraIssues),
-                $this->createMock(UrlFactoryInterface::class)
-            ),
+            new JiraHttpClient($this->mockJiraClient($jiraIssues)),
             new SlackHttpClient($mockSlackClient)
         );
 
@@ -88,6 +81,7 @@ final class SlackNotifierTest extends TestCase
 
         $responses = $slackNotifier->sendNotifications(
             $this->aCompany(),
+            $this->createMock(UrlFactoryInterface::class),
             SlackMapping::jiraNameWithSlackId([
                 'user.1.jira' => 'channel.id',
                 'user.2.jira' => 'channel.id',

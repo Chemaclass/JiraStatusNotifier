@@ -14,15 +14,6 @@ final class SlackNotifierInput
     /** @var null|string */
     private $jiraProjectName;
 
-    /** @var string */
-    private $jiraApiLabel;
-
-    /** @var null|string */
-    private $jiraApiPassword;
-
-    /** @var null|string */
-    private $slackBotUserOauthAccessToken;
-
     /** @var null|string */
     private $daysForStatus;
 
@@ -34,9 +25,6 @@ final class SlackNotifierInput
         $self = new self();
         $self->companyName = $array['COMPANY_NAME'] ?? null;
         $self->jiraProjectName = $array['JIRA_PROJECT_NAME'] ?? null;
-        $self->jiraApiLabel = $array['JIRA_API_LABEL'] ?? null;
-        $self->jiraApiPassword = $array['JIRA_API_PASSWORD'] ?? null;
-        $self->slackBotUserOauthAccessToken = $array['SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'] ?? null;
         $self->daysForStatus = $array['DAYS_FOR_STATUS'] ?? null;
         $self->slackMappingIds = $array['SLACK_MAPPING_IDS'] ?? null;
 
@@ -63,33 +51,6 @@ final class SlackNotifierInput
         }
 
         return $this->jiraProjectName;
-    }
-
-    public function jiraApiLabel(): string
-    {
-        if (!$this->jiraApiLabel) {
-            throw new UndefinedParameter('JIRA_API_LABEL');
-        }
-
-        return $this->jiraApiLabel;
-    }
-
-    public function jiraApiPassword(): string
-    {
-        if (!$this->jiraApiPassword) {
-            throw new UndefinedParameter('JIRA_API_PASSWORD');
-        }
-
-        return $this->jiraApiPassword;
-    }
-
-    public function slackBotUserOauthAccessToken(): string
-    {
-        if (!$this->slackBotUserOauthAccessToken) {
-            throw new UndefinedParameter('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN');
-        }
-
-        return $this->slackBotUserOauthAccessToken;
     }
 
     public function daysForStatus(): array

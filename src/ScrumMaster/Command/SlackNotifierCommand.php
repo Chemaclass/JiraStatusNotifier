@@ -15,37 +15,37 @@ use App\ScrumMaster\Slack\SlackMapping;
 use App\ScrumMaster\Slack\SlackMessage;
 use App\ScrumMaster\SlackNotifier;
 use DateTimeImmutable;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifierCommand
 {
+    /** @var JiraHttpClient */
+    private $jiraHttpClient;
+
+    /** @var SlackHttpClient */
+    private $slackHttpClient;
+
+    public function __construct(JiraHttpClient $jiraHttpClient, SlackHttpClient $slackHttpClient)
+    {
+        $this->jiraHttpClient = $jiraHttpClient;
+        $this->slackHttpClient = $slackHttpClient;
+    }
+
     public function execute(SlackNotifierInput $input, OutputInterface $output): void
     {
         $jiraBoard = new Board($input->daysForStatus());
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());
-
-        $slackNotifier = new SlackNotifier(
-            $jiraBoard,
-            new JiraHttpClient(
-                HttpClient::create([
-                    'auth_basic' => [$input->jiraApiLabel(), $input->jiraApiPassword()],
-                ]),
-                new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company))
-            ),
-            new SlackHttpClient(HttpClient::create([
-                'auth_bearer' => $input->slackBotUserOauthAccessToken(),
-            ]))
-        );
+        $slackNotifier = new SlackNotifier($jiraBoard, $this->jiraHttpClient, $this->slackHttpClient);
 
         $responses = $slackNotifier->sendNotifications(
             $company,
+            new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company)),
             SlackMapping::jiraNameWithSlackId($input->slackMappingIds()),
             SlackMessage::withTimeToDiff(new DateTimeImmutable())
         );
 
-        $output->writeln('> Total successful notifications sent: ' . $this->countWithStatusCode($responses, 200));
-        $output->writeln('> Total failed notifications sent: ' . $this->countWithStatusCode($responses, 400));
+        $output->writeln('Total successful notifications sent: ' . $this->countWithStatusCode($responses, 200));
+        $output->writeln('Total failed notifications sent: ' . $this->countWithStatusCode($responses, 400));
     }
 
     private function countWithStatusCode(array $responses, int $statusCode): int
