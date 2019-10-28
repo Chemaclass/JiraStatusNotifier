@@ -15,6 +15,7 @@ use App\ScrumMaster\Slack\SlackMapping;
 use App\ScrumMaster\Slack\SlackMessage;
 use App\ScrumMaster\SlackNotifier;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 $dotEnv = Dotenv\Dotenv::create(__DIR__ . '/..');
 $dotEnv->load();
@@ -39,7 +40,7 @@ $slackNotifier = new SlackNotifier(
     ]))
 );
 
-$slackNotifier->sendNotifications(
+$responses = $slackNotifier->sendNotifications(
     $company,
     SlackMapping::jiraNameWithSlackId(
         json_decode(getenv('SLACK_MAPPING_IDS'), true)
@@ -47,4 +48,12 @@ $slackNotifier->sendNotifications(
     SlackMessage::withTimeToDiff(new DateTimeImmutable())
 );
 
-print sprintf('Finished at %s | Take a look at Slack ;)', date('Y-m-d H:i:s'));
+print sprintf('> Total successful notifications sent %s' . PHP_EOL, countWithStatusCode($responses, 200));
+print sprintf('> Total failed notifications sent %s' . PHP_EOL, countWithStatusCode($responses, 400));
+
+function countWithStatusCode(array $responses, int $statusCode): int
+{
+    return count(array_filter($responses, function (ResponseInterface $response) use ($statusCode) {
+        return $response->getStatusCode() === $statusCode;
+    }));
+}
