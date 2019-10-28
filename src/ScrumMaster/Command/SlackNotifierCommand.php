@@ -13,7 +13,7 @@ use App\ScrumMaster\Jira\ReadModel\Company;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use App\ScrumMaster\Slack\SlackMapping;
 use App\ScrumMaster\Slack\SlackMessage;
-use App\ScrumMaster\SlackNotifier;
+use App\ScrumMaster\Slack\SlackNotifier;
 use DateTimeImmutable;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -44,6 +44,7 @@ final class SlackNotifierCommand
             SlackMessage::withTimeToDiff(new DateTimeImmutable())
         );
 
+        $output->writeln('Total notifications: ' . count($responses));
         $output->writeln('Total successful notifications sent: ' . $this->countWithStatusCode($responses, 200));
         $output->writeln('Total failed notifications sent: ' . $this->countWithStatusCode($responses, 400));
     }

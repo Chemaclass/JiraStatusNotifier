@@ -17,7 +17,7 @@ final class InMemoryOutput implements OutputInterface
 
     public function writeln(string $text): void
     {
-        $this->lines[] = $text . PHP_EOL;
+        $this->lines[] = $text;
     }
 
     public function lines(): array

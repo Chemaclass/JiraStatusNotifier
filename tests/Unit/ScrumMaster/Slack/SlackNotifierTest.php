@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\ScrumMaster;
+namespace App\Tests\Unit\ScrumMaster\Slack;
 
 use App\ScrumMaster\Jira\Board;
 use App\ScrumMaster\Jira\JiraHttpClient;
@@ -12,7 +12,7 @@ use App\ScrumMaster\Jira\UrlFactoryInterface;
 use App\ScrumMaster\Slack\MessageGeneratorInterface;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use App\ScrumMaster\Slack\SlackMapping;
-use App\ScrumMaster\SlackNotifier;
+use App\ScrumMaster\Slack\SlackNotifier;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
