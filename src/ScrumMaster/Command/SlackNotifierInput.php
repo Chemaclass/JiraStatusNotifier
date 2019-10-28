@@ -74,10 +74,16 @@ final class SlackNotifierInput
 
     private static function validateKeys(array $params): void
     {
+        $errors = [];
+
         foreach (self::MANDATORY_PARAMETERS as $name) {
             if (!isset($params[$name])) {
-                throw new UndefinedParameter($name);
+                $errors[] = $name;
             }
+        }
+
+        if (count($errors) > 0) {
+            throw new UndefinedParameter($errors);
         }
     }
 }
