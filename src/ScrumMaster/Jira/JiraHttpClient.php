@@ -12,20 +12,15 @@ final class JiraHttpClient
     /** @var HttpClientInterface */
     private $jiraClient;
 
-    /** @var UrlFactoryInterface */
-    private $urlFactory;
-
-    public function __construct(HttpClientInterface $jiraClient, UrlFactoryInterface $urlFactory)
+    public function __construct(HttpClientInterface $jiraClient)
     {
         $this->jiraClient = $jiraClient;
-        $this->urlFactory = $urlFactory;
     }
 
     /** @return JiraTicket[] */
-    public function getTickets(string $status): array
+    public function getTickets(UrlFactoryInterface $urlFactory, string $status): array
     {
-        $url = $this->urlFactory->buildUrl($status);
-        $response = $this->jiraClient->request('GET', $url);
+        $response = $this->jiraClient->request('GET', $urlFactory->buildUrl($status));
 
         return Tickets::fromJiraResponse($response);
     }

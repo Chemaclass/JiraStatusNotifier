@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster;
+namespace App\ScrumMaster\Slack;
 
 use App\ScrumMaster\Jira\BoardInterface;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Jira\ReadModel\Company;
-use App\ScrumMaster\Slack\MessageGeneratorInterface;
-use App\ScrumMaster\Slack\SlackHttpClient;
-use App\ScrumMaster\Slack\SlackMapping;
+use App\ScrumMaster\Jira\UrlFactoryInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifier
@@ -36,13 +34,14 @@ final class SlackNotifier
     /** @return ResponseInterface[] */
     public function sendNotifications(
         Company $company,
+        UrlFactoryInterface $urlFactory,
         SlackMapping $slackMapping,
         MessageGeneratorInterface $messageGenerator
     ): array {
         $responses = [];
 
         foreach ($this->board->maxDaysInStatus() as $statusName => $maxDays) {
-            $tickets = $this->jiraClient->getTickets($statusName);
+            $tickets = $this->jiraClient->getTickets($urlFactory, $statusName);
 
             foreach ($tickets as $ticket) {
                 $responses[] = $this->slackClient->postToChannel(
