@@ -33,7 +33,7 @@ final class SlackNotifierCommandTest extends TestCase
             SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
         ]), $output);
 
-        $this->assertContains('Total notifications: 0', $output->lines());
+        $this->assertContains('Total notifications: 0 ()', $output->lines());
     }
 
     /** @test */
@@ -42,8 +42,8 @@ final class SlackNotifierCommandTest extends TestCase
         $output = new InMemoryOutput();
 
         $jiraIssues = [
-            $this->createAnIssueAsArray('user.1.jira', 'KEY-1'),
-            $this->createAnIssueAsArray('user.2.jira', 'KEY-2'),
+            $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
+            $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
         ];
 
         $command = new SlackNotifierCommand(
@@ -58,6 +58,6 @@ final class SlackNotifierCommandTest extends TestCase
             SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
         ]), $output);
 
-        $this->assertContains('Total notifications: 2', $output->lines());
+        $this->assertContains('Total notifications: 2 (KEY-111, KEY-222)', $output->lines());
     }
 }

@@ -8,6 +8,7 @@ use App\ScrumMaster\Command\Exception\UndefinedParameter;
 
 final class SlackNotifierInput
 {
+
     public const COMPANY_NAME = 'COMPANY_NAME';
 
     public const JIRA_PROJECT_NAME = 'JIRA_PROJECT_NAME';
@@ -35,15 +36,15 @@ final class SlackNotifierInput
     /** @var string */
     private $slackMappingIds;
 
-    public static function fromArray(array $array): self
+    public static function fromArray(array $params): self
     {
-        static::validateKeys($array);
+        static::validateKeys($params);
 
         $self = new self();
-        $self->companyName = $array[self::COMPANY_NAME];
-        $self->jiraProjectName = $array[self::JIRA_PROJECT_NAME];
-        $self->daysForStatus = $array[self::DAYS_FOR_STATUS];
-        $self->slackMappingIds = $array[self::SLACK_MAPPING_IDS];
+        $self->companyName = $params[self::COMPANY_NAME];
+        $self->jiraProjectName = $params[self::JIRA_PROJECT_NAME];
+        $self->daysForStatus = $params[self::DAYS_FOR_STATUS];
+        $self->slackMappingIds = $params[self::SLACK_MAPPING_IDS];
 
         return $self;
     }

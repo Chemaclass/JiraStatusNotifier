@@ -8,7 +8,6 @@ use App\ScrumMaster\Jira\BoardInterface;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Jira\ReadModel\Company;
 use App\ScrumMaster\Jira\UrlFactoryInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifier
 {
@@ -31,26 +30,27 @@ final class SlackNotifier
         $this->slackClient = $slackClient;
     }
 
-    /** @return ResponseInterface[] */
     public function sendNotifications(
         Company $company,
         UrlFactoryInterface $urlFactory,
         SlackMapping $slackMapping,
         MessageGeneratorInterface $messageGenerator
-    ): array {
-        $responses = [];
+    ): SlackNotifierResult {
+        $result = new SlackNotifierResult();
 
         foreach ($this->board->maxDaysInStatus() as $statusName => $maxDays) {
             $tickets = $this->jiraClient->getTickets($urlFactory, $statusName);
 
             foreach ($tickets as $ticket) {
-                $responses[] = $this->slackClient->postToChannel(
+                $response = $this->slackClient->postToChannel(
                     $slackMapping->toSlackId($ticket->assignee()->name()),
                     $messageGenerator->forJiraTicket($ticket, $company->companyName())
                 );
+
+                $result->addTicketWithResponse($ticket, $response);
             }
         }
 
-        return $responses;
+        return $result;
     }
 }
