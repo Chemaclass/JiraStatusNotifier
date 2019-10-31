@@ -12,7 +12,7 @@ use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use Symfony\Component\HttpClient\HttpClient;
 
-$dotEnv = Dotenv\Dotenv::create(__DIR__ . '/..');
+$dotEnv = Dotenv\Dotenv::create(dirname(__DIR__));
 $dotEnv->load();
 
 $command = new SlackNotifierCommand(
