@@ -6,6 +6,7 @@ namespace App\Tests\Unit\ScrumMaster\Command;
 
 use App\ScrumMaster\Command\SlackNotifierCommand;
 use App\ScrumMaster\Command\SlackNotifierInput;
+use App\ScrumMaster\Command\SlackNotifierOutput;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use App\Tests\Unit\ScrumMaster\Concerns\JiraApiResource;
@@ -29,7 +30,7 @@ final class SlackNotifierCommandTest extends TestCase
             SlackNotifierInput::JIRA_PROJECT_NAME => 'project',
             SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
             SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
-        ]), new InMemoryOutput());
+        ]), $this->inMemoryOutput());
 
         $this->assertEmpty($result->list());
     }
@@ -52,8 +53,13 @@ final class SlackNotifierCommandTest extends TestCase
             SlackNotifierInput::JIRA_PROJECT_NAME => 'project',
             SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
             SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
-        ]), new InMemoryOutput());
+        ]), $this->inMemoryOutput());
 
         $this->assertEquals(['KEY-111', 'KEY-222'], array_keys($result->list()));
+    }
+
+    private function inMemoryOutput(): SlackNotifierOutput
+    {
+        return new SlackNotifierOutput(new InMemoryOutput());
     }
 }

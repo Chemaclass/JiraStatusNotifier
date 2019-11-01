@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\ScrumMaster\Command;
 
-use App\ScrumMaster\Command\IO\OutputInterface;
 use App\ScrumMaster\Jira\Board;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Jira\JqlUrlBuilder;
@@ -16,7 +15,6 @@ use App\ScrumMaster\Slack\SlackMessage;
 use App\ScrumMaster\Slack\SlackNotifier;
 use App\ScrumMaster\Slack\SlackNotifierResult;
 use DateTimeImmutable;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifierCommand
 {
@@ -32,7 +30,7 @@ final class SlackNotifierCommand
         $this->slackHttpClient = $slackHttpClient;
     }
 
-    public function execute(SlackNotifierInput $input, OutputInterface $output): SlackNotifierResult
+    public function execute(SlackNotifierInput $input, SlackNotifierOutput $output): SlackNotifierResult
     {
         $jiraBoard = new Board($input->daysForStatus());
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());
@@ -45,21 +43,8 @@ final class SlackNotifierCommand
             SlackMessage::withTimeToDiff(new DateTimeImmutable())
         );
 
-        $output->writeln(sprintf(
-            'Total notifications: %d (%s)',
-            count($result->list()),
-            implode(', ', array_keys($result->list()))
-        ));
-        $output->writeln('Total successful notifications sent: ' . $this->countWithStatusCode($result, 200));
-        $output->writeln('Total failed notifications sent: ' . $this->countWithStatusCode($result, 400));
+        $output->write($result);
 
         return $result;
-    }
-
-    private function countWithStatusCode(SlackNotifierResult $result, int $statusCode): int
-    {
-        return count(array_filter($result->list(), function (ResponseInterface $response) use ($statusCode) {
-            return $response->getStatusCode() === $statusCode;
-        }));
     }
 }

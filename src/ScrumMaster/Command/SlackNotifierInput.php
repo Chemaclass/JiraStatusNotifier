@@ -8,7 +8,6 @@ use App\ScrumMaster\Command\Exception\UndefinedParameter;
 
 final class SlackNotifierInput
 {
-
     public const COMPANY_NAME = 'COMPANY_NAME';
 
     public const JIRA_PROJECT_NAME = 'JIRA_PROJECT_NAME';

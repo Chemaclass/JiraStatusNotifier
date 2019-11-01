@@ -8,6 +8,7 @@ require dirname(__DIR__) . '/bootstrap.php';
 use App\ScrumMaster\Command\IO\EchoOutput;
 use App\ScrumMaster\Command\SlackNotifierCommand;
 use App\ScrumMaster\Command\SlackNotifierInput;
+use App\ScrumMaster\Command\SlackNotifierOutput;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use Symfony\Component\HttpClient\HttpClient;
@@ -24,4 +25,7 @@ $command = new SlackNotifierCommand(
     ]))
 );
 
-$command->execute(SlackNotifierInput::fromArray($_ENV), new EchoOutput());
+$command->execute(
+    SlackNotifierInput::fromArray($_ENV),
+    new SlackNotifierOutput(new EchoOutput())
+);
