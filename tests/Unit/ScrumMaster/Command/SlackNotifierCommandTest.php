@@ -19,28 +19,24 @@ final class SlackNotifierCommandTest extends TestCase
     /** @test */
     public function zeroNotificationsWereSent(): void
     {
-        $output = new InMemoryOutput();
-
         $command = new SlackNotifierCommand(
             new JiraHttpClient($this->createMock(HttpClientInterface::class)),
             new SlackHttpClient($this->createMock(HttpClientInterface::class))
         );
 
-        $command->execute(SlackNotifierInput::fromArray([
+        $result = $command->execute(SlackNotifierInput::fromArray([
             SlackNotifierInput::COMPANY_NAME => 'company',
             SlackNotifierInput::JIRA_PROJECT_NAME => 'project',
             SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
             SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
-        ]), $output);
+        ]), new InMemoryOutput());
 
-        $this->assertContains('Total notifications: 0 ()', $output->lines());
+        $this->assertEmpty($result->list());
     }
 
     /** @test */
     public function twoSuccessfulNotificationsWereSent(): void
     {
-        $output = new InMemoryOutput();
-
         $jiraIssues = [
             $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
             $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
@@ -51,13 +47,13 @@ final class SlackNotifierCommandTest extends TestCase
             new SlackHttpClient($this->createMock(HttpClientInterface::class))
         );
 
-        $command->execute(SlackNotifierInput::fromArray([
+        $result = $command->execute(SlackNotifierInput::fromArray([
             SlackNotifierInput::COMPANY_NAME => 'company',
             SlackNotifierInput::JIRA_PROJECT_NAME => 'project',
             SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
             SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
-        ]), $output);
+        ]), new InMemoryOutput());
 
-        $this->assertContains('Total notifications: 2 (KEY-111, KEY-222)', $output->lines());
+        $this->assertEquals(['KEY-111', 'KEY-222'], array_keys($result->list()));
     }
 }

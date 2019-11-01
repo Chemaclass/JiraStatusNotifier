@@ -32,7 +32,7 @@ final class SlackNotifierCommand
         $this->slackHttpClient = $slackHttpClient;
     }
 
-    public function execute(SlackNotifierInput $input, OutputInterface $output): void
+    public function execute(SlackNotifierInput $input, OutputInterface $output): SlackNotifierResult
     {
         $jiraBoard = new Board($input->daysForStatus());
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());
@@ -52,6 +52,8 @@ final class SlackNotifierCommand
         ));
         $output->writeln('Total successful notifications sent: ' . $this->countWithStatusCode($result, 200));
         $output->writeln('Total failed notifications sent: ' . $this->countWithStatusCode($result, 400));
+
+        return $result;
     }
 
     private function countWithStatusCode(SlackNotifierResult $result, int $statusCode): int
