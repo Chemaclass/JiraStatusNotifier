@@ -48,13 +48,16 @@ final class SlackNotifierCommandTest extends TestCase
             new SlackHttpClient($this->createMock(HttpClientInterface::class))
         );
 
+        $inMemoryOutput = new InMemoryOutput();
+
         $result = $command->execute(SlackNotifierInput::fromArray([
             SlackNotifierInput::COMPANY_NAME => 'company',
             SlackNotifierInput::JIRA_PROJECT_NAME => 'project',
             SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
             SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
-        ]), $this->inMemoryOutput());
+        ]), new SlackNotifierOutput($inMemoryOutput));
 
+        $this->assertNotEmpty($inMemoryOutput->lines());
         $this->assertEquals(['KEY-111', 'KEY-222'], array_keys($result->list()));
     }
 

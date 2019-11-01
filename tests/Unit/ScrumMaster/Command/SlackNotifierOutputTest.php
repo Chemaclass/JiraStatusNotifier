@@ -51,7 +51,7 @@ final class SlackNotifierOutputTest extends TestCase
 
     private function responseWithStatusCode(int $statusCode): ResponseInterface
     {
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn($statusCode);
 

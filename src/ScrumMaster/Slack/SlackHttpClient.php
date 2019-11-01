@@ -19,13 +19,13 @@ final class SlackHttpClient
         $this->client = $client;
     }
 
-    public function postToChannel(string $channel, string $text): ResponseInterface
+    public function postToChannel(string $channel, string $text, bool $asUser = true): ResponseInterface
     {
         return $this->client->request('POST', self::SLACK_API_POST_MESSAGE, [
             'json' => [
-                'as_user' => true,
                 'channel' => $channel,
                 'text' => $text,
+                'as_user' => $asUser,
             ],
         ]);
     }
