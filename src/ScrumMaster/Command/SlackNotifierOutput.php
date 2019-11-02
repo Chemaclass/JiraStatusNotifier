@@ -6,7 +6,6 @@ namespace App\ScrumMaster\Command;
 
 use App\ScrumMaster\Command\IO\OutputInterface;
 use App\ScrumMaster\Slack\SlackNotifierResult;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifierOutput
 {
@@ -20,21 +19,29 @@ final class SlackNotifierOutput
 
     public function write(SlackNotifierResult $result): void
     {
-        $this->output->writeln(sprintf(
-            'Total notifications: %d (%s)',
-            count($result->list()),
-            implode(', ', array_keys($result->list()))
-        ));
+        $this->writeTotalNotifications($result);
+        $this->writeSuccessfulAndFailedNotifications($result);
+    }
 
+    private function writeTotalNotifications(SlackNotifierResult $result): void
+    {
+        $totalKeys = count($result->list());
+        $keys = implode(', ', array_keys($result->list()));
+        $this->output->writeln("Total notifications: {$totalKeys} ({$keys})");
+    }
+
+    private function writeSuccessfulAndFailedNotifications(SlackNotifierResult $result): void
+    {
         $totalSuccessful = $totalFailed = 0;
-        /** @var ResponseInterface $response */
+
         foreach ($result->list() as $response) {
-            if ($response->getStatusCode() === 200) {
+            if (200 === $response->getStatusCode()) {
                 $totalSuccessful++;
             } else {
                 $totalFailed++;
             }
         }
+
         $this->output->writeln("Total successful notifications sent: {$totalSuccessful}");
         $this->output->writeln("Total failed notifications sent: {$totalFailed}");
     }
