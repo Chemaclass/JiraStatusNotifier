@@ -17,6 +17,7 @@ final class SlackNotifierResult
         $this->list[$ticket->key()] = $response;
     }
 
+    /** @return array<string,ResponseInterface> */
     public function list(): array
     {
         return $this->list;

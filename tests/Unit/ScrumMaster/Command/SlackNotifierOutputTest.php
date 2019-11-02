@@ -20,18 +20,18 @@ final class SlackNotifierOutputTest extends TestCase
     public function writeFromSlackNotifierOutput(): void
     {
         $result = new SlackNotifierResult();
-        $result->addTicketWithResponse($this->newTicket('KEY-2a'), $this->responseWithStatusCode(200));
-        $result->addTicketWithResponse($this->newTicket('KEY-2b'), $this->responseWithStatusCode(200));
+        $result->addTicketWithResponse($this->newTicket('KEY-1'), $this->responseWithStatusCode(100));
+        $result->addTicketWithResponse($this->newTicket('KEY-2'), $this->responseWithStatusCode(200));
         $result->addTicketWithResponse($this->newTicket('KEY-3'), $this->responseWithStatusCode(300));
         $result->addTicketWithResponse($this->newTicket('KEY-4'), $this->responseWithStatusCode(400));
+        $result->addTicketWithResponse($this->newTicket('KEY-5'), $this->responseWithStatusCode(500));
 
         $output = new InMemoryOutput();
         (new SlackNotifierOutput($output))->write($result);
 
-        $this->assertContains('Total notifications: 4 (KEY-2a, KEY-2b, KEY-3, KEY-4)', $output->lines());
-        $this->assertContains('Total successful notifications sent: 2', $output->lines());
-        // FIXME: currently is `1` because it counts as failed only the ones with statusCode:400
-        $this->assertContains('Total failed notifications sent: 1', $output->lines());
+        $this->assertContains('Total notifications: 5 (KEY-1, KEY-2, KEY-3, KEY-4, KEY-5)', $output->lines());
+        $this->assertContains('Total successful notifications sent: 1', $output->lines());
+        $this->assertContains('Total failed notifications sent: 4', $output->lines());
     }
 
     private function newTicket(string $key): JiraTicket

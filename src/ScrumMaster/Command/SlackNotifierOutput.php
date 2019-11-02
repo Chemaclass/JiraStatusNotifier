@@ -26,14 +26,16 @@ final class SlackNotifierOutput
             implode(', ', array_keys($result->list()))
         ));
 
-        $this->output->writeln('Total successful notifications sent: ' . $this->countWithStatusCode($result, 200));
-        $this->output->writeln('Total failed notifications sent: ' . $this->countWithStatusCode($result, 400));
-    }
-
-    private function countWithStatusCode(SlackNotifierResult $result, int $statusCode): int
-    {
-        return count(array_filter($result->list(), function (ResponseInterface $response) use ($statusCode) {
-            return $response->getStatusCode() === $statusCode;
-        }));
+        $totalSuccessful = $totalFailed = 0;
+        /** @var ResponseInterface $response */
+        foreach ($result->list() as $response) {
+            if ($response->getStatusCode() === 200) {
+                $totalSuccessful++;
+            } else {
+                $totalFailed++;
+            }
+        }
+        $this->output->writeln("Total successful notifications sent: {$totalSuccessful}");
+        $this->output->writeln("Total failed notifications sent: {$totalFailed}");
     }
 }
