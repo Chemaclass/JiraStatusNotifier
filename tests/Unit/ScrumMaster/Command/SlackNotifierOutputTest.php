@@ -10,9 +10,7 @@ use App\ScrumMaster\Jira\ReadModel\JiraTicket;
 use App\ScrumMaster\Jira\ReadModel\TicketStatus;
 use App\ScrumMaster\Slack\SlackNotifierResult;
 use DateTimeImmutable;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifierOutputTest extends TestCase
 {
@@ -20,11 +18,11 @@ final class SlackNotifierOutputTest extends TestCase
     public function writeFromSlackNotifierOutput(): void
     {
         $result = new SlackNotifierResult();
-        $result->addTicketWithResponse($this->newTicket('KEY-1'), $this->responseWithStatusCode(100));
-        $result->addTicketWithResponse($this->newTicket('KEY-2'), $this->responseWithStatusCode(200));
-        $result->addTicketWithResponse($this->newTicket('KEY-3'), $this->responseWithStatusCode(300));
-        $result->addTicketWithResponse($this->newTicket('KEY-4'), $this->responseWithStatusCode(400));
-        $result->addTicketWithResponse($this->newTicket('KEY-5'), $this->responseWithStatusCode(500));
+        $result->addTicketWithResponseCode($this->newTicket('KEY-1'), 100);
+        $result->addTicketWithResponseCode($this->newTicket('KEY-2'), 200);
+        $result->addTicketWithResponseCode($this->newTicket('KEY-3'), 300);
+        $result->addTicketWithResponseCode($this->newTicket('KEY-4'), 400);
+        $result->addTicketWithResponseCode($this->newTicket('KEY-5'), 500);
 
         $output = new InMemoryOutput();
         (new SlackNotifierOutput($output))->write($result);
@@ -47,14 +45,5 @@ final class SlackNotifierOutputTest extends TestCase
             ),
             $storyPoints = 5
         );
-    }
-
-    private function responseWithStatusCode(int $statusCode): ResponseInterface
-    {
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->createMock(ResponseInterface::class);
-        $response->method('getStatusCode')->willReturn($statusCode);
-
-        return $response;
     }
 }

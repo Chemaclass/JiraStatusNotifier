@@ -47,7 +47,7 @@ final class SlackNotifier
                     $messageGenerator->forJiraTicket($ticket, $company->companyName())
                 );
 
-                $result->addTicketWithResponse($ticket, $response);
+                $result->addTicketWithResponseCode($ticket, $response->getStatusCode());
             }
         }
 

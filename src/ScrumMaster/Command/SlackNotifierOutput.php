@@ -34,8 +34,8 @@ final class SlackNotifierOutput
     {
         $totalSuccessful = $totalFailed = 0;
 
-        foreach ($result->list() as $response) {
-            if (200 === $response->getStatusCode()) {
+        foreach ($result->list() as $statusCode) {
+            if (200 === $statusCode) {
                 $totalSuccessful++;
             } else {
                 $totalFailed++;

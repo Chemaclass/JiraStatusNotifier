@@ -5,19 +5,18 @@ declare(strict_types=1);
 namespace App\ScrumMaster\Slack;
 
 use App\ScrumMaster\Jira\ReadModel\JiraTicket;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifierResult
 {
-    /** @var array<string, ResponseInterface> */
+    /** @var array<string,int> */
     private $list = [];
 
-    public function addTicketWithResponse(JiraTicket $ticket, ResponseInterface $response): void
+    public function addTicketWithResponseCode(JiraTicket $ticket, int $response): void
     {
         $this->list[$ticket->key()] = $response;
     }
 
-    /** @return array<string,ResponseInterface> */
+    /** @return array<string,int> */
     public function list(): array
     {
         return $this->list;
