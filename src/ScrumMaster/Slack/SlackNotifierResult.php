@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace App\ScrumMaster\Slack;
 
-use App\ScrumMaster\Jira\ReadModel\JiraTicket;
-
 final class SlackNotifierResult
 {
     /** @var array<string,int> */
-    private $list = [];
+    private $codesPerTickets = [];
 
-    public function addTicketWithResponseCode(JiraTicket $ticket, int $response): void
+    public function addTicketWithResponseCode(string $ticketKey, int $statusCode): void
     {
-        $this->list[$ticket->key()] = $response;
+        $this->codesPerTickets[$ticketKey] = $statusCode;
     }
 
     /** @return array<string,int> */
-    public function list(): array
+    public function codesPerTickets(): array
     {
-        return $this->list;
+        return $this->codesPerTickets;
     }
 }

@@ -32,7 +32,7 @@ final class SlackNotifierCommandTest extends TestCase
             SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
         ]), $this->inMemoryOutput());
 
-        $this->assertEmpty($result->list());
+        $this->assertEmpty($result->codesPerTickets());
     }
 
     /** @test */
@@ -58,7 +58,7 @@ final class SlackNotifierCommandTest extends TestCase
         ]), new SlackNotifierOutput($inMemoryOutput));
 
         $this->assertNotEmpty($inMemoryOutput->lines());
-        $this->assertEquals(['KEY-111', 'KEY-222'], array_keys($result->list()));
+        $this->assertEquals(['KEY-111', 'KEY-222'], array_keys($result->codesPerTickets()));
     }
 
     private function inMemoryOutput(): SlackNotifierOutput

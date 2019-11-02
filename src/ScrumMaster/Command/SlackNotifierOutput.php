@@ -25,8 +25,8 @@ final class SlackNotifierOutput
 
     private function writeTotalNotifications(SlackNotifierResult $result): void
     {
-        $totalKeys = count($result->list());
-        $keys = implode(', ', array_keys($result->list()));
+        $totalKeys = count($result->codesPerTickets());
+        $keys = implode(', ', array_keys($result->codesPerTickets()));
         $this->output->writeln("Total notifications: {$totalKeys} ({$keys})");
     }
 
@@ -34,7 +34,7 @@ final class SlackNotifierOutput
     {
         $totalSuccessful = $totalFailed = 0;
 
-        foreach ($result->list() as $statusCode) {
+        foreach ($result->codesPerTickets() as $statusCode) {
             if (200 === $statusCode) {
                 $totalSuccessful++;
             } else {
