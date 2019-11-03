@@ -19,18 +19,8 @@ final class SlackNotifierOutput
 
     public function write(SlackNotifierResult $result): void
     {
-        $this->writeTotalNotifications($result);
-        $this->writeSuccessfulAndFailedNotifications($result);
-    }
-
-    private function writeTotalNotifications(SlackNotifierResult $result): void
-    {
         $keys = implode(', ', $result->ticketKeys());
         $this->output->writeln("Total notifications: {$result->total()} ({$keys})");
-    }
-
-    private function writeSuccessfulAndFailedNotifications(SlackNotifierResult $result): void
-    {
         $this->output->writeln("Total successful notifications sent: {$result->totalSuccessful()}");
         $this->output->writeln("Total failed notifications sent: {$result->totalFailed()}");
     }
