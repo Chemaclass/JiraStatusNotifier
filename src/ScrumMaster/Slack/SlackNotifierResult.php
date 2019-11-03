@@ -30,4 +30,18 @@ final class SlackNotifierResult
     {
         return count($this->codesPerTickets);
     }
+
+    public function totalSuccessful(): int
+    {
+        return count(array_filter($this->codesPerTickets, function ($statusCode) {
+            return 200 === $statusCode;
+        }));
+    }
+
+    public function totalFailed(): int
+    {
+        return count(array_filter($this->codesPerTickets, function ($statusCode) {
+            return 200 !== $statusCode;
+        }));
+    }
 }

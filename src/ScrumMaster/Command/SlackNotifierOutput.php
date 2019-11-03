@@ -31,17 +31,7 @@ final class SlackNotifierOutput
 
     private function writeSuccessfulAndFailedNotifications(SlackNotifierResult $result): void
     {
-        $totalSuccessful = $totalFailed = 0;
-
-        foreach ($result->codesPerTickets() as $statusCode) {
-            if (200 === $statusCode) {
-                $totalSuccessful++;
-            } else {
-                $totalFailed++;
-            }
-        }
-
-        $this->output->writeln("Total successful notifications sent: {$totalSuccessful}");
-        $this->output->writeln("Total failed notifications sent: {$totalFailed}");
+        $this->output->writeln("Total successful notifications sent: {$result->totalSuccessful()}");
+        $this->output->writeln("Total failed notifications sent: {$result->totalFailed()}");
     }
 }
