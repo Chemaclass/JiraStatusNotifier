@@ -17,6 +17,13 @@ final class SlackNotifierCommandTest extends TestCase
 {
     use JiraApiResource;
 
+    private const ENV = [
+        SlackNotifierInput::COMPANY_NAME => 'company.name',
+        SlackNotifierInput::JIRA_PROJECT_NAME => 'Jira project name',
+        SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
+        SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
+    ];
+
     /** @test */
     public function zeroNotificationsWereSent(): void
     {
@@ -25,12 +32,10 @@ final class SlackNotifierCommandTest extends TestCase
             new SlackHttpClient($this->createMock(HttpClientInterface::class))
         );
 
-        $result = $command->execute(SlackNotifierInput::fromArray([
-            SlackNotifierInput::COMPANY_NAME => 'company',
-            SlackNotifierInput::JIRA_PROJECT_NAME => 'project',
-            SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
-            SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
-        ]), $this->inMemoryOutput());
+        $result = $command->execute(
+            SlackNotifierInput::fromArray(self::ENV),
+            $this->inMemoryOutput()
+        );
 
         $this->assertEmpty($result->codesPerTickets());
     }
@@ -38,27 +43,23 @@ final class SlackNotifierCommandTest extends TestCase
     /** @test */
     public function twoSuccessfulNotificationsWereSent(): void
     {
-        $jiraIssues = [
-            $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
-            $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
-        ];
-
         $command = new SlackNotifierCommand(
-            new JiraHttpClient($this->mockJiraClient($jiraIssues)),
+            new JiraHttpClient($this->mockJiraClient([
+                $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
+                $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
+            ])),
             new SlackHttpClient($this->createMock(HttpClientInterface::class))
         );
 
         $inMemoryOutput = new InMemoryOutput();
 
-        $result = $command->execute(SlackNotifierInput::fromArray([
-            SlackNotifierInput::COMPANY_NAME => 'company',
-            SlackNotifierInput::JIRA_PROJECT_NAME => 'project',
-            SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
-            SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
-        ]), new SlackNotifierOutput($inMemoryOutput));
+        $result = $command->execute(
+            SlackNotifierInput::fromArray(self::ENV),
+            new SlackNotifierOutput($inMemoryOutput)
+        );
 
         $this->assertNotEmpty($inMemoryOutput->lines());
-        $this->assertEquals(['KEY-111', 'KEY-222'], array_keys($result->codesPerTickets()));
+        $this->assertEquals(['KEY-111', 'KEY-222'], $result->ticketKeys());
     }
 
     private function inMemoryOutput(): SlackNotifierOutput
