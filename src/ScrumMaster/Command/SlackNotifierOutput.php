@@ -25,9 +25,8 @@ final class SlackNotifierOutput
 
     private function writeTotalNotifications(SlackNotifierResult $result): void
     {
-        $totalKeys = count($result->codesPerTickets());
-        $keys = implode(', ', array_keys($result->codesPerTickets()));
-        $this->output->writeln("Total notifications: {$totalKeys} ({$keys})");
+        $keys = implode(', ', $result->ticketKeys());
+        $this->output->writeln("Total notifications: {$result->total()} ({$keys})");
     }
 
     private function writeSuccessfulAndFailedNotifications(SlackNotifierResult $result): void

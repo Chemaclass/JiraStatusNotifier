@@ -19,4 +19,15 @@ final class SlackNotifierResult
     {
         return $this->codesPerTickets;
     }
+
+    /** @return string[] */
+    public function ticketKeys(): array
+    {
+        return array_keys($this->codesPerTickets);
+    }
+
+    public function total(): int
+    {
+        return count($this->codesPerTickets);
+    }
 }
