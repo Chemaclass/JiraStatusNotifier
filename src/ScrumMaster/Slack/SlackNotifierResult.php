@@ -9,13 +9,13 @@ final class SlackNotifierResult
     /** @var array<string,int> */
     private $codesPerTickets = [];
 
-    public function addTicketWithResponseCode(string $ticketKey, int $statusCode): void
+    public function addTicketKeyWithResponseCode(string $ticketKey, int $statusCode): void
     {
         $this->codesPerTickets[$ticketKey] = $statusCode;
     }
 
     /** @return array<string,int> */
-    public function codesPerTickets(): array
+    public function responseCodePerTickets(): array
     {
         return $this->codesPerTickets;
     }
@@ -43,5 +43,12 @@ final class SlackNotifierResult
         return count(array_filter($this->codesPerTickets, function ($statusCode) {
             return 200 !== $statusCode;
         }));
+    }
+
+    public function append(self $other): void
+    {
+        foreach ($other->responseCodePerTickets() as $ticketKey => $responseStatusCode) {
+            $this->codesPerTickets[$ticketKey] = $responseStatusCode;
+        }
     }
 }

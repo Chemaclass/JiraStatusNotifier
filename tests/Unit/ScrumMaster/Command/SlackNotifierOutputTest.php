@@ -14,11 +14,11 @@ final class SlackNotifierOutputTest extends TestCase
     public function writeFromSlackNotifierOutput(): void
     {
         $result = new SlackNotifierResult();
-        $result->addTicketWithResponseCode('KEY-1', 100);
-        $result->addTicketWithResponseCode('KEY-2', 200);
-        $result->addTicketWithResponseCode('KEY-3', 300);
-        $result->addTicketWithResponseCode('KEY-4', 400);
-        $result->addTicketWithResponseCode('KEY-5', 500);
+        $result->addTicketKeyWithResponseCode('KEY-1', 100);
+        $result->addTicketKeyWithResponseCode('KEY-2', 200);
+        $result->addTicketKeyWithResponseCode('KEY-3', 300);
+        $result->addTicketKeyWithResponseCode('KEY-4', 400);
+        $result->addTicketKeyWithResponseCode('KEY-5', 500);
 
         $output = new InMemoryOutput();
         (new SlackNotifierOutput($output))->write($result);
