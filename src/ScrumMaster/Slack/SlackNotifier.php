@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\ScrumMaster\Slack;
 
-use App\ScrumMaster\Jira\BoardInterface;
+use App\ScrumMaster\Jira\Board;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Jira\ReadModel\Company;
+use App\ScrumMaster\Jira\ReadModel\JiraTicket;
 use App\ScrumMaster\Jira\UrlFactoryInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifier
 {
@@ -17,11 +19,11 @@ final class SlackNotifier
     /** @var SlackHttpClient */
     private $slackClient;
 
-    /** @var BoardInterface */
-    private $board;
-
     /** @var Company */
     private $company;
+
+    /** @var UrlFactoryInterface */
+    private $urlFactory;
 
     /** @var SlackMapping */
     private $slackMapping;
@@ -32,45 +34,54 @@ final class SlackNotifier
     public function __construct(
         JiraHttpClient $jiraClient,
         SlackHttpClient $slackClient,
-        BoardInterface $board,
         Company $company,
+        UrlFactoryInterface $urlFactory,
         SlackMapping $slackMapping,
         MessageGeneratorInterface $messageGenerator
     ) {
         $this->jiraClient = $jiraClient;
         $this->slackClient = $slackClient;
-        $this->board = $board;
         $this->company = $company;
+        $this->urlFactory = $urlFactory;
         $this->slackMapping = $slackMapping;
         $this->messageGenerator = $messageGenerator;
     }
 
-    public function sendNotifications(UrlFactoryInterface $urlFactory): SlackNotifierResult
+    public function sendNotifications(Board $board): SlackNotifierResult
     {
         $result = new SlackNotifierResult();
 
-        foreach ($this->board->maxDaysInStatus() as $statusName => $maxDays) {
-            $tickets = $this->jiraClient->getTickets($urlFactory, $statusName);
-            $result->append($this->postToSlack($tickets));
+        foreach ($board->maxDaysInStatus() as $statusName => $maxDays) {
+            $result->append($this->postToSlack(
+                $this->getTicketsFromJiraByStatus($statusName)
+            ));
         }
 
         return $result;
     }
 
-    /** @return array<string,int> */
     private function postToSlack(array $tickets): SlackNotifierResult
     {
         $result = new SlackNotifierResult();
 
         foreach ($tickets as $ticket) {
-            $response = $this->slackClient->postToChannel(
-                $this->slackMapping->toSlackId($ticket->assignee()->name()),
-                $this->messageGenerator->forJiraTicket($ticket, $this->company->companyName())
-            );
-
+            $response = $this->postTicketToSlack($ticket);
             $result->addTicketKeyWithResponseCode($ticket->key(), $response->getStatusCode());
         }
 
         return $result;
+    }
+
+    private function postTicketToSlack(JiraTicket $ticket): ResponseInterface
+    {
+        return $this->slackClient->postToChannel(
+            $this->slackMapping->toSlackId($ticket->assignee()->name()),
+            $this->messageGenerator->forJiraTicket($ticket, $this->company->companyName())
+        );
+    }
+
+    private function getTicketsFromJiraByStatus(string $statusName): array
+    {
+        return $this->jiraClient->getTickets($this->urlFactory, $statusName);
     }
 }

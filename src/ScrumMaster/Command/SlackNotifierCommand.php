@@ -38,15 +38,13 @@ final class SlackNotifierCommand
         $slackNotifier = new SlackNotifier(
             $this->jiraHttpClient,
             $this->slackHttpClient,
-            $jiraBoard,
             $company,
+            new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company)),
             SlackMapping::jiraNameWithSlackId($input->slackMappingIds()),
             SlackMessage::withTimeToDiff(new DateTimeImmutable())
         );
 
-        $result = $slackNotifier->sendNotifications(
-            new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company))
-        );
+        $result = $slackNotifier->sendNotifications($jiraBoard);
 
         $output->write($result);
 
