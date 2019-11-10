@@ -4,51 +4,58 @@ declare(strict_types=1);
 
 namespace App\ScrumMaster\Slack;
 
+use App\ScrumMaster\Slack\ReadModel\SlackTicket;
+
 final class SlackNotifierResult
 {
-    /** @var array<string,int> */
-    private $codesPerTickets = [];
+    /** @var SlackTicket[] */
+    private $slackTickets = [];
 
-    public function addTicketKeyWithResponseCode(string $ticketKey, int $statusCode): void
+    public function addSlackTicket(SlackTicket $slackTicket): void
     {
-        $this->codesPerTickets[$ticketKey] = $statusCode;
+        $this->slackTickets[] = $slackTicket;
     }
 
-    /** @return array<string,int> */
+    /** @return SlackTicket[] */
     public function responseCodePerTickets(): array
     {
-        return $this->codesPerTickets;
+        return $this->slackTickets;
     }
 
     /** @return string[] */
     public function ticketKeys(): array
     {
-        return array_keys($this->codesPerTickets);
+        $keys = [];
+        foreach ($this->slackTickets as $slackTicket) {
+            $keys[] = $slackTicket->ticketCode();
+        }
+
+        return $keys;
     }
 
     public function total(): int
     {
-        return count($this->codesPerTickets);
+        return count($this->slackTickets);
     }
 
     public function totalSuccessful(): int
     {
-        return count(array_filter($this->codesPerTickets, function ($statusCode) {
-            return 200 === $statusCode;
+        return count(array_filter($this->slackTickets, function (SlackTicket $slackTicket) {
+            return 200 === $slackTicket->statusCode();
         }));
     }
 
     public function totalFailed(): int
     {
-        return count(array_filter($this->codesPerTickets, function ($statusCode) {
-            return 200 !== $statusCode;
+        return count(array_filter($this->slackTickets, function (SlackTicket $slackTicket) {
+            return 200 !== $slackTicket->statusCode();
         }));
     }
 
     public function append(self $other): void
     {
-        foreach ($other->responseCodePerTickets() as $ticketKey => $responseStatusCode) {
-            $this->codesPerTickets[$ticketKey] = $responseStatusCode;
+        foreach ($other->responseCodePerTickets() as $ticketKey => $responseCodeAndDisplayName) {
+            $this->slackTickets[$ticketKey] = $responseCodeAndDisplayName;
         }
     }
 }

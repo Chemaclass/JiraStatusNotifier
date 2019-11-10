@@ -9,6 +9,7 @@ use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Jira\ReadModel\Company;
 use App\ScrumMaster\Jira\ReadModel\JiraTicket;
 use App\ScrumMaster\Jira\UrlFactoryInterface;
+use App\ScrumMaster\Slack\ReadModel\SlackTicket;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifier
@@ -66,7 +67,8 @@ final class SlackNotifier
 
         foreach ($tickets as $ticket) {
             $response = $this->postTicketToSlack($ticket);
-            $result->addTicketKeyWithResponseCode($ticket->key(), $response->getStatusCode());
+            $slackTicket = new SlackTicket($ticket->key(), $ticket->assignee()->displayName(), $response->getStatusCode());
+            $result->addSlackTicket($slackTicket);
         }
 
         return $result;
