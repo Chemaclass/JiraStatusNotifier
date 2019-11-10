@@ -8,6 +8,6 @@ final class UndefinedParameter extends \Exception
 {
     public function __construct(array $parameters)
     {
-        parent::__construct('Undefined parameter: ' . implode(', ', $parameterName));
+        parent::__construct('Undefined parameter: ' . implode(', ', $parameters));
     }
 }
