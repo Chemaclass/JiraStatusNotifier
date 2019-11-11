@@ -6,6 +6,7 @@ namespace App\Tests\Unit\ScrumMaster\Command;
 
 use App\ScrumMaster\Command\SlackNotifierCommand;
 use App\ScrumMaster\Command\SlackNotifierInput;
+use App\ScrumMaster\Command\SlackNotifierOutput;
 use App\ScrumMaster\Jira\JiraHttpClient;
 use App\ScrumMaster\Slack\SlackHttpClient;
 use App\Tests\Unit\ScrumMaster\Concerns\JiraApiResource;
@@ -16,48 +17,53 @@ final class SlackNotifierCommandTest extends TestCase
 {
     use JiraApiResource;
 
+    private const ENV = [
+        SlackNotifierInput::COMPANY_NAME => 'company.name',
+        SlackNotifierInput::JIRA_PROJECT_NAME => 'Jira project name',
+        SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
+        SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
+    ];
+
     /** @test */
     public function zeroNotificationsWereSent(): void
     {
-        $output = new InMemoryOutput();
-
         $command = new SlackNotifierCommand(
             new JiraHttpClient($this->createMock(HttpClientInterface::class)),
             new SlackHttpClient($this->createMock(HttpClientInterface::class))
         );
 
-        $command->execute(SlackNotifierInput::fromArray([
-            SlackNotifierInput::COMPANY_NAME => 'company',
-            SlackNotifierInput::JIRA_PROJECT_NAME => 'project',
-            SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
-            SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
-        ]), $output);
+        $result = $command->execute(
+            SlackNotifierInput::fromArray(self::ENV),
+            $this->inMemoryOutput()
+        );
 
-        $this->assertContains('Total notifications: 0', $output->lines());
+        $this->assertEmpty($result->responseCodePerTickets());
     }
 
     /** @test */
     public function twoSuccessfulNotificationsWereSent(): void
     {
-        $output = new InMemoryOutput();
-
-        $jiraIssues = [
-            $this->createAnIssueAsArray('user.1.jira', 'KEY-1'),
-            $this->createAnIssueAsArray('user.2.jira', 'KEY-2'),
-        ];
-
         $command = new SlackNotifierCommand(
-            new JiraHttpClient($this->mockJiraClient($jiraIssues)),
+            new JiraHttpClient($this->mockJiraClient([
+                $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
+                $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
+            ])),
             new SlackHttpClient($this->createMock(HttpClientInterface::class))
         );
 
-        $command->execute(SlackNotifierInput::fromArray([
-            SlackNotifierInput::COMPANY_NAME => 'company',
-            SlackNotifierInput::JIRA_PROJECT_NAME => 'project',
-            SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
-            SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
-        ]), $output);
+        $inMemoryOutput = new InMemoryOutput();
 
-        $this->assertContains('Total notifications: 2', $output->lines());
+        $result = $command->execute(
+            SlackNotifierInput::fromArray(self::ENV),
+            new SlackNotifierOutput($inMemoryOutput)
+        );
+
+        $this->assertNotEmpty($inMemoryOutput->lines());
+        $this->assertEquals(['KEY-111', 'KEY-222'], $result->ticketKeys());
+    }
+
+    private function inMemoryOutput(): SlackNotifierOutput
+    {
+        return new SlackNotifierOutput(new InMemoryOutput());
     }
 }
