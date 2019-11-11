@@ -16,6 +16,14 @@ use Symfony\Component\HttpClient\HttpClient;
 $dotEnv = Dotenv\Dotenv::create(dirname(__DIR__));
 $dotEnv->load();
 
+if(!isset($_ENV['JIRA_API_LABEL'])
+    || !isset($_ENV['JIRA_API_PASSWORD'])
+    || !isset($_ENV['SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'])
+) {
+  echo 'JIRA_API_LABEL, JIRA_API_PASSWORD and SLACK_BOT_USER_OAUTH_ACCESS_TOKEN keys are mandatory!';
+  exit(1);
+}
+
 $command = new SlackNotifierCommand(
     new JiraHttpClient(HttpClient::create([
         'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],

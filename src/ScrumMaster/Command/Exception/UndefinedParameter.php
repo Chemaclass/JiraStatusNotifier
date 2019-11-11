@@ -6,8 +6,8 @@ namespace App\ScrumMaster\Command\Exception;
 
 final class UndefinedParameter extends \Exception
 {
-    public function __construct(string $parameterName)
+    public function __construct(array $parameters)
     {
-        parent::__construct('Undefined parameter: ' . $parameterName);
+        parent::__construct('Undefined parameter: ' . implode(', ', $parameters));
     }
 }
