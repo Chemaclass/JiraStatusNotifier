@@ -8,16 +8,16 @@ use App\ScrumMaster\Slack\ReadModel\SlackTicket;
 
 final class SlackNotifierResult
 {
-    /** @var SlackTicket[] */
+    /** @var array<string, SlackTicket> */
     private $slackTickets = [];
 
     public function addSlackTicket(SlackTicket $slackTicket): void
     {
-        $this->slackTickets[] = $slackTicket;
+        $this->slackTickets[$slackTicket->ticketCode()] = $slackTicket;
     }
 
-    /** @return SlackTicket[] */
-    public function responseCodePerTickets(): array
+    /** @return array<string, SlackTicket> */
+    public function slackTickets(): array
     {
         return $this->slackTickets;
     }
@@ -25,12 +25,7 @@ final class SlackNotifierResult
     /** @return string[] */
     public function ticketKeys(): array
     {
-        $keys = [];
-        foreach ($this->slackTickets as $slackTicket) {
-            $keys[] = $slackTicket->ticketCode();
-        }
-
-        return $keys;
+        return array_keys($this->slackTickets());
     }
 
     public function total(): int
@@ -54,8 +49,8 @@ final class SlackNotifierResult
 
     public function append(self $other): void
     {
-        foreach ($other->responseCodePerTickets() as $ticketKey => $responseCodeAndDisplayName) {
-            $this->slackTickets[$ticketKey] = $responseCodeAndDisplayName;
+        foreach ($other->slackTickets() as $slackTicket) {
+            $this->addSlackTicket($slackTicket);
         }
     }
 }
