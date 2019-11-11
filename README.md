@@ -3,9 +3,9 @@
 This tool will notify the assigner person of a JIRA ticket if the ticket
 remains in the same status for more than `N` days.
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/build-status/master)
 
 ## ENV Variables
 
