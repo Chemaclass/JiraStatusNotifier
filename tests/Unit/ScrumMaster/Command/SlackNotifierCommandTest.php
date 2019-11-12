@@ -37,7 +37,7 @@ final class SlackNotifierCommandTest extends TestCase
             $this->inMemoryOutput()
         );
 
-        $this->assertEmpty($result->responseCodePerTickets());
+        $this->assertEmpty($result->slackTickets());
     }
 
     /** @test */

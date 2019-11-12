@@ -19,9 +19,23 @@ final class SlackNotifierOutput
 
     public function write(SlackNotifierResult $result): void
     {
-        $keys = implode(', ', $result->ticketKeys());
-        $this->output->writeln("Total notifications: {$result->total()} ({$keys})");
+        $notificationTitles = $this->buildNotificationTitles($result);
+
+        $this->output->writeln("Total notifications: {$result->total()} ($notificationTitles)");
         $this->output->writeln("Total successful notifications sent: {$result->totalSuccessful()}");
         $this->output->writeln("Total failed notifications sent: {$result->totalFailed()}");
+    }
+
+    private function buildNotificationTitles(SlackNotifierResult $result): string
+    {
+        $notificationTitles = [];
+
+        foreach ($result->slackTickets() as $statusCode => $slackTicket) {
+            $notificationTitles[] = null !== $slackTicket->displayName()
+                ? "$statusCode: {$slackTicket->displayName()}"
+                : $statusCode;
+        }
+
+        return implode(', ', $notificationTitles);
     }
 }
