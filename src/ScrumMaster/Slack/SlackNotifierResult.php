@@ -11,9 +11,9 @@ final class SlackNotifierResult
     /** @var array<string, SlackTicket> */
     private $slackTickets = [];
 
-    public function addSlackTicket(SlackTicket $slackTicket): void
+    public function addSlackTicket(string $ticketKey, SlackTicket $slackTicket): void
     {
-        $this->slackTickets[$slackTicket->ticketCode()] = $slackTicket;
+        $this->slackTickets[$ticketKey] = $slackTicket;
     }
 
     /** @return array<string, SlackTicket> */
@@ -36,21 +36,21 @@ final class SlackNotifierResult
     public function totalSuccessful(): int
     {
         return count(array_filter($this->slackTickets, function (SlackTicket $slackTicket) {
-            return 200 === $slackTicket->statusCode();
+            return 200 === $slackTicket->responseStatusCode();
         }));
     }
 
     public function totalFailed(): int
     {
         return count(array_filter($this->slackTickets, function (SlackTicket $slackTicket) {
-            return 200 !== $slackTicket->statusCode();
+            return 200 !== $slackTicket->responseStatusCode();
         }));
     }
 
     public function append(self $other): void
     {
-        foreach ($other->slackTickets() as $slackTicket) {
-            $this->addSlackTicket($slackTicket);
+        foreach ($other->slackTickets() as $ticketKey => $slackTicket) {
+            $this->addSlackTicket($ticketKey, $slackTicket);
         }
     }
 }

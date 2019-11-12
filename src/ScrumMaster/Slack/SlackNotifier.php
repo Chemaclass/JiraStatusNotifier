@@ -67,8 +67,8 @@ final class SlackNotifier
 
         foreach ($tickets as $ticket) {
             $response = $this->postTicketToSlack($ticket);
-            $slackTicket = new SlackTicket($ticket->key(), $ticket->assignee()->displayName(), $response->getStatusCode());
-            $result->addSlackTicket($slackTicket);
+            $slackTicket = new SlackTicket($ticket->assignee()->displayName(), $response->getStatusCode());
+            $result->addSlackTicket($ticket->key(), $slackTicket);
         }
 
         return $result;

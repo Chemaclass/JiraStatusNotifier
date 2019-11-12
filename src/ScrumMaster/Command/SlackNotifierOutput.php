@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\ScrumMaster\Command;
 
 use App\ScrumMaster\Command\IO\OutputInterface;
-use App\ScrumMaster\Slack\ReadModel\SlackTicket;
 use App\ScrumMaster\Slack\SlackNotifierResult;
 
 final class SlackNotifierOutput
@@ -30,10 +29,11 @@ final class SlackNotifierOutput
     private function buildNotificationTitles(SlackNotifierResult $result): string
     {
         $notificationTitles = [];
-        foreach ($result->slackTickets() as $slackTicket) {
+
+        foreach ($result->slackTickets() as $statusCode => $slackTicket) {
             $notificationTitles[] = null !== $slackTicket->displayName()
-                ? "{$slackTicket->ticketCode()}: {$slackTicket->displayName()}"
-                : $slackTicket->ticketCode();
+                ? "$statusCode: {$slackTicket->displayName()}"
+                : $statusCode;
         }
 
         return implode(', ', $notificationTitles);

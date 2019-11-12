@@ -15,11 +15,11 @@ final class SlackNotifierOutputTest extends TestCase
     public function writeFromSlackNotifierOutput(): void
     {
         $result = new SlackNotifierResult();
-        $result->addSlackTicket(new SlackTicket('KEY-1', null, 100));
-        $result->addSlackTicket(new SlackTicket('KEY-2', 'jira.user.1', 200));
-        $result->addSlackTicket(new SlackTicket('KEY-3', null, 300));
-        $result->addSlackTicket(new SlackTicket('KEY-4', 'jira.user.2', 400));
-        $result->addSlackTicket(new SlackTicket('KEY-5', 'jira.user.1', 500));
+        $result->addSlackTicket('KEY-1', new SlackTicket(null, 100));
+        $result->addSlackTicket('KEY-2', new SlackTicket('jira.user.1', 200));
+        $result->addSlackTicket('KEY-3', new SlackTicket(null, 300));
+        $result->addSlackTicket('KEY-4', new SlackTicket('jira.user.2', 400));
+        $result->addSlackTicket('KEY-5', new SlackTicket('jira.user.1', 500));
 
         $output = new InMemoryOutput();
         (new SlackNotifierOutput($output))->write($result);

@@ -6,28 +6,18 @@ namespace App\ScrumMaster\Slack\ReadModel;
 
 final class SlackTicket
 {
-    /** @var string */
-    private $ticketCode;
-
-    /** @var string|null */
+    /** @var null|string */
     private $displayName;
 
     /** @var int */
-    private $statusCode;
+    private $responseStatusCode;
 
     public function __construct(
-        string $ticketCode,
         ?string $displayName,
-        int $statusCode
+        int $responseStatusCode
     ) {
-        $this->ticketCode = $ticketCode;
         $this->displayName = $displayName;
-        $this->statusCode = $statusCode;
-    }
-
-    public function ticketCode(): string
-    {
-        return $this->ticketCode;
+        $this->responseStatusCode = $responseStatusCode;
     }
 
     public function displayName(): ?string
@@ -35,8 +25,8 @@ final class SlackTicket
         return $this->displayName;
     }
 
-    public function statusCode(): int
+    public function responseStatusCode(): int
     {
-        return $this->statusCode;
+        return $this->responseStatusCode;
     }
 }
