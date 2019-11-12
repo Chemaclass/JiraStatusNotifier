@@ -1,9 +1,6 @@
 FROM php:7.3-fpm
 RUN apt-get update -y
 RUN apt-get upgrade -y
-RUN apt-get install -y libpq-dev git locales libicu-dev gettext libzip-dev
-RUN docker-php-ext-configure intl
-RUN docker-php-ext-install gd soap bcmath zip gettext intl pcntl
 RUN pecl install -o -f xdebug \
     && rm -rf /tmp/pear \
     && docker-php-ext-enable xdebug

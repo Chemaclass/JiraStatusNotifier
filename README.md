@@ -3,9 +3,9 @@
 This tool will notify the assigner person of a JIRA ticket if the ticket
 remains in the same status for more than `N` days.
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/?branch=master)
-[![Build Status](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/scrum-master/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/badges/build.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/build-status/master)
 
 ## ENV Variables
 
@@ -45,6 +45,10 @@ allow first this bot (as an app) to publish messages into that channel:
 
 Value example: `'{"To Do":6,"In Progress":4,"In Review":1,"IN QA":2,"Verified":1}'`
 
-This json consist as array of `<string:int>` where the `string` is the status name
-from JIRA, and the `int` is the max days that a ticket should be in that status.
-Otherwise, it will trigger the slack notification to the responsible person.
+This JSON consist of an array of `<string:int>` where
+
+* the `string` is the status name from the JIRA board
+* the `int` is the max days that a ticket could be in that status.
+
+In case the JIRA ticket is in that status for more days than it should,
+a slack notification will be sent to the responsible person.

@@ -45,7 +45,6 @@ final class SlackNotifierCommand
         );
 
         $result = $slackNotifier->sendNotifications($jiraBoard);
-
         $output->write($result);
 
         return $result;

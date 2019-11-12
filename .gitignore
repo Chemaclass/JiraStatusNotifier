@@ -1,8 +1,8 @@
+.idea
+coverage
 vendor
 *.env
-.idea
 .php_cs.cache
 .phpunit.result.cache
 .DS_Store
-coverage
 infection.log
