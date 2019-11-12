@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\ScrumMaster\Command;
 
 use App\ScrumMaster\Command\IO\OutputInterface;
+use App\ScrumMaster\Slack\ReadModel\SlackTicket;
 use App\ScrumMaster\Slack\SlackNotifierResult;
 
 final class SlackNotifierOutput
@@ -20,10 +21,12 @@ final class SlackNotifierOutput
     public function write(SlackNotifierResult $result): void
     {
         $notificationTitles = $this->buildNotificationTitles($result);
+        $notificationSuccessful = $this->buildNotificationSuccessful($result);
+        $notificationFailed = $this->buildNotificationFailed($result);
 
         $this->output->writeln("Total notifications: {$result->total()} ($notificationTitles)");
-        $this->output->writeln("Total successful notifications sent: {$result->totalSuccessful()}");
-        $this->output->writeln("Total failed notifications sent: {$result->totalFailed()}");
+        $this->output->writeln("Total successful notifications sent: {$result->totalSuccessful()} ($notificationSuccessful)");
+        $this->output->writeln("Total failed notifications sent: {$result->totalFailed()} ($notificationFailed)");
     }
 
     private function buildNotificationTitles(SlackNotifierResult $result): string
@@ -37,5 +40,23 @@ final class SlackNotifierOutput
         }
 
         return implode(', ', $notificationTitles);
+    }
+
+    private function buildNotificationSuccessful(SlackNotifierResult $result): string
+    {
+        $notificationSuccessful = array_keys(array_filter($result->slackTickets(), function (SlackTicket $slackTicket) {
+            return 200 === $slackTicket->responseStatusCode();
+        }));
+
+        return implode(', ', $notificationSuccessful);
+    }
+
+    private function buildNotificationFailed(SlackNotifierResult $result): string
+    {
+        $notificationFailed = array_keys(array_filter($result->slackTickets(), function (SlackTicket $slackTicket) {
+            return 200 !== $slackTicket->responseStatusCode();
+        }));
+
+        return implode(', ', $notificationFailed);
     }
 }

@@ -25,7 +25,7 @@ final class SlackNotifierOutputTest extends TestCase
         (new SlackNotifierOutput($output))->write($result);
 
         $this->assertContains('Total notifications: 5 (KEY-1, KEY-2: jira.user.1, KEY-3, KEY-4: jira.user.2, KEY-5: jira.user.1)', $output->lines());
-        $this->assertContains('Total successful notifications sent: 1', $output->lines());
-        $this->assertContains('Total failed notifications sent: 4', $output->lines());
+        $this->assertContains('Total successful notifications sent: 1 (KEY-2)', $output->lines());
+        $this->assertContains('Total failed notifications sent: 4 (KEY-1, KEY-3, KEY-4, KEY-5)', $output->lines());
     }
 }
