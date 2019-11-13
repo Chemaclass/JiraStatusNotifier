@@ -1,7 +1,6 @@
 # Scrum Master   
 
-This tool will notify the assigner person of a JIRA ticket if the ticket
-remains in the same status for more than `N` days.
+This tool will notify the person assigned a JIRA-ticket if the ticket remains in the same status for more than `N` days.
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/?branch=master)
