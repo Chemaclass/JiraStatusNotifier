@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.2-fpm
 RUN apt-get update -y
 RUN apt-get upgrade -y
 RUN pecl install -o -f xdebug \
