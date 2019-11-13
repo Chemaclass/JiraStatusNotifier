@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Unit\ScrumMaster\Command\IO;
+namespace Chemaclass\ScrumMaster\Tests\Unit\ScrumMaster\Command\IO;
 
-use App\ScrumMaster\Command\IO\EchoOutput;
+use Chemaclass\ScrumMaster\Command\IO\EchoOutput;
 use PHPUnit\Framework\TestCase;
 
 class EchoOutputTest extends TestCase

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Jira;
+namespace Chemaclass\ScrumMaster\Jira;
 
-use App\ScrumMaster\Jira\ReadModel\Assignee;
-use App\ScrumMaster\Jira\ReadModel\JiraTicket;
-use App\ScrumMaster\Jira\ReadModel\TicketStatus;
+use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
+use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
+use Chemaclass\ScrumMaster\Jira\ReadModel\TicketStatus;
 use DateTimeImmutable;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 

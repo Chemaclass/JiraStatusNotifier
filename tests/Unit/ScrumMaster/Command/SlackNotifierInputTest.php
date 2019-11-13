@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\ScrumMaster\Command;
+namespace Chemaclass\ScrumMaster\Tests\Unit\ScrumMaster\Command;
 
-use App\ScrumMaster\Command\SlackNotifierInput;
+use Chemaclass\ScrumMaster\Command\SlackNotifierInput;
 use PHPUnit\Framework\TestCase;
 
 final class SlackNotifierInputTest extends TestCase

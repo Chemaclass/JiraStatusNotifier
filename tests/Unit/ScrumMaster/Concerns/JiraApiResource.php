@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\ScrumMaster\Concerns;
+namespace Chemaclass\ScrumMaster\Tests\Unit\ScrumMaster\Concerns;
 
-use App\ScrumMaster\Jira\Tickets;
+use Chemaclass\ScrumMaster\Jira\Tickets;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;

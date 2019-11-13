@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Jira;
+namespace Chemaclass\ScrumMaster\Jira;
 
-use App\ScrumMaster\Jira\ReadModel\JiraTicket;
+use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class JiraHttpClient

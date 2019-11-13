@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Jira\ReadModel;
+namespace Chemaclass\ScrumMaster\Jira\ReadModel;
 
 final class JiraTicket
 {

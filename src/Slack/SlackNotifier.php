@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Slack;
+namespace Chemaclass\ScrumMaster\Slack;
 
-use App\ScrumMaster\Jira\Board;
-use App\ScrumMaster\Jira\JiraHttpClient;
-use App\ScrumMaster\Jira\ReadModel\Company;
-use App\ScrumMaster\Jira\ReadModel\JiraTicket;
-use App\ScrumMaster\Jira\UrlFactoryInterface;
-use App\ScrumMaster\Slack\ReadModel\SlackTicket;
+use Chemaclass\ScrumMaster\Jira\Board;
+use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
+use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
+use Chemaclass\ScrumMaster\Jira\UrlFactoryInterface;
+use Chemaclass\ScrumMaster\Slack\ReadModel\SlackTicket;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifier

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Command;
+namespace Chemaclass\ScrumMaster\Command;
 
-use App\ScrumMaster\Command\Exception\UndefinedParameter;
+use Chemaclass\ScrumMaster\Command\Exception\UndefinedParameter;
 
 final class SlackNotifierInput
 {

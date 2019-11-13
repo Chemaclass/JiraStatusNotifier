@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Command\IO;
+namespace Chemaclass\ScrumMaster\Command\IO;
 
 interface OutputInterface
 {

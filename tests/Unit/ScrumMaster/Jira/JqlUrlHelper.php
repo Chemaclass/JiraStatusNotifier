@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\ScrumMaster\Jira;
+namespace Chemaclass\ScrumMaster\Tests\Unit\ScrumMaster\Jira;
 
 trait JqlUrlHelper
 {

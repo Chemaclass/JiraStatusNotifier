@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\ScrumMaster\Command;
+namespace Chemaclass\ScrumMaster\Tests\Unit\ScrumMaster\Command;
 
-use App\ScrumMaster\Command\SlackNotifierOutput;
-use App\ScrumMaster\Slack\ReadModel\SlackTicket;
-use App\ScrumMaster\Slack\SlackNotifierResult;
+use Chemaclass\ScrumMaster\Command\SlackNotifierOutput;
+use Chemaclass\ScrumMaster\Slack\ReadModel\SlackTicket;
+use Chemaclass\ScrumMaster\Slack\SlackNotifierResult;
 use PHPUnit\Framework\TestCase;
 
 final class SlackNotifierOutputTest extends TestCase

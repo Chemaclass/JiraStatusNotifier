@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Slack\ReadModel;
+namespace Chemaclass\ScrumMaster\Slack\ReadModel;
 
 final class SlackTicket
 {

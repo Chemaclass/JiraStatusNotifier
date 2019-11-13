@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\ScrumMaster\Jira;
+namespace Chemaclass\ScrumMaster\Tests\Unit\ScrumMaster\Jira;
 
-use App\ScrumMaster\Jira\ReadModel\Assignee;
-use App\ScrumMaster\Jira\ReadModel\JiraTicket;
-use App\ScrumMaster\Jira\ReadModel\TicketStatus;
-use App\ScrumMaster\Jira\Tickets;
+use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
+use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
+use Chemaclass\ScrumMaster\Jira\ReadModel\TicketStatus;
+use Chemaclass\ScrumMaster\Jira\Tickets;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\ResponseInterface;

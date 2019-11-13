@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Command\Exception;
+namespace Chemaclass\ScrumMaster\Command\Exception;
 
 final class UndefinedParameter extends \Exception
 {

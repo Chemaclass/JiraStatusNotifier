@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\ScrumMaster\Jira;
+namespace Chemaclass\ScrumMaster\Tests\Unit\ScrumMaster\Jira;
 
-use App\ScrumMaster\Jira\Board;
+use Chemaclass\ScrumMaster\Jira\Board;
 use PHPUnit\Framework\TestCase;
 
 final class BoardTest extends TestCase

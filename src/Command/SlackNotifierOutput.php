@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Command;
+namespace Chemaclass\ScrumMaster\Command;
 
-use App\ScrumMaster\Command\IO\OutputInterface;
-use App\ScrumMaster\Slack\ReadModel\SlackTicket;
-use App\ScrumMaster\Slack\SlackNotifierResult;
+use Chemaclass\ScrumMaster\Command\IO\OutputInterface;
+use Chemaclass\ScrumMaster\Slack\ReadModel\SlackTicket;
+use Chemaclass\ScrumMaster\Slack\SlackNotifierResult;
 
 final class SlackNotifierOutput
 {

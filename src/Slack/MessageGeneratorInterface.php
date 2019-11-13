@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Slack;
+namespace Chemaclass\ScrumMaster\Slack;
 
-use App\ScrumMaster\Jira\ReadModel\JiraTicket;
+use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 
 interface MessageGeneratorInterface
 {

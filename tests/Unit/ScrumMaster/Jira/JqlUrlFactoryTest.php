@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\ScrumMaster\Jira;
+namespace Chemaclass\ScrumMaster\Tests\Unit\ScrumMaster\Jira;
 
-use App\ScrumMaster\Jira\Board;
-use App\ScrumMaster\Jira\JqlUrlBuilder;
-use App\ScrumMaster\Jira\JqlUrlFactory;
-use App\ScrumMaster\Jira\ReadModel\Company;
+use Chemaclass\ScrumMaster\Jira\Board;
+use Chemaclass\ScrumMaster\Jira\JqlUrlBuilder;
+use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
+use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 use PHPUnit\Framework\TestCase;
 
 final class JqlUrlFactoryTest extends TestCase

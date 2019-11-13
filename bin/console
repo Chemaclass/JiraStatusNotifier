@@ -5,12 +5,12 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/bootstrap.php';
 
-use App\ScrumMaster\Command\IO\EchoOutput;
-use App\ScrumMaster\Command\SlackNotifierCommand;
-use App\ScrumMaster\Command\SlackNotifierInput;
-use App\ScrumMaster\Command\SlackNotifierOutput;
-use App\ScrumMaster\Jira\JiraHttpClient;
-use App\ScrumMaster\Slack\SlackHttpClient;
+use Chemaclass\ScrumMaster\Command\IO\EchoOutput;
+use Chemaclass\ScrumMaster\Command\SlackNotifierCommand;
+use Chemaclass\ScrumMaster\Command\SlackNotifierInput;
+use Chemaclass\ScrumMaster\Command\SlackNotifierOutput;
+use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
 use Symfony\Component\HttpClient\HttpClient;
 
 $dotEnv = Dotenv\Dotenv::create(dirname(__DIR__));

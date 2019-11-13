@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Slack;
+namespace Chemaclass\ScrumMaster\Slack;
 
-use App\ScrumMaster\Slack\ReadModel\SlackTicket;
+use Chemaclass\ScrumMaster\Slack\ReadModel\SlackTicket;
 
 final class SlackNotifierResult
 {

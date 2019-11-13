@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Slack;
+namespace Chemaclass\ScrumMaster\Slack;
 
-use App\ScrumMaster\Jira\ReadModel\Assignee;
-use App\ScrumMaster\Jira\ReadModel\JiraTicket;
+use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
+use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use DateTimeImmutable;
 
 final class SlackMessage implements MessageGeneratorInterface

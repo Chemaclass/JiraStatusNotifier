@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Command;
+namespace Chemaclass\ScrumMaster\Command;
 
-use App\ScrumMaster\Jira\Board;
-use App\ScrumMaster\Jira\JiraHttpClient;
-use App\ScrumMaster\Jira\JqlUrlBuilder;
-use App\ScrumMaster\Jira\JqlUrlFactory;
-use App\ScrumMaster\Jira\ReadModel\Company;
-use App\ScrumMaster\Slack\SlackHttpClient;
-use App\ScrumMaster\Slack\SlackMapping;
-use App\ScrumMaster\Slack\SlackMessage;
-use App\ScrumMaster\Slack\SlackNotifier;
-use App\ScrumMaster\Slack\SlackNotifierResult;
+use Chemaclass\ScrumMaster\Jira\Board;
+use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Jira\JqlUrlBuilder;
+use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
+use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
+use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
+use Chemaclass\ScrumMaster\Slack\SlackMapping;
+use Chemaclass\ScrumMaster\Slack\SlackMessage;
+use Chemaclass\ScrumMaster\Slack\SlackNotifier;
+use Chemaclass\ScrumMaster\Slack\SlackNotifierResult;
 use DateTimeImmutable;
 
 final class SlackNotifierCommand

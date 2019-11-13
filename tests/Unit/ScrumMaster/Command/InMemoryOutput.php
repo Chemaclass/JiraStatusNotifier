@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\ScrumMaster\Command;
+namespace Chemaclass\ScrumMaster\Tests\Unit\ScrumMaster\Command;
 
-use App\ScrumMaster\Command\IO\OutputInterface;
+use Chemaclass\ScrumMaster\Command\IO\OutputInterface;
 
 final class InMemoryOutput implements OutputInterface
 {

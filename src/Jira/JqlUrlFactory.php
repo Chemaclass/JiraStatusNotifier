@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\ScrumMaster\Jira;
+namespace Chemaclass\ScrumMaster\Jira;
 
 final class JqlUrlFactory implements UrlFactoryInterface
 {
