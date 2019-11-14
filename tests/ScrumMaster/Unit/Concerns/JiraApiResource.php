@@ -26,7 +26,7 @@ trait JiraApiResource
         return $jiraClient;
     }
 
-    private function createAnIssueAsArray(string $assigneeName, string $key): array
+    private function createAnIssueAsArray(string $assigneeKey, string $key): array
     {
         return [
             'key' => $key,
@@ -38,8 +38,8 @@ trait JiraApiResource
                 'summary' => 'The ticket title',
                 'statuscategorychangedate' => '2019-06-15T10:35:00+00',
                 'assignee' => [
-                    'name' => $assigneeName,
-                    'key' => 'user.key.jira',
+                    'name' => 'Real Name',
+                    'key' => $assigneeKey,
                     'emailAddress' => 'user@email.jira',
                     'displayName' => 'display.name.jira',
                 ],
