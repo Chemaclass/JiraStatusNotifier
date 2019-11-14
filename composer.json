@@ -3,6 +3,7 @@
     "description": "This tool will notify the person assigned a JIRA-ticket if the ticket remains in the same status for more than N days.",
     "type": "library",
     "homepage": "https://github.com/Chemaclass/ScrumMaster",
+    "license": "MIT",
     "keywords": [
         "jira",
         "slack",
@@ -13,12 +14,15 @@
         "scrum",
         "scrum-master"
     ],
-    "license": "MIT",
     "authors": [
         {
             "name": "Jose Maria Valera Reales",
             "email": "chemaclass@outlook.es",
             "homepage": "http://chemaclass.es/"
+        },
+        {
+            "name": "Jesus Valera Reales",
+            "email": "jesus1902@outlook.com"
         }
     ],
     "require": {
