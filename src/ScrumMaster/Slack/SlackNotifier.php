@@ -12,7 +12,6 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Chemaclass\ScrumMaster\Jira\UrlFactoryInterface;
 use Chemaclass\ScrumMaster\Slack\ReadModel\SlackTicket;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Webmozart\Assert\Assert;
 
 final class SlackNotifier
 {
@@ -70,13 +69,12 @@ final class SlackNotifier
 
     private function postToSlack(array $tickets): SlackNotifierResult
     {
-        Assert::allIsInstanceOf($tickets, JiraTicket::class);
         $result = new SlackNotifierResult();
 
         foreach ($tickets as $ticket) {
             $assignee = $ticket->assignee();
 
-            if ($this->shouldIgnore($assignee)) {
+            if ($this->shouldIgnoreAssignee($assignee)) {
                 continue;
             }
 
@@ -101,7 +99,7 @@ final class SlackNotifier
         return $this->jiraClient->getTickets($this->urlFactory, $statusName);
     }
 
-    private function shouldIgnore(Assignee $assignee): bool
+    private function shouldIgnoreAssignee(Assignee $assignee): bool
     {
         return in_array($assignee->key(), $this->jiraUsersToIgnore);
     }
