@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Tests\Unit\ScrumMaster\Jira;
+namespace Chemaclass\ScrumMaster\Tests\Unit\Jira;
 
 use Chemaclass\ScrumMaster\Jira\JqlUrlBuilder;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;

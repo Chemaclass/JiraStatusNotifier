@@ -2,6 +2,7 @@
     "name": "chemaclass/scrum-master",
     "description": "This tool will notify the person assigned a JIRA-ticket if the ticket remains in the same status for more than N days.",
     "type": "library",
+    "homepage": "https://github.com/Chemaclass/ScrumMaster",
     "keywords": [
         "jira",
         "slack",
@@ -16,25 +17,30 @@
     "authors": [
         {
             "name": "Jose Maria Valera Reales",
-            "email": "chemaclass@outlook.es"
+            "email": "chemaclass@outlook.es",
+            "homepage": "http://chemaclass.es/"
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "ext-json": "*",
-        "vlucas/phpdotenv": "^3.6",
-        "symfony/http-client": "^4.3"
+        "symfony/http-client": "^4.3",
+        "vlucas/phpdotenv": "^3.6"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.15",
-        "phpunit/phpunit": "^8.4",
-        "symfony/var-dumper": "^4.3",
-        "infection/infection": "^0.14.2"
+        "infection/infection": "^0.14.2",
+        "phpunit/phpunit": "^8.4.2",
+        "symfony/var-dumper": "^4.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Chemaclass\\ScrumMaster\\": "src/ScrumMaster"
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "Chemaclass\\ScrumMaster\\": "src/",
-            "Chemaclass\\ScrumMaster\\Tests\\": "tests/"
+            "Chemaclass\\ScrumMaster\\Tests\\": "tests/ScrumMaster"
         }
     }
 }
