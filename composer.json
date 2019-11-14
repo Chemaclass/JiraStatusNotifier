@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.2",
         "ext-json": "*",
         "symfony/http-client": "^4.3",
         "vlucas/phpdotenv": "^3.6"
