@@ -79,14 +79,13 @@ final class SlackNotifierCommandTest extends TestCase
         $this->assertEquals(['KEY-222'], $result->ticketKeys());
     }
 
-    private function notifierInput(array $optional = []): SlackNotifierInput
+    private function notifierInput(array $optionalFields = []): SlackNotifierInput
     {
-        return SlackNotifierInput::fromArray(array_merge(self::MANDATORY_FIELDS, $optional));
+        return SlackNotifierInput::fromArray(array_merge(self::MANDATORY_FIELDS, $optionalFields));
     }
 
     private function inMemoryOutput(): SlackNotifierOutput
     {
         return new SlackNotifierOutput(new InMemoryOutput());
     }
-
 }

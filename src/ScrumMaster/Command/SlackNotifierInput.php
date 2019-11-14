@@ -34,7 +34,7 @@ final class SlackNotifierInput
     /** @var array */
     private $daysForStatus;
 
-    /** @var string */
+    /** @var array */
     private $slackMappingIds;
 
     /** @var array */
@@ -48,7 +48,7 @@ final class SlackNotifierInput
         $self->companyName = $params[self::COMPANY_NAME];
         $self->jiraProjectName = $params[self::JIRA_PROJECT_NAME];
         $self->daysForStatus = json_decode($params[self::DAYS_FOR_STATUS], true);
-        $self->slackMappingIds = $params[self::SLACK_MAPPING_IDS];
+        $self->slackMappingIds = json_decode($params[self::SLACK_MAPPING_IDS], true);
         $self->jiraUsersToIgnore = isset($params[self::JIRA_USERS_TO_IGNORE])
             ? json_decode($params[self::JIRA_USERS_TO_IGNORE], true)
             : [];
@@ -77,7 +77,7 @@ final class SlackNotifierInput
 
     public function slackMappingIds(): array
     {
-        return json_decode($this->slackMappingIds, true);
+        return $this->slackMappingIds;
     }
 
     public function jiraUsersToIgnore(): array
