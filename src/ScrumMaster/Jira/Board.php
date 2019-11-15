@@ -6,13 +6,15 @@ namespace Chemaclass\ScrumMaster\Jira;
 
 final class Board implements BoardInterface
 {
+    public const FALLBACK_VALUE_DEFAULT = 1;
+
     /** @var array <string,int> */
     private $maxDaysInStatus;
 
     /** @var int */
     private $fallbackValue;
 
-    public function __construct(array $maxDaysInStatus, int $fallbackValue = 1)
+    public function __construct(array $maxDaysInStatus, int $fallbackValue = self::FALLBACK_VALUE_DEFAULT)
     {
         $this->maxDaysInStatus = $maxDaysInStatus;
         $this->fallbackValue = $fallbackValue;
