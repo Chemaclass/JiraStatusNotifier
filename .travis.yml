@@ -1,0 +1,20 @@
+language: php
+cache: false
+
+sudo: false
+
+php:
+  - 7.2
+
+script:
+  - ./vendor/bin/phpunit --disallow-test-output --coverage-clover ./clover.xml --group=Coverage
+  - ./vendor/bin/phpunit --disallow-test-output --exclude-group=Coverage
+  - ./vendor/bin/php-cs-fixer
+  - ulimit -n 4096 && phpdbg -qrr ./vendor/bin/infection -vvv --test-framework-options='--testsuite=unit' --min-msi=84 --min-covered-msi=86
+
+matrix:
+  allow_failures:
+    - php: nightly
+
+after_script:
+  - sh .travis.coverage.sh
