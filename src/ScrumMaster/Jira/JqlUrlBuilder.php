@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMaster\Jira;
 
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
+use function sprintf;
 
 final class JqlUrlBuilder
 {

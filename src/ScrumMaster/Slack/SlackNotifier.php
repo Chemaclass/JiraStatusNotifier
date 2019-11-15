@@ -11,6 +11,7 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Chemaclass\ScrumMaster\Jira\UrlFactoryInterface;
 use Chemaclass\ScrumMaster\Slack\ReadModel\SlackTicket;
+use function in_array;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class SlackNotifier
@@ -79,7 +80,7 @@ final class SlackNotifier
             }
 
             $response = $this->postTicketToSlack($ticket);
-            $slackTicket = new SlackTicket($assignee->displayName(), $response->getStatusCode());
+            $slackTicket = SlackTicket::withStatusCodeAndAssignee($response->getStatusCode(), $assignee->displayName());
             $result->addSlackTicket($ticket->key(), $slackTicket);
         }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMaster\Slack;
 
 use Chemaclass\ScrumMaster\Slack\ReadModel\SlackTicket;
+use function count;
 
 final class SlackNotifierResult
 {
