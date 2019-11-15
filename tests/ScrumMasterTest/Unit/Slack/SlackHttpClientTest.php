@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Tests\Unit\Slack;
+namespace Chemaclass\ScrumMasterTests\Unit\Slack;
 
 use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
 use PHPUnit\Framework\TestCase;

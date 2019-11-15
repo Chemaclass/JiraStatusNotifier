@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Tests\Unit\Command;
+namespace Chemaclass\ScrumMasterTests\Unit\Command;
 
 use Chemaclass\ScrumMaster\Command\SlackNotifierCommand;
 use Chemaclass\ScrumMaster\Command\SlackNotifierInput;
 use Chemaclass\ScrumMaster\Command\SlackNotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
-use Chemaclass\ScrumMaster\Tests\Unit\Concerns\JiraApiResource;
+use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

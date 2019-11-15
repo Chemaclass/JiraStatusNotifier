@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Tests\Unit\Concerns;
+namespace Chemaclass\ScrumMasterTests\Unit\Concerns;
 
 use Chemaclass\ScrumMaster\Jira\Tickets;
 use PHPUnit\Framework\MockObject\MockObject;

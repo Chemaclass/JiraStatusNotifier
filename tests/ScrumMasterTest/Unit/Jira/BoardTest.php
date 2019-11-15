@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Tests\Unit\Jira;
+namespace Chemaclass\ScrumMasterTests\Unit\Jira;
 
 use Chemaclass\ScrumMaster\Jira\Board;
 use PHPUnit\Framework\TestCase;

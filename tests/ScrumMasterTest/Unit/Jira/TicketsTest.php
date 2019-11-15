@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Tests\Unit\Jira;
+namespace Chemaclass\ScrumMasterTests\Unit\Jira;
 
 use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;

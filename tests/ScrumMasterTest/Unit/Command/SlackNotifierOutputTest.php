@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Tests\Unit\Command;
+namespace Chemaclass\ScrumMasterTests\Unit\Command;
 
 use Chemaclass\ScrumMaster\Command\SlackNotifierOutput;
 use Chemaclass\ScrumMaster\Slack\ReadModel\SlackTicket;
