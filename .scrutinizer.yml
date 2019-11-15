@@ -1,0 +1,32 @@
+build:
+  environment:
+    php: 7.2
+  nodes:
+    analysis:
+      project_setup:
+        override:
+          - 'true'
+      tests:
+        override:
+          - php-scrutinizer-run
+          -
+            command: phpcs-run
+            use_website_config: true
+    tests: true
+    coverage:
+      tests:
+        override:
+          -
+            command: 'vendor/bin/phpunit tests --coverage-clover tests/clover.xml --configuration phpunit.xml'
+            coverage:
+              file: 'tests/clover.xml'
+              format: 'clover'
+checks:
+  php: true
+tools:
+  php_cs_fixer:
+    enabled: true
+    config:
+      level: all
+    filter:
+      paths: ["src/*", "tests/*"]
