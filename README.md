@@ -51,3 +51,11 @@ This JSON consist of an array of `<string:int>` where
 
 In case the JIRA ticket is in that status for more days than it should,
 a slack notification will be sent to the responsible person.
+
+### JIRA_USERS_TO_IGNORE (optional)
+
+Value example: `'["any.jira.user.key","another.jira.user.key"]'`
+
+Prevent sending any notifications to the users listed by their jira user-key.
+
+This is optional. Default value: `'[]'`

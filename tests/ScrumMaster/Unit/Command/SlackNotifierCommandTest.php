@@ -17,7 +17,7 @@ final class SlackNotifierCommandTest extends TestCase
 {
     use JiraApiResource;
 
-    private const ENV = [
+    private const MANDATORY_FIELDS = [
         SlackNotifierInput::COMPANY_NAME => 'company.name',
         SlackNotifierInput::JIRA_PROJECT_NAME => 'Jira project name',
         SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
@@ -32,10 +32,7 @@ final class SlackNotifierCommandTest extends TestCase
             new SlackHttpClient($this->createMock(HttpClientInterface::class))
         );
 
-        $result = $command->execute(
-            SlackNotifierInput::fromArray(self::ENV),
-            $this->inMemoryOutput()
-        );
+        $result = $command->execute($this->notifierInput(), $this->inMemoryOutput());
 
         $this->assertEmpty($result->slackTickets());
     }
@@ -52,14 +49,39 @@ final class SlackNotifierCommandTest extends TestCase
         );
 
         $inMemoryOutput = new InMemoryOutput();
+        $result = $command->execute($this->notifierInput(), new SlackNotifierOutput($inMemoryOutput));
+
+        $this->assertNotEmpty($inMemoryOutput->lines());
+        $this->assertEquals(['KEY-111', 'KEY-222'], $result->ticketKeys());
+    }
+
+    /** @test */
+    public function ignoredUserShouldNotReceiveAnyNotification(): void
+    {
+        $command = new SlackNotifierCommand(
+            new JiraHttpClient($this->mockJiraClient([
+                $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
+                $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
+            ])),
+            new SlackHttpClient($this->createMock(HttpClientInterface::class))
+        );
+
+        $inMemoryOutput = new InMemoryOutput();
 
         $result = $command->execute(
-            SlackNotifierInput::fromArray(self::ENV),
+            $this->notifierInput([
+                SlackNotifierInput::JIRA_USERS_TO_IGNORE => '["user.1.jira"]',
+            ]),
             new SlackNotifierOutput($inMemoryOutput)
         );
 
         $this->assertNotEmpty($inMemoryOutput->lines());
-        $this->assertEquals(['KEY-111', 'KEY-222'], $result->ticketKeys());
+        $this->assertEquals(['KEY-222'], $result->ticketKeys());
+    }
+
+    private function notifierInput(array $optionalFields = []): SlackNotifierInput
+    {
+        return SlackNotifierInput::fromArray(array_merge(self::MANDATORY_FIELDS, $optionalFields));
     }
 
     private function inMemoryOutput(): SlackNotifierOutput
