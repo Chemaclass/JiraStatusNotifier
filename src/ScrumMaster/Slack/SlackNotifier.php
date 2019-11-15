@@ -10,6 +10,7 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Chemaclass\ScrumMaster\Jira\UrlFactoryInterface;
+use Chemaclass\ScrumMaster\Slack\MessageTemplate\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Slack\ReadModel\SlackTicket;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 

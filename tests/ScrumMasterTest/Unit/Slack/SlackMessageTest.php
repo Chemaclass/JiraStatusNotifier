@@ -7,7 +7,7 @@ namespace Chemaclass\ScrumMasterTests\Unit\Slack;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Chemaclass\ScrumMaster\Jira\ReadModel\TicketStatus;
-use Chemaclass\ScrumMaster\Slack\SlackMessage;
+use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 

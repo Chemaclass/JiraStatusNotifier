@@ -9,12 +9,11 @@ use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JqlUrlBuilder;
 use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
+use Chemaclass\ScrumMaster\Slack\MessageTemplate\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
 use Chemaclass\ScrumMaster\Slack\SlackMapping;
-use Chemaclass\ScrumMaster\Slack\SlackMessage;
 use Chemaclass\ScrumMaster\Slack\SlackNotifier;
 use Chemaclass\ScrumMaster\Slack\SlackNotifierResult;
-use DateTimeImmutable;
 
 final class SlackNotifierCommand
 {
@@ -24,10 +23,17 @@ final class SlackNotifierCommand
     /** @var SlackHttpClient */
     private $slackHttpClient;
 
-    public function __construct(JiraHttpClient $jiraHttpClient, SlackHttpClient $slackHttpClient)
-    {
+    /** @var MessageGeneratorInterface */
+    private $messageGenerator;
+
+    public function __construct(
+        JiraHttpClient $jiraHttpClient,
+        SlackHttpClient $slackHttpClient,
+        MessageGeneratorInterface $messageGenerator
+    ) {
         $this->jiraHttpClient = $jiraHttpClient;
         $this->slackHttpClient = $slackHttpClient;
+        $this->messageGenerator = $messageGenerator;
     }
 
     public function execute(SlackNotifierInput $input, SlackNotifierOutput $output): SlackNotifierResult
@@ -41,7 +47,7 @@ final class SlackNotifierCommand
             $company,
             new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company)),
             SlackMapping::jiraNameWithSlackId($input->slackMappingIds()),
-            SlackMessage::withTimeToDiff(new DateTimeImmutable()),
+            $this->messageGenerator,
             $input->jiraUsersToIgnore()
         );
 

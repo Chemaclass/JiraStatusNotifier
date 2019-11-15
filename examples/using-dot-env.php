@@ -13,6 +13,7 @@ use Chemaclass\ScrumMaster\Command\SlackNotifierInput;
 use Chemaclass\ScrumMaster\Command\SlackNotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
+use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
 use Symfony\Component\HttpClient\HttpClient;
 
 $dotEnv = Dotenv\Dotenv::create(dirname(__DIR__));
@@ -32,7 +33,8 @@ $command = new SlackNotifierCommand(
     ])),
     new SlackHttpClient(HttpClient::create([
         'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
-    ]))
+    ])),
+    SlackMessage::withTimeToDiff(new DateTimeImmutable())
 );
 
 $command->execute(

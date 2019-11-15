@@ -8,8 +8,10 @@ use Chemaclass\ScrumMaster\Command\SlackNotifierCommand;
 use Chemaclass\ScrumMaster\Command\SlackNotifierInput;
 use Chemaclass\ScrumMaster\Command\SlackNotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
 use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -27,26 +29,18 @@ final class SlackNotifierCommandTest extends TestCase
     /** @test */
     public function zeroNotificationsWereSent(): void
     {
-        $command = new SlackNotifierCommand(
-            new JiraHttpClient($this->createMock(HttpClientInterface::class)),
-            new SlackHttpClient($this->createMock(HttpClientInterface::class))
-        );
-
+        $command = $this->slackNotifierCommandWithJiraTickets([]);
         $result = $command->execute($this->notifierInput(), $this->inMemoryOutput());
-
         $this->assertEmpty($result->slackTickets());
     }
 
     /** @test */
     public function twoSuccessfulNotificationsWereSent(): void
     {
-        $command = new SlackNotifierCommand(
-            new JiraHttpClient($this->mockJiraClient([
-                $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
-                $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
-            ])),
-            new SlackHttpClient($this->createMock(HttpClientInterface::class))
-        );
+        $command = $this->slackNotifierCommandWithJiraTickets([
+            $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
+            $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
+        ]);
 
         $inMemoryOutput = new InMemoryOutput();
         $result = $command->execute($this->notifierInput(), new SlackNotifierOutput($inMemoryOutput));
@@ -58,13 +52,10 @@ final class SlackNotifierCommandTest extends TestCase
     /** @test */
     public function ignoredUserShouldNotReceiveAnyNotification(): void
     {
-        $command = new SlackNotifierCommand(
-            new JiraHttpClient($this->mockJiraClient([
-                $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
-                $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
-            ])),
-            new SlackHttpClient($this->createMock(HttpClientInterface::class))
-        );
+        $command = $this->slackNotifierCommandWithJiraTickets([
+            $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
+            $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
+        ]);
 
         $inMemoryOutput = new InMemoryOutput();
 
@@ -87,5 +78,14 @@ final class SlackNotifierCommandTest extends TestCase
     private function inMemoryOutput(): SlackNotifierOutput
     {
         return new SlackNotifierOutput(new InMemoryOutput());
+    }
+
+    private function slackNotifierCommandWithJiraTickets(array $jiraIssues): SlackNotifierCommand
+    {
+        return new SlackNotifierCommand(
+            new JiraHttpClient($this->mockJiraClient($jiraIssues)),
+            new SlackHttpClient($this->createMock(HttpClientInterface::class)),
+            SlackMessage::withTimeToDiff(new DateTimeImmutable())
+        );
     }
 }
