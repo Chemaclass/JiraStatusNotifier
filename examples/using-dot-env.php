@@ -1,6 +1,8 @@
-#!/usr/bin/env php
 <?php
-
+/**
+ * This example demonstrates how to notify via Slack to the people assigned to the JIRA-tickets
+ * using the ENV parameters (from the .env file)
+ */
 declare(strict_types=1);
 
 require dirname(__DIR__) . '/bootstrap.php';
@@ -16,12 +18,12 @@ use Symfony\Component\HttpClient\HttpClient;
 $dotEnv = Dotenv\Dotenv::create(dirname(__DIR__));
 $dotEnv->load();
 
-if(!isset($_ENV['JIRA_API_LABEL'])
+if (!isset($_ENV['JIRA_API_LABEL'])
     || !isset($_ENV['JIRA_API_PASSWORD'])
     || !isset($_ENV['SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'])
 ) {
-  echo 'JIRA_API_LABEL, JIRA_API_PASSWORD and SLACK_BOT_USER_OAUTH_ACCESS_TOKEN keys are mandatory!';
-  exit(1);
+    echo 'JIRA_API_LABEL, JIRA_API_PASSWORD and SLACK_BOT_USER_OAUTH_ACCESS_TOKEN keys are mandatory!';
+    exit(1);
 }
 
 $command = new SlackNotifierCommand(
