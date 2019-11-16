@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMaster\Command;
 
 use Chemaclass\ScrumMaster\Command\Exception\UndefinedParameter;
+use function count;
+use function json_decode;
 
 final class SlackNotifierInput
 {

@@ -10,6 +10,8 @@ use Chemaclass\ScrumMaster\Slack\SlackNotifierResult;
 
 final class SlackNotifierOutput
 {
+    public const HTTP_OK = 200;
+
     /** @var OutputInterface */
     private $output;
 
@@ -33,8 +35,9 @@ final class SlackNotifierOutput
     {
         $notificationTitles = [];
 
+        /** @var SlackTicket $slackTicket */
         foreach ($result->slackTickets() as $statusCode => $slackTicket) {
-            $notificationTitles[] = null !== $slackTicket->displayName()
+            $notificationTitles[] = (null !== $slackTicket->displayName())
                 ? "$statusCode: {$slackTicket->displayName()}"
                 : $statusCode;
         }
@@ -45,7 +48,7 @@ final class SlackNotifierOutput
     private function buildNotificationSuccessful(SlackNotifierResult $result): string
     {
         $notificationSuccessful = array_keys(array_filter($result->slackTickets(), function (SlackTicket $slackTicket) {
-            return 200 === $slackTicket->responseStatusCode();
+            return self::HTTP_OK === $slackTicket->responseStatusCode();
         }));
 
         return implode(', ', $notificationSuccessful);
@@ -54,7 +57,7 @@ final class SlackNotifierOutput
     private function buildNotificationFailed(SlackNotifierResult $result): string
     {
         $notificationFailed = array_keys(array_filter($result->slackTickets(), function (SlackTicket $slackTicket) {
-            return 200 !== $slackTicket->responseStatusCode();
+            return self::HTTP_OK !== $slackTicket->responseStatusCode();
         }));
 
         return implode(', ', $notificationFailed);

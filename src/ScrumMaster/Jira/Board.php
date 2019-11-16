@@ -8,7 +8,7 @@ final class Board implements BoardInterface
 {
     public const FALLBACK_VALUE_DEFAULT = 1;
 
-    /** @var array <string,int> */
+    /** @var array<string,int> */
     private $maxDaysInStatus;
 
     /** @var int */

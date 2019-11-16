@@ -6,27 +6,35 @@ namespace Chemaclass\ScrumMaster\Slack\ReadModel;
 
 final class SlackTicket
 {
-    /** @var null|string */
-    private $displayName;
-
     /** @var int */
     private $responseStatusCode;
 
-    public function __construct(
-        ?string $displayName,
-        int $responseStatusCode
-    ) {
-        $this->displayName = $displayName;
-        $this->responseStatusCode = $responseStatusCode;
+    /** @var null|string */
+    private $displayName;
+
+    public static function withStatusCode(int $responseStatusCode): self
+    {
+        return new self($responseStatusCode, null);
     }
 
-    public function displayName(): ?string
+    public static function withStatusCodeAndAssignee(int $responseStatusCode, string $displayName): self
     {
-        return $this->displayName;
+        return new self($responseStatusCode, $displayName);
+    }
+
+    private function __construct(int $responseStatusCode, ?string $displayName)
+    {
+        $this->displayName = $displayName;
+        $this->responseStatusCode = $responseStatusCode;
     }
 
     public function responseStatusCode(): int
     {
         return $this->responseStatusCode;
+    }
+
+    public function displayName(): ?string
+    {
+        return $this->displayName;
     }
 }
