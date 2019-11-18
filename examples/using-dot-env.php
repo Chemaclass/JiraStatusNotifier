@@ -21,13 +21,18 @@ use Symfony\Component\HttpClient\HttpClient;
 $dotEnv = Dotenv\Dotenv::create(dirname(__DIR__));
 $dotEnv->load();
 
-if (!isset($_ENV['JIRA_API_LABEL'])
-    || !isset($_ENV['JIRA_API_PASSWORD'])
-    || !isset($_ENV['SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'])
-    || !isset($_ENV['SLACK_MAPPING_IDS'])
-) {
-    echo 'JIRA_API_LABEL, JIRA_API_PASSWORD and SLACK_BOT_USER_OAUTH_ACCESS_TOKEN keys are mandatory!';
-    exit(1);
+$mandatoryKeys = [
+    'JIRA_API_LABEL',
+    'JIRA_API_PASSWORD',
+    'SLACK_BOT_USER_OAUTH_ACCESS_TOKEN',
+    'SLACK_MAPPING_IDS',
+];
+
+foreach ($mandatoryKeys as $mandatoryKey) {
+    if (!isset($_ENV[$mandatoryKey])) {
+        echo implode(', ', $mandatoryKeys) . 'keys are mandatory!';
+        exit(1);
+    }
 }
 
 $command = new NotifierCommand(
