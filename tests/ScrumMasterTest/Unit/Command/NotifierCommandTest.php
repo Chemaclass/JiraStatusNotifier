@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMasterTests\Unit\Command;
 
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
-use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
+use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
 use Chemaclass\ScrumMaster\Slack\SlackChannel;
@@ -25,7 +25,6 @@ final class NotifierCommandTest extends TestCase
         NotifierInput::COMPANY_NAME => 'company.name',
         NotifierInput::JIRA_PROJECT_NAME => 'Jira project name',
         NotifierInput::DAYS_FOR_STATUS => '{"status":1}',
-        //        SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
     ];
 
     /** @test */
