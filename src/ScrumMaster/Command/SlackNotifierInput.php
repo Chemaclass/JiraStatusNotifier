@@ -16,15 +16,12 @@ final class SlackNotifierInput
 
     public const DAYS_FOR_STATUS = 'DAYS_FOR_STATUS';
 
-    public const SLACK_MAPPING_IDS = 'SLACK_MAPPING_IDS';
-
     public const JIRA_USERS_TO_IGNORE = 'JIRA_USERS_TO_IGNORE';
 
     private const MANDATORY_PARAMETERS = [
         self::COMPANY_NAME,
         self::JIRA_PROJECT_NAME,
         self::DAYS_FOR_STATUS,
-        self::SLACK_MAPPING_IDS,
     ];
 
     /** @var string */
@@ -37,9 +34,6 @@ final class SlackNotifierInput
     private $daysForStatus;
 
     /** @var array */
-    private $slackMappingIds;
-
-    /** @var array */
     private $jiraUsersToIgnore;
 
     public static function fromArray(array $params): self
@@ -50,7 +44,6 @@ final class SlackNotifierInput
         $self->companyName = $params[self::COMPANY_NAME];
         $self->jiraProjectName = $params[self::JIRA_PROJECT_NAME];
         $self->daysForStatus = json_decode($params[self::DAYS_FOR_STATUS], true);
-        $self->slackMappingIds = json_decode($params[self::SLACK_MAPPING_IDS], true);
         $self->jiraUsersToIgnore = isset($params[self::JIRA_USERS_TO_IGNORE])
             ? json_decode($params[self::JIRA_USERS_TO_IGNORE], true)
             : [];
@@ -75,11 +68,6 @@ final class SlackNotifierInput
     public function daysForStatus(): array
     {
         return $this->daysForStatus;
-    }
-
-    public function slackMappingIds(): array
-    {
-        return $this->slackMappingIds;
     }
 
     public function jiraUsersToIgnore(): array

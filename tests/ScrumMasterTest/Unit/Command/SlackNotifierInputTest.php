@@ -16,13 +16,11 @@ final class SlackNotifierInputTest extends TestCase
             'COMPANY_NAME' => 'company',
             'JIRA_PROJECT_NAME' => 'project',
             'DAYS_FOR_STATUS' => '{"status":2}',
-            'SLACK_MAPPING_IDS' => '{"jira.id":"slack.id"}',
         ]);
 
         $this->assertEquals('company', $input->companyName());
         $this->assertEquals('project', $input->jiraProjectName());
         $this->assertEquals(['status' => 2], $input->daysForStatus());
-        $this->assertEquals(['jira.id' => 'slack.id'], $input->slackMappingIds());
     }
 
     /** @test */
@@ -58,18 +56,6 @@ final class SlackNotifierInputTest extends TestCase
             'COMPANY_NAME' => 'company',
             'JIRA_PROJECT_NAME' => 'project',
             'SLACK_MAPPING_IDS' => '{"jira.id":"slack.id"}',
-        ]);
-    }
-
-    /** @test */
-    public function undefinedSlackMappingIds(): void
-    {
-        $this->expectExceptionMessage('Undefined parameter: SLACK_MAPPING_IDS');
-
-        SlackNotifierInput::fromArray([
-            'COMPANY_NAME' => 'company',
-            'JIRA_PROJECT_NAME' => 'project',
-            'DAYS_FOR_STATUS' => '{"status":2}',
         ]);
     }
 }

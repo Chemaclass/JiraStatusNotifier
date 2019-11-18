@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMasterTests\Unit\Command;
 
-use Chemaclass\ScrumMaster\Command\SlackNotifierCommand;
+use Chemaclass\ScrumMaster\Command\NotifierCommand;
+use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use Chemaclass\ScrumMaster\Command\SlackNotifierInput;
-use Chemaclass\ScrumMaster\Command\SlackNotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
+use Chemaclass\ScrumMaster\Slack\SlackChannel;
 use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
+use Chemaclass\ScrumMaster\Slack\SlackMapping;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-final class SlackNotifierCommandTest extends TestCase
+final class NotifierCommandTest extends TestCase
 {
     use JiraApiResource;
 
@@ -23,7 +25,7 @@ final class SlackNotifierCommandTest extends TestCase
         SlackNotifierInput::COMPANY_NAME => 'company.name',
         SlackNotifierInput::JIRA_PROJECT_NAME => 'Jira project name',
         SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
-        SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
+        //        SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
     ];
 
     /** @test */
@@ -31,7 +33,7 @@ final class SlackNotifierCommandTest extends TestCase
     {
         $command = $this->slackNotifierCommandWithJiraTickets([]);
         $result = $command->execute($this->notifierInput(), $this->inMemoryOutput());
-        $this->assertEmpty($result->slackTickets());
+        $this->assertEmpty($result[SlackChannel::name()]->channelIssues());
     }
 
     /** @test */
@@ -43,10 +45,10 @@ final class SlackNotifierCommandTest extends TestCase
         ]);
 
         $inMemoryOutput = new InMemoryOutput();
-        $result = $command->execute($this->notifierInput(), new SlackNotifierOutput($inMemoryOutput));
+        $result = $command->execute($this->notifierInput(), new NotifierOutput($inMemoryOutput));
 
         $this->assertNotEmpty($inMemoryOutput->lines());
-        $this->assertEquals(['KEY-111', 'KEY-222'], $result->ticketKeys());
+        $this->assertEquals(['KEY-111', 'KEY-222'], $result[SlackChannel::name()]->ticketKeys());
     }
 
     /** @test */
@@ -63,11 +65,11 @@ final class SlackNotifierCommandTest extends TestCase
             $this->notifierInput([
                 SlackNotifierInput::JIRA_USERS_TO_IGNORE => '["user.1.jira"]',
             ]),
-            new SlackNotifierOutput($inMemoryOutput)
+            new NotifierOutput($inMemoryOutput)
         );
 
         $this->assertNotEmpty($inMemoryOutput->lines());
-        $this->assertEquals(['KEY-222'], $result->ticketKeys());
+        $this->assertEquals(['KEY-222'], $result[SlackChannel::name()]->ticketKeys());
     }
 
     private function notifierInput(array $optionalFields = []): SlackNotifierInput
@@ -75,17 +77,22 @@ final class SlackNotifierCommandTest extends TestCase
         return SlackNotifierInput::fromArray(array_merge(self::MANDATORY_FIELDS, $optionalFields));
     }
 
-    private function inMemoryOutput(): SlackNotifierOutput
+    private function inMemoryOutput(): NotifierOutput
     {
-        return new SlackNotifierOutput(new InMemoryOutput());
+        return new NotifierOutput(new InMemoryOutput());
     }
 
-    private function slackNotifierCommandWithJiraTickets(array $jiraIssues): SlackNotifierCommand
+    private function slackNotifierCommandWithJiraTickets(array $jiraIssues): NotifierCommand
     {
-        return new SlackNotifierCommand(
+        return new NotifierCommand(
             new JiraHttpClient($this->mockJiraClient($jiraIssues)),
-            new SlackHttpClient($this->createMock(HttpClientInterface::class)),
-            SlackMessage::withTimeToDiff(new DateTimeImmutable())
+            [
+                new SlackChannel(
+                    new SlackHttpClient($this->createMock(HttpClientInterface::class)),
+                    SlackMapping::jiraNameWithSlackId(['jira.id' => 'slack.id']),
+                    SlackMessage::withTimeToDiff(new DateTimeImmutable())
+                ),
+            ]
         );
     }
 }

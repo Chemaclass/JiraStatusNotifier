@@ -8,12 +8,14 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/bootstrap.php';
 
 use Chemaclass\ScrumMaster\Command\IO\EchoOutput;
-use Chemaclass\ScrumMaster\Command\SlackNotifierCommand;
+use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\SlackNotifierInput;
-use Chemaclass\ScrumMaster\Command\SlackNotifierOutput;
+use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
-use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
 use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
+use Chemaclass\ScrumMaster\Slack\SlackChannel;
+use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
+use Chemaclass\ScrumMaster\Slack\SlackMapping;
 use Symfony\Component\HttpClient\HttpClient;
 
 $dotEnv = Dotenv\Dotenv::create(dirname(__DIR__));
@@ -22,22 +24,28 @@ $dotEnv->load();
 if (!isset($_ENV['JIRA_API_LABEL'])
     || !isset($_ENV['JIRA_API_PASSWORD'])
     || !isset($_ENV['SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'])
+    || !isset($_ENV['SLACK_MAPPING_IDS'])
 ) {
     echo 'JIRA_API_LABEL, JIRA_API_PASSWORD and SLACK_BOT_USER_OAUTH_ACCESS_TOKEN keys are mandatory!';
     exit(1);
 }
 
-$command = new SlackNotifierCommand(
+$command = new NotifierCommand(
     new JiraHttpClient(HttpClient::create([
         'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
     ])),
-    new SlackHttpClient(HttpClient::create([
-        'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
-    ])),
-    SlackMessage::withTimeToDiff(new DateTimeImmutable())
+    $channels = [
+        new SlackChannel(
+            new SlackHttpClient(HttpClient::create([
+                'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
+            ])),
+            SlackMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
+            SlackMessage::withTimeToDiff(new DateTimeImmutable())
+        ),
+    ]
 );
 
 $command->execute(
     SlackNotifierInput::fromArray($_ENV),
-    new SlackNotifierOutput(new EchoOutput())
+    new NotifierOutput(new EchoOutput())
 );

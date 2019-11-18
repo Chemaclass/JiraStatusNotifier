@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Slack\ReadModel;
+namespace Chemaclass\ScrumMaster\Channel\ReadModel;
 
-final class SlackTicket
+final class ChannelIssue
 {
     /** @var int */
     private $responseStatusCode;
@@ -17,7 +17,7 @@ final class SlackTicket
         return new self($responseStatusCode, null);
     }
 
-    public static function withStatusCodeAndAssignee(int $responseStatusCode, string $displayName): self
+    public static function withCodeAndAssignee(int $responseStatusCode, string $displayName): self
     {
         return new self($responseStatusCode, $displayName);
     }
