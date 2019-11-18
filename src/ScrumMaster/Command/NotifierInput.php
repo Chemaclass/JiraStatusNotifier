@@ -8,7 +8,7 @@ use Chemaclass\ScrumMaster\Command\Exception\UndefinedParameter;
 use function count;
 use function json_decode;
 
-final class SlackNotifierInput
+final class NotifierInput
 {
     public const COMPANY_NAME = 'COMPANY_NAME';
 

@@ -6,7 +6,7 @@ namespace Chemaclass\ScrumMasterTests\Unit\Command;
 
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierOutput;
-use Chemaclass\ScrumMaster\Command\SlackNotifierInput;
+use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
 use Chemaclass\ScrumMaster\Slack\SlackChannel;
@@ -22,9 +22,9 @@ final class NotifierCommandTest extends TestCase
     use JiraApiResource;
 
     private const MANDATORY_FIELDS = [
-        SlackNotifierInput::COMPANY_NAME => 'company.name',
-        SlackNotifierInput::JIRA_PROJECT_NAME => 'Jira project name',
-        SlackNotifierInput::DAYS_FOR_STATUS => '{"status":1}',
+        NotifierInput::COMPANY_NAME => 'company.name',
+        NotifierInput::JIRA_PROJECT_NAME => 'Jira project name',
+        NotifierInput::DAYS_FOR_STATUS => '{"status":1}',
         //        SlackNotifierInput::SLACK_MAPPING_IDS => '{"jira.id":"slack.id"}',
     ];
 
@@ -63,7 +63,7 @@ final class NotifierCommandTest extends TestCase
 
         $result = $command->execute(
             $this->notifierInput([
-                SlackNotifierInput::JIRA_USERS_TO_IGNORE => '["user.1.jira"]',
+                NotifierInput::JIRA_USERS_TO_IGNORE => '["user.1.jira"]',
             ]),
             new NotifierOutput($inMemoryOutput)
         );
@@ -72,9 +72,9 @@ final class NotifierCommandTest extends TestCase
         $this->assertEquals(['KEY-222'], $result[SlackChannel::name()]->ticketKeys());
     }
 
-    private function notifierInput(array $optionalFields = []): SlackNotifierInput
+    private function notifierInput(array $optionalFields = []): NotifierInput
     {
-        return SlackNotifierInput::fromArray(array_merge(self::MANDATORY_FIELDS, $optionalFields));
+        return NotifierInput::fromArray(array_merge(self::MANDATORY_FIELDS, $optionalFields));
     }
 
     private function inMemoryOutput(): NotifierOutput

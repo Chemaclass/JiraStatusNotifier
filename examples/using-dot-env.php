@@ -9,7 +9,7 @@ require dirname(__DIR__) . '/bootstrap.php';
 
 use Chemaclass\ScrumMaster\Command\IO\EchoOutput;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
-use Chemaclass\ScrumMaster\Command\SlackNotifierInput;
+use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
@@ -46,6 +46,6 @@ $command = new NotifierCommand(
 );
 
 $command->execute(
-    SlackNotifierInput::fromArray($_ENV),
+    NotifierInput::fromArray($_ENV),
     new NotifierOutput(new EchoOutput())
 );

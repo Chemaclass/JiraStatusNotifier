@@ -10,7 +10,6 @@ use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JqlUrlBuilder;
 use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
-use Webmozart\Assert\Assert;
 
 final class NotifierCommand
 {
@@ -22,12 +21,11 @@ final class NotifierCommand
 
     public function __construct(JiraHttpClient $jiraHttpClient, array $channels)
     {
-        Assert::allIsInstanceOf($channels, ChannelInterface::class);
         $this->jiraHttpClient = $jiraHttpClient;
         $this->channels = $channels;
     }
 
-    public function execute(SlackNotifierInput $input, NotifierOutput $output): array
+    public function execute(NotifierInput $input, NotifierOutput $output): array
     {
         $jiraBoard = new Board($input->daysForStatus());
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());
