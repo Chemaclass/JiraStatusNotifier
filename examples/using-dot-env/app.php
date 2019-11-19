@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-require dirname(__DIR__) . '/bootstrap.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 use Chemaclass\ScrumMaster\Command\IO\EchoOutput;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
@@ -18,7 +18,7 @@ use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
 use Chemaclass\ScrumMaster\Slack\SlackMapping;
 use Symfony\Component\HttpClient\HttpClient;
 
-$dotEnv = Dotenv\Dotenv::create(dirname(__DIR__));
+$dotEnv = Dotenv\Dotenv::create(__DIR__);
 $dotEnv->load();
 
 $mandatoryKeys = [

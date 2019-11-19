@@ -9,8 +9,8 @@ This tool will notify the person assigned a JIRA-ticket if the ticket remains in
 ## Notifications channels
 
 * [Slack](./docu/slack-notifications.md)
-* Email (Work in progress)
+* Email ([Not implemented yet](https://github.com/Chemaclass/ScrumMaster/issues/15))
 
 ## Example
 
-You can see an implementation example using [dot environment variables](./examples/using-dot-env.php)
+You can see an implementation example using [dot environment variables](examples/using-dot-env/app.php)

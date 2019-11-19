@@ -1,6 +1,6 @@
 # Slack parameters
 
-Apart of the [mandatory parameters](./mandatory-parameters.md), you will need:
+Apart of the [mandatory parameters](README.md), you will need:
 
 ### SLACK_BOT_USER_OAUTH_ACCESS_TOKEN
 
