@@ -20,7 +20,7 @@ final class NotifierOutput
         $this->output = $output;
     }
 
-    /** @param ChannelResultInterface[] $results */
+    /** @param array<string,ChannelResultInterface> $results */
     public function write(array $results): void
     {
         foreach ($results as $channelName => $result) {
@@ -68,9 +68,12 @@ final class NotifierOutput
 
     private function buildNotificationFailed(ChannelResultInterface $result): string
     {
-        $notificationFailed = array_keys(array_filter($result->channelIssues(), function (ChannelIssue $slackTicket) {
-            return self::HTTP_OK !== $slackTicket->responseStatusCode();
-        }));
+        $notificationFailed = array_keys(array_filter(
+            $result->channelIssues(),
+            function (ChannelIssue $slackTicket) {
+                return self::HTTP_OK !== $slackTicket->responseStatusCode();
+            }
+        ));
 
         return implode(', ', $notificationFailed);
     }

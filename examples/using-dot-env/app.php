@@ -50,7 +50,6 @@ $command = new NotifierCommand(
     ]
 );
 
-$command->execute(
-    NotifierInput::fromArray($_ENV),
-    new NotifierOutput(new EchoOutput())
-);
+$result = $command->execute(NotifierInput::fromArray($_ENV));
+$output = new NotifierOutput(new EchoOutput());
+$output->write($result);

@@ -25,11 +25,6 @@ final class SlackChannel implements ChannelInterface
     /** @var MessageGeneratorInterface */
     private $messageGenerator;
 
-    public static function name(): string
-    {
-        return 'SlackChannel';
-    }
-
     public function __construct(
         SlackHttpClient $slackClient,
         SlackMapping $slackMapping,

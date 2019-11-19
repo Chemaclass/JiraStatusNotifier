@@ -11,8 +11,6 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 
 interface ChannelInterface
 {
-    public static function name(): string;
-
     public function sendNotifications(
         Board $board,
         JiraHttpClient $jiraClient,
