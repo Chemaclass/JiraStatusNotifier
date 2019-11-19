@@ -4,54 +4,55 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMaster\Slack;
 
-use Chemaclass\ScrumMaster\Slack\ReadModel\SlackTicket;
+use Chemaclass\ScrumMaster\Channel\ChannelResultInterface;
+use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use function count;
 
-final class SlackNotifierResult
+final class SlackNotifierResult implements ChannelResultInterface
 {
-    /** @var array<string, SlackTicket> */
-    private $slackTickets = [];
+    /** @var array<string, ChannelIssue> */
+    private $channelIssues = [];
 
-    public function addSlackTicket(string $ticketKey, SlackTicket $slackTicket): void
+    public function addChannelIssue(string $ticketKey, ChannelIssue $channelIssue): void
     {
-        $this->slackTickets[$ticketKey] = $slackTicket;
+        $this->channelIssues[$ticketKey] = $channelIssue;
     }
 
-    /** @return array<string, SlackTicket> */
-    public function slackTickets(): array
+    /** @return array<string, ChannelIssue> */
+    public function channelIssues(): array
     {
-        return $this->slackTickets;
+        return $this->channelIssues;
     }
 
     /** @return string[] */
     public function ticketKeys(): array
     {
-        return array_keys($this->slackTickets());
+        return array_keys($this->channelIssues());
     }
 
     public function total(): int
     {
-        return count($this->slackTickets);
+        return count($this->channelIssues);
     }
 
     public function totalSuccessful(): int
     {
-        return count(array_filter($this->slackTickets, function (SlackTicket $slackTicket) {
-            return 200 === $slackTicket->responseStatusCode();
+        return count(array_filter($this->channelIssues, function (ChannelIssue $channelIssue) {
+            return 200 === $channelIssue->responseStatusCode();
         }));
     }
 
     public function totalFailed(): int
     {
-        return count(array_filter($this->slackTickets, function (SlackTicket $slackTicket) {
-            return 200 !== $slackTicket->responseStatusCode();
+        return count(array_filter($this->channelIssues, function (ChannelIssue $channelIssue) {
+            return 200 !== $channelIssue->responseStatusCode();
         }));
     }
 
     public function append(self $other): void
     {
-        foreach ($other->slackTickets() as $ticketKey => $slackTicket) {
-            $this->addSlackTicket($ticketKey, $slackTicket);
+        foreach ($other->channelIssues() as $ticketKey => $channelIssue) {
+            $this->addChannelIssue($ticketKey, $channelIssue);
         }
     }
 }
