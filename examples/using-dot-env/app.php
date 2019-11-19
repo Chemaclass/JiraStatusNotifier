@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/../../vendor/autoload.php';
+require dirname(__DIR__) . '/../vendor/autoload.php';
 
 use Chemaclass\ScrumMaster\Command\IO\EchoOutput;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;

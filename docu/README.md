@@ -4,7 +4,7 @@ This tool will notify the person assigned a JIRA-ticket if the ticket remains in
 
 ## Mandatory parameters
 
-Requires in order to connect to JIRA and fetch all the tickets from the board
+These are the required parameters in order to connect to JIRA and fetch all the tickets from the board.
 
 ### COMPANY_NAME
 
