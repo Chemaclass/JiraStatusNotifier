@@ -1,18 +1,21 @@
 {
     "name": "chemaclass/scrum-master",
-    "description": "This tool will notify the person assigned a JIRA-ticket if the ticket remains in the same status for more than N days.",
+    "description": "This tool will notify the person assigned to a JIRA-ticket if the ticket remains in the same status for more than N days.",
     "type": "library",
     "homepage": "https://github.com/Chemaclass/ScrumMaster",
     "license": "MIT",
     "keywords": [
+        "agile",
         "jira",
-        "slack",
-        "bot",
         "jira-api",
-        "slack-api",
+        "notifier",
         "php",
+        "reminder",
         "scrum",
-        "scrum-master"
+        "scrum-master",
+        "slack",
+        "slack-api",
+        "slack-bot"
     ],
     "authors": [
         {
