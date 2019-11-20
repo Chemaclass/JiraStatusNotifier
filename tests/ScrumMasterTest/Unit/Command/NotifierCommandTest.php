@@ -6,7 +6,6 @@ namespace Chemaclass\ScrumMasterTests\Unit\Command;
 
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
-use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
 use Chemaclass\ScrumMaster\Slack\SlackChannel;
@@ -31,8 +30,8 @@ final class NotifierCommandTest extends TestCase
     public function zeroNotificationsWereSent(): void
     {
         $command = $this->slackNotifierCommandWithJiraTickets([]);
-        $result = $command->execute($this->notifierInput(), $this->inMemoryOutput());
-        $this->assertEmpty($result[SlackChannel::name()]->channelIssues());
+        $result = $command->execute($this->notifierInput());
+        $this->assertEmpty($result[SlackChannel::class]->channelIssues());
     }
 
     /** @test */
@@ -43,11 +42,8 @@ final class NotifierCommandTest extends TestCase
             $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
         ]);
 
-        $inMemoryOutput = new InMemoryOutput();
-        $result = $command->execute($this->notifierInput(), new NotifierOutput($inMemoryOutput));
-
-        $this->assertNotEmpty($inMemoryOutput->lines());
-        $this->assertEquals(['KEY-111', 'KEY-222'], $result[SlackChannel::name()]->ticketKeys());
+        $result = $command->execute($this->notifierInput());
+        $this->assertEquals(['KEY-111', 'KEY-222'], $result[SlackChannel::class]->ticketKeys());
     }
 
     /** @test */
@@ -58,27 +54,18 @@ final class NotifierCommandTest extends TestCase
             $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
         ]);
 
-        $inMemoryOutput = new InMemoryOutput();
-
         $result = $command->execute(
             $this->notifierInput([
                 NotifierInput::JIRA_USERS_TO_IGNORE => '["user.1.jira"]',
-            ]),
-            new NotifierOutput($inMemoryOutput)
+            ])
         );
 
-        $this->assertNotEmpty($inMemoryOutput->lines());
-        $this->assertEquals(['KEY-222'], $result[SlackChannel::name()]->ticketKeys());
+        $this->assertEquals(['KEY-222'], $result[SlackChannel::class]->ticketKeys());
     }
 
     private function notifierInput(array $optionalFields = []): NotifierInput
     {
         return NotifierInput::fromArray(array_merge(self::MANDATORY_FIELDS, $optionalFields));
-    }
-
-    private function inMemoryOutput(): NotifierOutput
-    {
-        return new NotifierOutput(new InMemoryOutput());
     }
 
     private function slackNotifierCommandWithJiraTickets(array $jiraIssues): NotifierCommand

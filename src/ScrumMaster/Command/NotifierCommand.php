@@ -25,14 +25,14 @@ final class NotifierCommand
         $this->channels = $channels;
     }
 
-    public function execute(NotifierInput $input, NotifierOutput $output): array
+    public function execute(NotifierInput $input): array
     {
         $jiraBoard = new Board($input->daysForStatus());
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());
         $result = [];
 
         foreach ($this->channels as $channel) {
-            $result[$channel->name()] = $channel->sendNotifications(
+            $result[get_class($channel)] = $channel->sendNotifications(
                 $jiraBoard,
                 $this->jiraHttpClient,
                 $company,
@@ -40,8 +40,6 @@ final class NotifierCommand
                 $input->jiraUsersToIgnore()
             );
         }
-
-        $output->write($result);
 
         return $result;
     }
