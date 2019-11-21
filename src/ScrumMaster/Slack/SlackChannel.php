@@ -42,7 +42,7 @@ final class SlackChannel implements ChannelInterface
         JqlUrlFactory $jqlUrlFactory,
         array $jiraUsersToIgnore = []
     ): ChannelResultInterface {
-        $result = new SlackNotifierResult();
+        $result = new SlackChannelResult();
 
         foreach ($board->maxDaysInStatus() as $statusName => $maxDays) {
             $tickets = $jiraClient->getTickets($jqlUrlFactory, $statusName);
@@ -53,9 +53,9 @@ final class SlackChannel implements ChannelInterface
         return $result;
     }
 
-    private function postToSlack(Company $company, array $tickets, array $jiraUsersToIgnore): SlackNotifierResult
+    private function postToSlack(Company $company, array $tickets, array $jiraUsersToIgnore): SlackChannelResult
     {
-        $result = new SlackNotifierResult();
+        $result = new SlackChannelResult();
 
         foreach ($tickets as $ticket) {
             $assignee = $ticket->assignee();

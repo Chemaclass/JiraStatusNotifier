@@ -8,7 +8,7 @@ use Chemaclass\ScrumMaster\Channel\ChannelResultInterface;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use function count;
 
-final class SlackNotifierResult implements ChannelResultInterface
+final class SlackChannelResult implements ChannelResultInterface
 {
     /** @var array<string, ChannelIssue> */
     private $channelIssues = [];
@@ -25,7 +25,7 @@ final class SlackNotifierResult implements ChannelResultInterface
     }
 
     /** @return string[] */
-    public function ticketKeys(): array
+    public function channelIssuesKeys(): array
     {
         return array_keys($this->channelIssues());
     }
