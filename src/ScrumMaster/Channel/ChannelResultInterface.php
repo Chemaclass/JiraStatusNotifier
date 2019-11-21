@@ -10,7 +10,4 @@ interface ChannelResultInterface
 {
     /** @return array<string, ChannelIssue> */
     public function channelIssues(): array;
-
-    /** @return string[] */
-    public function channelIssuesKeys(): array;
 }

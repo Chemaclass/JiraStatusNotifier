@@ -41,22 +41,22 @@ final class SlackNotifierCommandTest extends TestCase
     public function twoSuccessfulNotificationsWereSent(): void
     {
         $command = $this->slackNotifierCommandWithJiraTickets([
-            $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
-            $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
+            $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111'),
+            $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222'),
         ]);
 
         $result = $command->execute($this->notifierInput());
         /** @var SlackChannelResult $channelResult */
         $channelResult = $result[SlackChannel::class];
-        $this->assertEquals(['KEY-111', 'KEY-222'], $channelResult->channelIssuesKeys());
+        $this->assertEquals(['KEY-111', 'KEY-222'], array_keys($channelResult->channelIssues()));
     }
 
     /** @test */
     public function ignoredUserShouldNotReceiveAnyNotification(): void
     {
         $command = $this->slackNotifierCommandWithJiraTickets([
-            $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
-            $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
+            $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111'),
+            $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222'),
         ]);
 
         $result = $command->execute(
@@ -67,7 +67,7 @@ final class SlackNotifierCommandTest extends TestCase
 
         /** @var SlackChannelResult $channelResult */
         $channelResult = $result[SlackChannel::class];
-        $this->assertEquals(['KEY-222'], $channelResult->channelIssuesKeys());
+        $this->assertEquals(['KEY-222'], array_keys($channelResult->channelIssues()));
     }
 
     private function notifierInput(array $optionalFields = []): NotifierInput

@@ -13,21 +13,17 @@ final class SlackChannelResult implements ChannelResultInterface
     /** @var array<string, ChannelIssue> */
     private $channelIssues = [];
 
-    public function addChannelIssue(string $ticketKey, ChannelIssue $channelIssue): void
+    public function addChannelIssue(string $ticketKey, ChannelIssue $channelIssue): self
     {
         $this->channelIssues[$ticketKey] = $channelIssue;
+
+        return $this;
     }
 
     /** @return array<string, ChannelIssue> */
     public function channelIssues(): array
     {
         return $this->channelIssues;
-    }
-
-    /** @return string[] */
-    public function channelIssuesKeys(): array
-    {
-        return array_keys($this->channelIssues());
     }
 
     public function total(): int

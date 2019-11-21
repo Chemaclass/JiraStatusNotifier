@@ -26,7 +26,7 @@ trait JiraApiResource
         return $jiraClient;
     }
 
-    private function createAnIssueAsArray(string $assigneeKey, string $key): array
+    private function createAJiraIssueAsArray(string $assigneeKey, string $key): array
     {
         return [
             'key' => $key,

@@ -6,6 +6,7 @@ namespace Chemaclass\ScrumMasterTests\Unit\Command;
 
 use Chemaclass\ScrumMaster\Channel\ChannelInterface;
 use Chemaclass\ScrumMaster\Channel\ChannelResultInterface;
+use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
@@ -26,21 +27,26 @@ final class NotifierCommandTest extends TestCase
     /** @test */
     public function zeroNotificationsWereSent(): void
     {
-        $command = $this->notifierCommandWithJiraTickets([]);
+        $command = $this->notifierCommandWithChannelIssues([]);
         $result = $command->execute($this->notifierInput());
-        $this->assertEmpty(reset($result)->channelIssues());
+        /** @var ChannelResultInterface $channelResult */
+        $channelResult = reset($result);
+        $this->assertEmpty($channelResult->channelIssues());
     }
 
     /** @test */
     public function twoSuccessfulNotificationsWereSent(): void
     {
-        $command = $this->notifierCommandWithJiraTickets([
-            $this->createAnIssueAsArray('user.1.jira', 'KEY-111'),
-            $this->createAnIssueAsArray('user.2.jira', 'KEY-222'),
-        ]);
+        $issues = [
+            'KEY-1' => ChannelIssue::withCodeAndAssignee(200, 'jira.user.1'),
+            'KEY-2' => ChannelIssue::withCodeAndAssignee(200, 'jira.user.2'),
+        ];
 
+        $command = $this->notifierCommandWithChannelIssues($issues);
         $result = $command->execute($this->notifierInput());
-        $this->assertEquals(['KEY-111', 'KEY-222'], reset($result)->channelIssuesKeys());
+        /** @var ChannelResultInterface $channelResult */
+        $channelResult = reset($result);
+        $this->assertEquals($issues, $channelResult->channelIssues());
     }
 
     private function notifierInput(): NotifierInput
@@ -48,20 +54,18 @@ final class NotifierCommandTest extends TestCase
         return NotifierInput::fromArray(self::MANDATORY_FIELDS);
     }
 
-    private function notifierCommandWithJiraTickets(array $jiraIssues): NotifierCommand
+    private function notifierCommandWithChannelIssues(array $channelIssues): NotifierCommand
     {
-        /** @var ChannelResultInterface|MockObject $channel */
+        /** @var ChannelResultInterface|MockObject $result */
         $result = $this->createMock(ChannelResultInterface::class);
-        $result->method('channelIssuesKeys')->willReturn(array_map(function (array $jiraIssue) {
-            return $jiraIssue['key'];
-        }, $jiraIssues));
+        $result->method('channelIssues')->willReturn($channelIssues);
 
         /** @var ChannelInterface|MockObject $channel */
         $channel = $this->createMock(ChannelInterface::class);
         $channel->method('sendNotifications')->willReturn($result);
 
         return new NotifierCommand(
-            new JiraHttpClient($this->mockJiraClient($jiraIssues)),
+            new JiraHttpClient($this->mockJiraClient([])),
             [$channel]
         );
     }
