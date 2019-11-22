@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMasterTests\Unit\Slack;
+namespace Chemaclass\ScrumMasterTests\Unit\Channel\Slack;
 
-use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
+use Chemaclass\ScrumMaster\Channel\Slack\SlackHttpClient;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

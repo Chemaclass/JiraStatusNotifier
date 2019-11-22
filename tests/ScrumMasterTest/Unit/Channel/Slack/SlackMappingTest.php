@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMasterTests\Unit\Slack;
+namespace Chemaclass\ScrumMasterTests\Unit\Channel\Slack;
 
-use Chemaclass\ScrumMaster\Slack\SlackMapping;
+use Chemaclass\ScrumMaster\Channel\Slack\SlackMapping;
 use PHPUnit\Framework\TestCase;
 
 final class SlackMappingTest extends TestCase

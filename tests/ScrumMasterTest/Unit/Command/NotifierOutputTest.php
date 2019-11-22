@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMasterTests\Unit\Command;
 
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
+use Chemaclass\ScrumMaster\Channel\Slack\SlackChannelResult;
 use Chemaclass\ScrumMaster\Command\IO\OutputInterface;
 use Chemaclass\ScrumMaster\Command\NotifierOutput;
-use Chemaclass\ScrumMaster\Slack\SlackChannelResult;
 use PHPUnit\Framework\TestCase;
 
 final class NotifierOutputTest extends TestCase

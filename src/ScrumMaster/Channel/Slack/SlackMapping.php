@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Slack;
+namespace Chemaclass\ScrumMaster\Channel\Slack;
 
 /**
  * Map the JIRA name with the personal Slack ID

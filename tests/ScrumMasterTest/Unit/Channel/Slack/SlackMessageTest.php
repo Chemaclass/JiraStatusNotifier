@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMasterTests\Unit\Slack;
+namespace Chemaclass\ScrumMasterTests\Unit\Channel\Slack;
 
+use Chemaclass\ScrumMaster\Channel\Slack\MessageGenerator;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Chemaclass\ScrumMaster\Jira\ReadModel\TicketStatus;
-use Chemaclass\ScrumMaster\Slack\MessageGenerator;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 

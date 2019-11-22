@@ -12,10 +12,10 @@ use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
-use Chemaclass\ScrumMaster\Slack\MessageGenerator;
-use Chemaclass\ScrumMaster\Slack\SlackChannel;
-use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
-use Chemaclass\ScrumMaster\Slack\SlackMapping;
+use Chemaclass\ScrumMaster\Channel\Slack\MessageGenerator;
+use Chemaclass\ScrumMaster\Channel\Slack\SlackChannel;
+use Chemaclass\ScrumMaster\Channel\Slack\SlackHttpClient;
+use Chemaclass\ScrumMaster\Channel\Slack\SlackMapping;
 use Symfony\Component\HttpClient\HttpClient;
 
 $dotEnv = Dotenv\Dotenv::create(__DIR__);

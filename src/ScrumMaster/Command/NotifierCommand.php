@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMaster\Command;
 
 use Chemaclass\ScrumMaster\Channel\ChannelInterface;
+use Chemaclass\ScrumMaster\Channel\Slack\SlackChannelResult;
 use Chemaclass\ScrumMaster\Jira\Board;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JqlUrlBuilder;
 use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
-use Chemaclass\ScrumMaster\Slack\SlackChannelResult;
 
 final class NotifierCommand
 {
