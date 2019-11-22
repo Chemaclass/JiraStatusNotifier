@@ -5,4 +5,8 @@ for arg in "$@"; do
   args="$args $arg"
 done
 
-docker exec -ti -u dev scrum_master_php sh -c "cd /srv/scrum-master && composer $args"
+if [[ -f /.dockerenv ]]; then
+    cd /srv/scrum-master && composer ${args}
+else
+    docker exec -ti -u dev scrum_master_php sh -c "cd /srv/scrum-master && composer $args"
+fi
