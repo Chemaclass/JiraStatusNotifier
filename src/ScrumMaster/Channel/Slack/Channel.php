@@ -14,20 +14,20 @@ use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 use function in_array;
 
-final class SlackChannel implements ChannelInterface
+final class Channel implements ChannelInterface
 {
-    /** @var SlackHttpClient */
+    /** @var HttpClient */
     private $slackClient;
 
-    /** @var SlackMapping */
+    /** @var JiraMapping */
     private $slackMapping;
 
     /** @var MessageGeneratorInterface */
     private $messageGenerator;
 
     public function __construct(
-        SlackHttpClient $slackClient,
-        SlackMapping $slackMapping,
+        HttpClient $slackClient,
+        JiraMapping $slackMapping,
         MessageGeneratorInterface $messageGenerator
     ) {
         $this->slackClient = $slackClient;
@@ -42,7 +42,7 @@ final class SlackChannel implements ChannelInterface
         JqlUrlFactory $jqlUrlFactory,
         array $jiraUsersToIgnore = []
     ): ChannelResultInterface {
-        $result = new SlackChannelResult();
+        $result = new ChannelResult();
 
         foreach ($board->maxDaysInStatus() as $statusName => $maxDays) {
             $tickets = $jiraClient->getTickets($jqlUrlFactory, $statusName);
@@ -53,9 +53,9 @@ final class SlackChannel implements ChannelInterface
         return $result;
     }
 
-    private function postToSlack(Company $company, array $tickets, array $jiraUsersToIgnore): SlackChannelResult
+    private function postToSlack(Company $company, array $tickets, array $jiraUsersToIgnore): ChannelResult
     {
-        $result = new SlackChannelResult();
+        $result = new ChannelResult();
 
         foreach ($tickets as $ticket) {
             $assignee = $ticket->assignee();

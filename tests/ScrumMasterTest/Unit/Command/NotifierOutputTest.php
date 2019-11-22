@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMasterTests\Unit\Command;
 
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
-use Chemaclass\ScrumMaster\Channel\Slack\SlackChannelResult;
+use Chemaclass\ScrumMaster\Channel\Slack\ChannelResult;
 use Chemaclass\ScrumMaster\Command\IO\OutputInterface;
 use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +15,7 @@ final class NotifierOutputTest extends TestCase
     /** @test */
     public function writeFromSlackNotifierOutput(): void
     {
-        $result = (new SlackChannelResult())
+        $result = (new ChannelResult())
             ->addChannelIssue('K-1', ChannelIssue::withStatusCode(100))
             ->addChannelIssue('K-2', ChannelIssue::withCodeAndAssignee(200, 'j.user.1'))
             ->addChannelIssue('K-3', ChannelIssue::withStatusCode(300))

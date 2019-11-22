@@ -7,7 +7,7 @@ namespace Chemaclass\ScrumMaster\Channel\Slack;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-final class SlackHttpClient
+final class HttpClient
 {
     public const SLACK_API_POST_MESSAGE = 'https://slack.com/api/chat.postMessage';
 

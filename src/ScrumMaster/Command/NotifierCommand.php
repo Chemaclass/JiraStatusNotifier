@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMaster\Command;
 
 use Chemaclass\ScrumMaster\Channel\ChannelInterface;
-use Chemaclass\ScrumMaster\Channel\Slack\SlackChannelResult;
+use Chemaclass\ScrumMaster\Channel\Slack\ChannelResult;
 use Chemaclass\ScrumMaster\Jira\Board;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JqlUrlBuilder;
@@ -26,7 +26,7 @@ final class NotifierCommand
         $this->channels = $channels;
     }
 
-    /** @return array<string, SlackChannelResult> */
+    /** @return array<string, ChannelResult> */
     public function execute(NotifierInput $input): array
     {
         $jiraBoard = new Board($input->daysForStatus());

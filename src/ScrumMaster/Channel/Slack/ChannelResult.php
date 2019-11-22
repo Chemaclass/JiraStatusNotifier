@@ -8,7 +8,7 @@ use Chemaclass\ScrumMaster\Channel\ChannelResultInterface;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use function count;
 
-final class SlackChannelResult implements ChannelResultInterface
+final class ChannelResult implements ChannelResultInterface
 {
     /** @var array<string, ChannelIssue> */
     private $channelIssues = [];

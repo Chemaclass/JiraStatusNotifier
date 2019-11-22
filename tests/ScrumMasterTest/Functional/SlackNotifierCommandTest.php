@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMasterTests\Functional;
 
+use Chemaclass\ScrumMaster\Channel\Slack\Channel;
+use Chemaclass\ScrumMaster\Channel\Slack\ChannelResult;
+use Chemaclass\ScrumMaster\Channel\Slack\HttpClient;
+use Chemaclass\ScrumMaster\Channel\Slack\JiraMapping;
 use Chemaclass\ScrumMaster\Channel\Slack\MessageGenerator;
-use Chemaclass\ScrumMaster\Channel\Slack\SlackChannel;
-use Chemaclass\ScrumMaster\Channel\Slack\SlackChannelResult;
-use Chemaclass\ScrumMaster\Channel\Slack\SlackHttpClient;
-use Chemaclass\ScrumMaster\Channel\Slack\SlackMapping;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
@@ -32,8 +32,8 @@ final class SlackNotifierCommandTest extends TestCase
     {
         $command = $this->slackNotifierCommandWithJiraTickets([]);
         $result = $command->execute($this->notifierInput());
-        /** @var SlackChannelResult $channelResult */
-        $channelResult = $result[SlackChannel::class];
+        /** @var ChannelResult $channelResult */
+        $channelResult = $result[Channel::class];
         $this->assertEmpty($channelResult->channelIssues());
     }
 
@@ -46,8 +46,8 @@ final class SlackNotifierCommandTest extends TestCase
         ]);
 
         $result = $command->execute($this->notifierInput());
-        /** @var SlackChannelResult $channelResult */
-        $channelResult = $result[SlackChannel::class];
+        /** @var ChannelResult $channelResult */
+        $channelResult = $result[Channel::class];
         $this->assertEquals(['KEY-111', 'KEY-222'], array_keys($channelResult->channelIssues()));
     }
 
@@ -65,8 +65,8 @@ final class SlackNotifierCommandTest extends TestCase
             ])
         );
 
-        /** @var SlackChannelResult $channelResult */
-        $channelResult = $result[SlackChannel::class];
+        /** @var ChannelResult $channelResult */
+        $channelResult = $result[Channel::class];
         $this->assertEquals(['KEY-222'], array_keys($channelResult->channelIssues()));
     }
 
@@ -80,9 +80,9 @@ final class SlackNotifierCommandTest extends TestCase
         return new NotifierCommand(
             new JiraHttpClient($this->mockJiraClient($jiraIssues)),
             [
-                new SlackChannel(
-                    new SlackHttpClient($this->createMock(HttpClientInterface::class)),
-                    SlackMapping::jiraNameWithSlackId(['jira.id' => 'slack.id']),
+                new Channel(
+                    new HttpClient($this->createMock(HttpClientInterface::class)),
+                    JiraMapping::jiraNameWithSlackId(['jira.id' => 'slack.id']),
                     MessageGenerator::withTimeToDiff(new DateTimeImmutable())
                 ),
             ]

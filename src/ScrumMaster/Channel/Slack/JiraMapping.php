@@ -7,7 +7,7 @@ namespace Chemaclass\ScrumMaster\Channel\Slack;
 /**
  * Map the JIRA name with the personal Slack ID
  */
-final class SlackMapping
+final class JiraMapping
 {
     private const FALLBACK_SLACK_ID_KEY = 'fallback';
 

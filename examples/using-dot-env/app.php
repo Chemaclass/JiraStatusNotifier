@@ -7,15 +7,12 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
+use Chemaclass\ScrumMaster\Channel\Slack;
 use Chemaclass\ScrumMaster\Command\IO\EchoOutput;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
-use Chemaclass\ScrumMaster\Channel\Slack\MessageGenerator;
-use Chemaclass\ScrumMaster\Channel\Slack\SlackChannel;
-use Chemaclass\ScrumMaster\Channel\Slack\SlackHttpClient;
-use Chemaclass\ScrumMaster\Channel\Slack\SlackMapping;
 use Symfony\Component\HttpClient\HttpClient;
 
 $dotEnv = Dotenv\Dotenv::create(__DIR__);
@@ -40,13 +37,13 @@ $command = new NotifierCommand(
         'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
     ])),
     $channels = [
-        new SlackChannel(
-            new SlackHttpClient(HttpClient::create([
+        new Slack\Channel(
+            new Slack\HttpClient(HttpClient::create([
                 'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
             ])),
-            SlackMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
-            MessageGenerator::withTimeToDiff(new DateTimeImmutable())
-        )
+            Slack\JiraMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
+            Slack\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+        ),
     ]
 );
 

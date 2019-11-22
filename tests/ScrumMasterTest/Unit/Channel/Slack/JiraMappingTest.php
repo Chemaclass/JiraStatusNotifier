@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMasterTests\Unit\Channel\Slack;
 
-use Chemaclass\ScrumMaster\Channel\Slack\SlackMapping;
+use Chemaclass\ScrumMaster\Channel\Slack\JiraMapping;
 use PHPUnit\Framework\TestCase;
 
-final class SlackMappingTest extends TestCase
+final class JiraMappingTest extends TestCase
 {
-    /** @var SlackMapping */
+    /** @var JiraMapping */
     private $mapping;
 
     protected function setUp(): void
     {
-        $this->mapping = SlackMapping::jiraNameWithSlackId([
+        $this->mapping = JiraMapping::jiraNameWithSlackId([
             'fallback' => 'slack.group.id',
             'jira.person.id' => 'slack.person.id',
         ]);

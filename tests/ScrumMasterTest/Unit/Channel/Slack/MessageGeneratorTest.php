@@ -11,7 +11,7 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\TicketStatus;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
-final class SlackMessageTest extends TestCase
+final class MessageGeneratorTest extends TestCase
 {
     /** @test */
     public function renderMessageWithAssignee(): void
