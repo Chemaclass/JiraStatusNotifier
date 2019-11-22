@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
+use Chemaclass\ScrumMaster\Channel\Email;
 use Chemaclass\ScrumMaster\Channel\Slack;
 use Chemaclass\ScrumMaster\Command\IO\EchoOutput;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
@@ -37,12 +38,20 @@ $command = new NotifierCommand(
         'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
     ])),
     $channels = [
-        new Slack\Channel(
-            new Slack\HttpClient(HttpClient::create([
-                'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
-            ])),
-            Slack\JiraMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
-            Slack\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+//        new Slack\Channel(
+//            new Slack\HttpClient(HttpClient::create([
+//                'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
+//            ])),
+//            Slack\JiraMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
+//            Slack\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+//        ),
+        new Email\Channel(
+            Email\Client::withMailer(new \Swift_Mailer(
+                (new \Swift_SmtpTransport(getenv('MAILER_URL_HOST')))
+                    ->setUsername(getenv('MAILER_URL_USERNAME'))
+                    ->setPassword(getenv('MAILER_URL_PASSWORD'))
+            )),
+            Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
         ),
     ]
 );

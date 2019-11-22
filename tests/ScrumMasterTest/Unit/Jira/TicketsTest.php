@@ -29,7 +29,8 @@ final class TicketsTest extends TestCase
                 new Assignee(
                     $name = 'assignee-name',
                     $key = 'assignee-key',
-                    $displayName = 'Name Surname'
+                    $displayName = 'Name Surname',
+                    $email = 'any@example.com'
                 ),
                 $storyPoints = 8
             ),

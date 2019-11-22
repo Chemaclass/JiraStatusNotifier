@@ -34,7 +34,8 @@ final class Tickets
                 new Assignee(
                     $assignee['name'],
                     $assignee['key'],
-                    $assignee['displayName']
+                    $assignee['displayName'],
+                    $assignee['emailAddress']
                 ),
                 $storyPoints = (int) $fields[self::FIELD_STORY_POINTS]
             );
