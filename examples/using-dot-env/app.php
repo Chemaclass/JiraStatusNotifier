@@ -12,7 +12,7 @@ use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
-use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
+use Chemaclass\ScrumMaster\Slack\MessageGenerator;
 use Chemaclass\ScrumMaster\Slack\SlackChannel;
 use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
 use Chemaclass\ScrumMaster\Slack\SlackMapping;
@@ -45,8 +45,8 @@ $command = new NotifierCommand(
                 'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
             ])),
             SlackMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
-            SlackMessage::withTimeToDiff(new DateTimeImmutable())
-        ),
+            MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+        )
     ]
 );
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Slack\MessageTemplate;
+namespace Chemaclass\ScrumMaster\Channel;
 
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 

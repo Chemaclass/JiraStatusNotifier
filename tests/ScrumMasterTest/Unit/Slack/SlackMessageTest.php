@@ -7,7 +7,7 @@ namespace Chemaclass\ScrumMasterTests\Unit\Slack;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Chemaclass\ScrumMaster\Jira\ReadModel\TicketStatus;
-use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
+use Chemaclass\ScrumMaster\Slack\MessageGenerator;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
@@ -37,7 +37,7 @@ TXT;
             $storyPoints = 5
         );
 
-        $slackMessage = SlackMessage::withTimeToDiff($statusDateChange);
+        $slackMessage = MessageGenerator::withTimeToDiff($statusDateChange);
         $this->assertEquals($expectedMessage, $slackMessage->forJiraTicket($jiraTicket, 'company-name'));
     }
 
@@ -61,7 +61,7 @@ TXT;
             $storyPoints = 5
         );
 
-        $slackMessage = SlackMessage::withTimeToDiff($statusDateChange);
+        $slackMessage = MessageGenerator::withTimeToDiff($statusDateChange);
         $this->assertEquals($expectedMessage, $slackMessage->forJiraTicket($jiraTicket, 'company-name'));
     }
 }

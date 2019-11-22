@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Slack\MessageTemplate;
+namespace Chemaclass\ScrumMaster\Slack;
 
+use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use DateTimeImmutable;
 
-final class SlackMessage implements MessageGeneratorInterface
+final class MessageGenerator implements MessageGeneratorInterface
 {
     /** @var DateTimeImmutable */
     private $timeToDiff;

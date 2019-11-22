@@ -6,12 +6,12 @@ namespace Chemaclass\ScrumMaster\Slack;
 
 use Chemaclass\ScrumMaster\Channel\ChannelInterface;
 use Chemaclass\ScrumMaster\Channel\ChannelResultInterface;
+use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Jira\Board;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
-use Chemaclass\ScrumMaster\Slack\MessageTemplate\MessageGeneratorInterface;
 use function in_array;
 
 final class SlackChannel implements ChannelInterface

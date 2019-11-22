@@ -7,7 +7,7 @@ namespace Chemaclass\ScrumMasterTests\Functional;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
-use Chemaclass\ScrumMaster\Slack\MessageTemplate\SlackMessage;
+use Chemaclass\ScrumMaster\Slack\MessageGenerator;
 use Chemaclass\ScrumMaster\Slack\SlackChannel;
 use Chemaclass\ScrumMaster\Slack\SlackChannelResult;
 use Chemaclass\ScrumMaster\Slack\SlackHttpClient;
@@ -83,7 +83,7 @@ final class SlackNotifierCommandTest extends TestCase
                 new SlackChannel(
                     new SlackHttpClient($this->createMock(HttpClientInterface::class)),
                     SlackMapping::jiraNameWithSlackId(['jira.id' => 'slack.id']),
-                    SlackMessage::withTimeToDiff(new DateTimeImmutable())
+                    MessageGenerator::withTimeToDiff(new DateTimeImmutable())
                 ),
             ]
         );
