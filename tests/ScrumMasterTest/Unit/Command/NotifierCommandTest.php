@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMasterTests\Unit\Command;
 
 use Chemaclass\ScrumMaster\Channel\ChannelInterface;
-use Chemaclass\ScrumMaster\Channel\ChannelResultInterface;
+use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
@@ -29,7 +29,7 @@ final class NotifierCommandTest extends TestCase
     {
         $command = $this->notifierCommandWithChannelIssues([]);
         $result = $command->execute($this->notifierInput());
-        /** @var ChannelResultInterface $channelResult */
+        /** @var ChannelResult $channelResult */
         $channelResult = reset($result);
         $this->assertEmpty($channelResult->channelIssues());
     }
@@ -44,7 +44,7 @@ final class NotifierCommandTest extends TestCase
 
         $command = $this->notifierCommandWithChannelIssues($issues);
         $result = $command->execute($this->notifierInput());
-        /** @var ChannelResultInterface $channelResult */
+        /** @var ChannelResult $channelResult */
         $channelResult = reset($result);
         $this->assertEquals($issues, $channelResult->channelIssues());
     }
@@ -56,13 +56,9 @@ final class NotifierCommandTest extends TestCase
 
     private function notifierCommandWithChannelIssues(array $channelIssues): NotifierCommand
     {
-        /** @var ChannelResultInterface|MockObject $result */
-        $result = $this->createMock(ChannelResultInterface::class);
-        $result->method('channelIssues')->willReturn($channelIssues);
-
         /** @var ChannelInterface|MockObject $channel */
         $channel = $this->createMock(ChannelInterface::class);
-        $channel->method('sendNotifications')->willReturn($result);
+        $channel->method('sendNotifications')->willReturn(ChannelResult::withIssues($channelIssues));
 
         return new NotifierCommand(
             new JiraHttpClient($this->mockJiraClient([])),

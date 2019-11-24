@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMaster\Command;
 
-use Chemaclass\ScrumMaster\Channel\ChannelResultInterface;
+use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Command\IO\OutputInterface;
 
@@ -20,7 +20,7 @@ final class NotifierOutput
         $this->output = $output;
     }
 
-    /** @param array<string,ChannelResultInterface> $results */
+    /** @param array<string,ChannelResult> $results */
     public function write(array $results): void
     {
         foreach ($results as $channelName => $result) {
@@ -28,7 +28,7 @@ final class NotifierOutput
         }
     }
 
-    private function writeChannel(string $name, ChannelResultInterface $result): void
+    private function writeChannel(string $name, ChannelResult $result): void
     {
         $this->output->writeln("# CHANNEL: {$name}");
         $notificationTitles = $this->buildNotificationTitles($result);
@@ -40,7 +40,7 @@ final class NotifierOutput
         $this->output->writeln("Total failed notifications sent: {$result->totalFailed()} ($notificationFailed)");
     }
 
-    private function buildNotificationTitles(ChannelResultInterface $result): string
+    private function buildNotificationTitles(ChannelResult $result): string
     {
         $notificationTitles = [];
 
@@ -54,7 +54,7 @@ final class NotifierOutput
         return implode(', ', $notificationTitles);
     }
 
-    private function buildNotificationSuccessful(ChannelResultInterface $result): string
+    private function buildNotificationSuccessful(ChannelResult $result): string
     {
         $notificationSuccessful = array_keys(array_filter(
             $result->channelIssues(),
@@ -66,7 +66,7 @@ final class NotifierOutput
         return implode(', ', $notificationSuccessful);
     }
 
-    private function buildNotificationFailed(ChannelResultInterface $result): string
+    private function buildNotificationFailed(ChannelResult $result): string
     {
         $notificationFailed = array_keys(array_filter(
             $result->channelIssues(),

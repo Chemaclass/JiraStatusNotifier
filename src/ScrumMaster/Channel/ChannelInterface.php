@@ -17,5 +17,5 @@ interface ChannelInterface
         Company $company,
         JqlUrlFactory $jqlUrlFactory,
         array $jiraUsersToIgnore = []
-    ): ChannelResultInterface;
+    ): ChannelResult;
 }
