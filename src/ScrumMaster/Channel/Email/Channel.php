@@ -69,8 +69,8 @@ final class Channel implements ChannelInterface
             }
 
             $this->sendEmail($ticket, $company);
-            $slackTicket = ChannelIssue::withCodeAndAssignee(200, $assignee->displayName());
-            $result->addChannelIssue($ticket->key(), $slackTicket);
+            $issue = ChannelIssue::withCodeAndTicket(200, $ticket);
+            $result->addChannelIssue($ticket->key(), $issue);
         }
 
         return $result;
