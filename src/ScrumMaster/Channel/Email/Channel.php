@@ -25,8 +25,10 @@ final class Channel implements ChannelInterface
     /** @var MessageGeneratorInterface */
     private $messageGenerator;
 
-    public function __construct(MailerClient $client, MessageGeneratorInterface $messageGenerator)
-    {
+    public function __construct(
+        MailerClient $client,
+        MessageGeneratorInterface $messageGenerator
+    ) {
         $this->messageGenerator = $messageGenerator;
         $this->client = $client;
     }
@@ -74,8 +76,7 @@ final class Channel implements ChannelInterface
         $this->client->sendMessage(new Message(
             new ToAddress([
                 new EmailAddress(
-                // $ticket->assignee()->email(), // TODO: create some mapping to "bypass" the end email of an user that
-                    getenv('MAILER_USERNAME'),  // TODO: doesn't want to receive this emails specifically
+                    $ticket->assignee()->email(),
                     $ticket->assignee()->displayName()
                 ),
             ]),

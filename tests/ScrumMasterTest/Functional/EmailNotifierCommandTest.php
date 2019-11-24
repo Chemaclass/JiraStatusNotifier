@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMasterTests\Functional;
 
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
-use Chemaclass\ScrumMaster\Channel\Slack;
+use Chemaclass\ScrumMaster\Channel\Email;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Swift_Mailer;
 
-final class SlackNotifierCommandTest extends TestCase
+final class EmailNotifierCommandTest extends TestCase
 {
     use JiraApiResource;
 
@@ -30,7 +30,7 @@ final class SlackNotifierCommandTest extends TestCase
         $command = $this->slackNotifierCommandWithJiraTickets([]);
         $result = $command->execute($this->notifierInput());
         /** @var ChannelResult $channelResult */
-        $channelResult = $result[Slack\Channel::class];
+        $channelResult = $result[Email\Channel::class];
         $this->assertEmpty($channelResult->channelIssues());
     }
 
@@ -44,7 +44,7 @@ final class SlackNotifierCommandTest extends TestCase
 
         $result = $command->execute($this->notifierInput());
         /** @var ChannelResult $channelResult */
-        $channelResult = $result[Slack\Channel::class];
+        $channelResult = $result[Email\Channel::class];
         $this->assertEquals(['KEY-111', 'KEY-222'], array_keys($channelResult->channelIssues()));
     }
 
@@ -63,7 +63,7 @@ final class SlackNotifierCommandTest extends TestCase
         );
 
         /** @var ChannelResult $channelResult */
-        $channelResult = $result[Slack\Channel::class];
+        $channelResult = $result[Email\Channel::class];
         $this->assertEquals(['KEY-222'], array_keys($channelResult->channelIssues()));
     }
 
@@ -77,10 +77,9 @@ final class SlackNotifierCommandTest extends TestCase
         return new NotifierCommand(
             new JiraHttpClient($this->mockJiraClient($jiraIssues)),
             [
-                new Slack\Channel(
-                    new Slack\HttpClient($this->createMock(HttpClientInterface::class)),
-                    Slack\JiraMapping::jiraNameWithSlackId(['jira.id' => 'slack.id']),
-                    Slack\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+                new Email\Channel(
+                    new Email\MailerClient($this->createMock(Swift_Mailer::class)),
+                    Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
                 ),
             ]
         );
