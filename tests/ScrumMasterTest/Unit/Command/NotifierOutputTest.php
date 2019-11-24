@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMasterTests\Unit\Command;
 
+use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
-use Chemaclass\ScrumMaster\Channel\Slack\ChannelResult;
 use Chemaclass\ScrumMaster\Command\IO\OutputInterface;
 use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use PHPUnit\Framework\TestCase;

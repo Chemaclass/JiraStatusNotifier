@@ -13,4 +13,4 @@ This tool will notify the person assigned a JIRA-ticket if the ticket remains in
 
 ## Example
 
-You can see an implementation example using [dot environment variables](examples/using-dot-env/app.php)
+You can see an implementation example using [dot environment variables](examples/using-slack-channel/app.php)
