@@ -43,13 +43,13 @@ final class Channel implements ChannelInterface
         foreach ($board->maxDaysInStatus() as $statusName => $maxDays) {
             $tickets = $jiraClient->getTickets($jqlUrlFactory, $statusName);
 
-            $result->append($this->sendEmail($company, $tickets, $jiraUsersToIgnore));
+            $result->append($this->sendEmails($company, $tickets, $jiraUsersToIgnore));
         }
 
         return $result;
     }
 
-    private function sendEmail(Company $company, array $tickets, array $jiraUsersToIgnore): ChannelResult
+    private function sendEmails(Company $company, array $tickets, array $jiraUsersToIgnore): ChannelResult
     {
         $result = new ChannelResult();
 
@@ -61,21 +61,25 @@ final class Channel implements ChannelInterface
                 continue;
             }
 
-            $this->client->sendMessage(new Message(
-                new ToAddress([
-                    new EmailAddress(
-                        // $ticket->assignee()->email(), // TODO: create some mapping to "bypass" the end email of an user that
-                        getenv('MAILER_USERNAME'),  // TODO: doesn't want to receive this emails specifically
-                        $ticket->assignee()->displayName()
-                    ),
-                ]),
-                $this->messageGenerator->forJiraTicket($ticket, $company->companyName())
-            ));
-
+            $this->sendEmail($ticket, $company);
             $slackTicket = ChannelIssue::withCodeAndAssignee(200, $assignee->displayName());
             $result->addChannelIssue($ticket->key(), $slackTicket);
         }
 
         return $result;
+    }
+
+    private function sendEmail(JiraTicket $ticket, Company $company): void
+    {
+        $this->client->sendMessage(new Message(
+            new ToAddress([
+                new EmailAddress(
+                // $ticket->assignee()->email(), // TODO: create some mapping to "bypass" the end email of an user that
+                    getenv('MAILER_USERNAME'),  // TODO: doesn't want to receive this emails specifically
+                    $ticket->assignee()->displayName()
+                ),
+            ]),
+            $this->messageGenerator->forJiraTicket($ticket, $company->companyName())
+        ));
     }
 }

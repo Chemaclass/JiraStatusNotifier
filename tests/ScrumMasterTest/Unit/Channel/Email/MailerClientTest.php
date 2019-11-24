@@ -22,7 +22,7 @@ final class MailerClientTest extends TestCase
         $swiftMailer
             ->expects(self::once())
             ->method('send')
-            ->willReturnCallback(function (\Swift_Message $m) use ($bodyMessage) {
+            ->willReturnCallback(function (\Swift_Message $m) use ($bodyMessage): void {
                 self::assertEquals('any@mail.com', key($m->getTo()));
                 self::assertEquals('Person Name', $m->getTo()['any@mail.com']);
                 self::assertEquals($bodyMessage, $m->getBody());

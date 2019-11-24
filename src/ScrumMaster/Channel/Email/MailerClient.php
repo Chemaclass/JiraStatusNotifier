@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMaster\Channel\Email;
 
-use Chemaclass\ScrumMaster\Channel\Email\ReadModel\EmailAddress;
 use Chemaclass\ScrumMaster\Channel\Email\ReadModel\Message;
-use Chemaclass\ScrumMaster\Channel\Email\ReadModel\ToAddress;
 use Swift_Mailer;
 
 final class MailerClient
