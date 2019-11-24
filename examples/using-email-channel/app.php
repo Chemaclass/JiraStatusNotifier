@@ -49,7 +49,8 @@ $command = new NotifierCommand(
                     ->setUsername(getenv('MAILER_USERNAME'))
                     ->setPassword(getenv('MAILER_PASSWORD'))
             )),
-            Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+            Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
+            Email\ByPassEmail::sendAllTo(getenv('MAILER_USERNAME'))
         ),
     ]
 );

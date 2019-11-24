@@ -25,12 +25,17 @@ final class Channel implements ChannelInterface
     /** @var MessageGeneratorInterface */
     private $messageGenerator;
 
+    /** @var ByPassEmail|null */
+    private $byPassEmail;
+
     public function __construct(
         MailerClient $client,
-        MessageGeneratorInterface $messageGenerator
+        MessageGeneratorInterface $messageGenerator,
+        ?ByPassEmail $byPassEmail = null
     ) {
         $this->messageGenerator = $messageGenerator;
         $this->client = $client;
+        $this->byPassEmail = $byPassEmail;
     }
 
     public function sendNotifications(
@@ -76,11 +81,25 @@ final class Channel implements ChannelInterface
         $this->client->sendMessage(new Message(
             new ToAddress([
                 new EmailAddress(
-                    $ticket->assignee()->email(),
+                    $this->emailFromTicket($ticket),
                     $ticket->assignee()->displayName()
                 ),
             ]),
             $this->messageGenerator->forJiraTicket($ticket, $company->companyName())
         ));
+    }
+
+    private function emailFromTicket(JiraTicket $ticket): string
+    {
+        if ($this->byPassEmail) {
+            $assigneeKey = $ticket->assignee()->key();
+            $overriddenEmail = $this->byPassEmail->byAssigneeKey($assigneeKey);
+
+            if ($overriddenEmail) {
+                return $overriddenEmail;
+            }
+        }
+
+        return $ticket->assignee()->email();
     }
 }
