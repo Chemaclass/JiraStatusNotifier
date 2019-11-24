@@ -33,7 +33,7 @@ TXT;
                 $name = 'assignee.name',
                 $key = 'assignee-key',
                 $displayName = 'Full Name',
-            $email = 'any@example.com'
+                $email = 'any@example.com'
             ),
             $storyPoints = 5
         );

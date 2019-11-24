@@ -6,7 +6,9 @@ namespace Chemaclass\ScrumMaster\Channel\Email;
 
 use Chemaclass\ScrumMaster\Channel\ChannelInterface;
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
-use Chemaclass\ScrumMaster\Channel\Email\ReadModel\Email;
+use Chemaclass\ScrumMaster\Channel\Email\ReadModel\EmailAddress;
+use Chemaclass\ScrumMaster\Channel\Email\ReadModel\Message;
+use Chemaclass\ScrumMaster\Channel\Email\ReadModel\ToAddress;
 use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Jira\Board;
@@ -17,13 +19,13 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 
 final class Channel implements ChannelInterface
 {
-    /** @var Client */
+    /** @var MailerClient */
     private $client;
 
     /** @var MessageGeneratorInterface */
     private $messageGenerator;
 
-    public function __construct(Client $client, MessageGeneratorInterface $messageGenerator)
+    public function __construct(MailerClient $client, MessageGeneratorInterface $messageGenerator)
     {
         $this->messageGenerator = $messageGenerator;
         $this->client = $client;
@@ -59,9 +61,14 @@ final class Channel implements ChannelInterface
                 continue;
             }
 
-            $this->client->sendMessage(new Email(
-//                $ticket->assignee()->email(), // TODO: create some mapping to "bypass" the end email of an user that
-                getenv('MAILER_USERNAME'),  // TODO: doesn't want to receive this emails specifically
+            $this->client->sendMessage(new Message(
+                new ToAddress([
+                    new EmailAddress(
+                        // $ticket->assignee()->email(), // TODO: create some mapping to "bypass" the end email of an user that
+                        getenv('MAILER_USERNAME'),  // TODO: doesn't want to receive this emails specifically
+                        $ticket->assignee()->displayName()
+                    ),
+                ]),
                 $this->messageGenerator->forJiraTicket($ticket, $company->companyName())
             ));
 

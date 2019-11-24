@@ -18,7 +18,6 @@ final class JiraTicket
     /** @var Assignee */
     private $assignee;
 
-
     /** @var null|int */
     private $storyPoints;
 

@@ -44,7 +44,7 @@ $command = new NotifierCommand(
     ])),
     $channels = [
         new Email\Channel(
-            new Email\Client(new \Swift_Mailer(
+            new Email\MailerClient(new \Swift_Mailer(
                 (new \Swift_SmtpTransport(getenv('MAILER_HOST'), getenv('MAILER_PORT'), getenv('MAILER_ENCRYPTION')))
                     ->setUsername(getenv('MAILER_USERNAME'))
                     ->setPassword(getenv('MAILER_PASSWORD'))
