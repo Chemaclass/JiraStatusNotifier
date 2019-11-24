@@ -25,7 +25,7 @@ final class Channel implements ChannelInterface
     /** @var MessageGeneratorInterface */
     private $messageGenerator;
 
-    /** @var ByPassEmail|null */
+    /** @var null|ByPassEmail */
     private $byPassEmail;
 
     public function __construct(
