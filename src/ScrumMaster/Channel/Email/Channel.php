@@ -60,7 +60,8 @@ final class Channel implements ChannelInterface
             }
 
             $this->client->sendMessage(new Email(
-                $ticket->assignee()->email(),
+//                $ticket->assignee()->email(), // TODO: create some mapping to "bypass" the end email of an user that
+                getenv('MAILER_USERNAME'),  // TODO: doesn't want to receive this emails specifically
                 $this->messageGenerator->forJiraTicket($ticket, $company->companyName())
             ));
 

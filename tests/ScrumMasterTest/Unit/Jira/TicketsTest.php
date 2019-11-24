@@ -30,7 +30,7 @@ final class TicketsTest extends TestCase
                     $name = 'assignee-name',
                     $key = 'assignee-key',
                     $displayName = 'Name Surname',
-                    $email = 'any@example.com'
+                    $email = 'person@companymail.com'
                 ),
                 $storyPoints = 8
             ),

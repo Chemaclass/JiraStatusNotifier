@@ -1,4 +1,4 @@
-# Slack parameters
+# Slack Channel
 
 Apart of the [mandatory parameters](README.md), you will need:
 

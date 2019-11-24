@@ -15,12 +15,7 @@ final class Client
     /** @var \Swift_Mailer */
     private $mailer;
 
-    public static function withMailer(Swift_Mailer $mailer): self
-    {
-        return new self($mailer);
-    }
-
-    private function __construct(Swift_Mailer $mailer)
+    public function __construct(Swift_Mailer $mailer)
     {
         $this->mailer = $mailer;
     }
