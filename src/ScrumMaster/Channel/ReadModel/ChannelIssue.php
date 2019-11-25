@@ -43,9 +43,4 @@ final class ChannelIssue
 
         return $this->ticket->assignee()->displayName();
     }
-
-    public function ticket(): ?JiraTicket
-    {
-        return $this->ticket;
-    }
 }

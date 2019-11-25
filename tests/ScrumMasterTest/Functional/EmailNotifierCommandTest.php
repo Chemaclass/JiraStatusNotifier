@@ -11,8 +11,10 @@ use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swift_Mailer;
+use Swift_Message;
 
 final class EmailNotifierCommandTest extends TestCase
 {
@@ -67,19 +69,41 @@ final class EmailNotifierCommandTest extends TestCase
         $this->assertEquals(['KEY-222'], array_keys($channelResult->channelIssues()));
     }
 
-    /** @test */
+    /**
+     * It will override the email from 'user.1.jira' only, because we are overriding it
+     * to send the email to another email -> 'user.2@email.com'
+     *
+     * @test
+     */
     public function overrideEmailFromAssignee(): void
     {
-        $command = $this->slackNotifierCommandWithJiraTickets([
-            $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111', 'user.1@email.com'),
-            $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222', 'user.2@email.com'),
-        ], Email\ByPassEmail::overriddenEmails(['user.1.jira' => 'user.2@email.com']));
+        /** @var MockObject|Swift_Mailer $mailer */
+        $mailer = $this->createMock(Swift_Mailer::class);
+        $mailer->expects(self::exactly(3))
+            ->method('send')
+            ->willReturnCallback(function (Swift_Message $swiftMessage): void {
+                self::assertTrue(isset($swiftMessage->getTo()['user.3@email.com']));
+            });
 
-        $result = $command->execute($this->notifierInput());
-        /** @var ChannelResult $channelResult */
-        $channelResult = $result[Email\Channel::class];
-        $issues = $channelResult->channelIssues();
-        $workInProgress = 1;
+        $command = new NotifierCommand(
+            new JiraHttpClient($this->mockJiraClient([
+                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111', 'user.1@email.com'),
+                $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222', 'user.2@email.com'),
+                $this->createAJiraIssueAsArray('user.3.jira', 'KEY-222', 'user.3@email.com'),
+            ])),
+            [
+                new Email\Channel(
+                    new Email\MailerClient($mailer),
+                    Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
+                    Email\ByPassEmail::overriddenEmails([
+                        'user.1.jira' => 'user.3@email.com',
+                        'user.2.jira' => 'user.3@email.com',
+                    ])
+                ),
+            ]
+        );
+
+        $command->execute($this->notifierInput());
     }
 
     private function notifierInput(array $optionalFields = []): NotifierInput
@@ -87,17 +111,14 @@ final class EmailNotifierCommandTest extends TestCase
         return NotifierInput::fromArray(array_merge(self::MANDATORY_FIELDS, $optionalFields));
     }
 
-    private function slackNotifierCommandWithJiraTickets(
-        array $jiraIssues,
-        ?Email\ByPassEmail $byPassEmail = null
-    ): NotifierCommand {
+    private function slackNotifierCommandWithJiraTickets(array $jiraIssues): NotifierCommand
+    {
         return new NotifierCommand(
             new JiraHttpClient($this->mockJiraClient($jiraIssues)),
             [
                 new Email\Channel(
                     new Email\MailerClient($this->createMock(Swift_Mailer::class)),
-                    Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
-                    $byPassEmail
+                    Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
                 ),
             ]
         );

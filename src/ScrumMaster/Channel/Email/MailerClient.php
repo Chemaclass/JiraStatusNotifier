@@ -6,6 +6,7 @@ namespace Chemaclass\ScrumMaster\Channel\Email;
 
 use Chemaclass\ScrumMaster\Channel\Email\ReadModel\Message;
 use Swift_Mailer;
+use Swift_Message;
 
 final class MailerClient
 {
@@ -23,11 +24,11 @@ final class MailerClient
 
     public function sendMessage(Message $message): void
     {
-        $message = (new \Swift_Message(self::SUBJECT))
+        $swiftMessage = (new Swift_Message(self::SUBJECT))
             ->setFrom(self::FROM)
             ->setTo($message->toAddresses())
             ->setBody($message->body());
 
-        $this->swiftMailer->send($message);
+        $this->swiftMailer->send($swiftMessage);
     }
 }
