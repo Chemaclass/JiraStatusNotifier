@@ -69,7 +69,7 @@ final class Channel implements ChannelInterface
             }
 
             $this->sendEmail($ticket, $company);
-            $issue = ChannelIssue::withCodeAndTicket(200, $ticket);
+            $issue = ChannelIssue::withCodeAndAssignee(200, $ticket->assignee()->displayName());
             $result->addChannelIssue($ticket->key(), $issue);
         }
 

@@ -8,9 +8,6 @@ use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Command\IO\OutputInterface;
 use Chemaclass\ScrumMaster\Command\NotifierOutput;
-use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
-use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
-use Chemaclass\ScrumMaster\Jira\ReadModel\TicketStatus;
 use PHPUnit\Framework\TestCase;
 
 final class NotifierOutputTest extends TestCase
@@ -20,10 +17,10 @@ final class NotifierOutputTest extends TestCase
     {
         $result = (new ChannelResult())
             ->addChannelIssue('K-1', ChannelIssue::withStatusCode(100))
-            ->addChannelIssue('K-2', ChannelIssue::withCodeAndTicket(200, $this->newJiraTicket('j.user.1')))
+            ->addChannelIssue('K-2', ChannelIssue::withCodeAndAssignee(200, 'j.user.1'))
             ->addChannelIssue('K-3', ChannelIssue::withStatusCode(300))
-            ->addChannelIssue('K-4', ChannelIssue::withCodeAndTicket(100, $this->newJiraTicket('j.user.2')))
-            ->addChannelIssue('K-5', ChannelIssue::withCodeAndTicket(100, $this->newJiraTicket('j.user.1')));
+            ->addChannelIssue('K-4', ChannelIssue::withCodeAndAssignee(100, 'j.user.2'))
+            ->addChannelIssue('K-5', ChannelIssue::withCodeAndAssignee(100, 'j.user.1'));
 
         $inMemoryOutput = $this->inMemoryOutput();
         (new NotifierOutput($inMemoryOutput))->write(['any channel name' => $result]);
@@ -56,21 +53,5 @@ final class NotifierOutputTest extends TestCase
                 return $this->lines;
             }
         };
-    }
-
-    private function newJiraTicket(string $displayName): JiraTicket
-    {
-        return new JiraTicket(
-            $title = 'Ticket Title',
-            $key = 'CST-KEY',
-            new TicketStatus('IN QA', new \DateTimeImmutable()),
-            new Assignee(
-                $name = 'assignee.name',
-                $key = 'assignee-key',
-                $displayName,
-                $email = 'any@example.com'
-            ),
-            $storyPoints = 5
-        );
     }
 }

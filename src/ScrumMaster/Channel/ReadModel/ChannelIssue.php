@@ -4,30 +4,28 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMaster\Channel\ReadModel;
 
-use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
-
 final class ChannelIssue
 {
     /** @var int */
     private $responseStatusCode;
 
-    /** @var null|JiraTicket */
-    private $ticket;
+    /** @var null|string */
+    private $displayName;
 
     public static function withStatusCode(int $responseStatusCode): self
     {
         return new self($responseStatusCode, null);
     }
 
-    public static function withCodeAndTicket(int $responseStatusCode, JiraTicket $ticket): self
+    public static function withCodeAndAssignee(int $responseStatusCode, string $displayName): self
     {
-        return new self($responseStatusCode, $ticket);
+        return new self($responseStatusCode, $displayName);
     }
 
-    private function __construct(int $responseStatusCode, ?JiraTicket $ticket)
+    private function __construct(int $responseStatusCode, ?string $displayName)
     {
         $this->responseStatusCode = $responseStatusCode;
-        $this->ticket = $ticket;
+        $this->displayName = $displayName;
     }
 
     public function responseStatusCode(): int
@@ -37,10 +35,6 @@ final class ChannelIssue
 
     public function displayName(): ?string
     {
-        if (!$this->ticket) {
-            return null;
-        }
-
-        return $this->ticket->assignee()->displayName();
+        return $this->displayName;
     }
 }

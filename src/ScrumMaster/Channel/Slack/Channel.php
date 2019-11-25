@@ -69,7 +69,7 @@ final class Channel implements ChannelInterface
                 $this->messageGenerator->forJiraTicket($ticket, $company->companyName())
             );
 
-            $issue = ChannelIssue::withCodeAndTicket($response->getStatusCode(), $ticket);
+            $issue = ChannelIssue::withCodeAndAssignee($response->getStatusCode(), $assignee->displayName());
             $result->addChannelIssue($ticket->key(), $issue);
         }
 

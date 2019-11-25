@@ -10,9 +10,6 @@ use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
-use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
-use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
-use Chemaclass\ScrumMaster\Jira\ReadModel\TicketStatus;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -41,8 +38,8 @@ final class NotifierCommandTest extends TestCase
     public function twoSuccessfulNotificationsWereSent(): void
     {
         $issues = [
-            'KEY-1' => ChannelIssue::withCodeAndTicket(200, $this->newJiraTicket('jira.user.1')),
-            'KEY-2' => ChannelIssue::withCodeAndTicket(200, $this->newJiraTicket('jira.user.2')),
+            'KEY-1' => ChannelIssue::withCodeAndAssignee(200, 'jira.user.1'),
+            'KEY-2' => ChannelIssue::withCodeAndAssignee(200, 'jira.user.2'),
         ];
 
         $command = $this->notifierCommandWithChannelIssues($issues);
@@ -66,22 +63,6 @@ final class NotifierCommandTest extends TestCase
         return new NotifierCommand(
             new JiraHttpClient($this->mockJiraClient([])),
             [$channel]
-        );
-    }
-
-    private function newJiraTicket(string $displayName): JiraTicket
-    {
-        return new JiraTicket(
-            $title = 'Ticket Title',
-            $key = 'CST-KEY',
-            new TicketStatus('IN QA', new \DateTimeImmutable()),
-            new Assignee(
-                $name = 'assignee.name',
-                $key = 'assignee-key',
-                $displayName,
-                $email = 'any@example.com'
-            ),
-            $storyPoints = 5
         );
     }
 }
