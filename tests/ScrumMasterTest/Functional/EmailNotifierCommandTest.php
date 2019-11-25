@@ -69,28 +69,26 @@ final class EmailNotifierCommandTest extends TestCase
         $this->assertEquals(['KEY-222'], array_keys($channelResult->channelIssues()));
     }
 
-    /**
-     * It will override the email from 'user.1.jira' only, because we are overriding it
-     * to send the email to another email -> 'user.2@email.com'
-     *
-     * @test
-     */
+    /** @test */
     public function overrideEmailFromAssignee(): void
     {
+        $jiraIssues = [
+            $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111', 'user.1@email.com'),
+            $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222', 'user.2@email.com'),
+            $this->createAJiraIssueAsArray('user.3.jira', 'KEY-222', 'user.3@email.com'),
+        ];
+
         /** @var MockObject|Swift_Mailer $mailer */
         $mailer = $this->createMock(Swift_Mailer::class);
-        $mailer->expects(self::exactly(3))
+        $mailer->expects(self::exactly(count($jiraIssues)))
             ->method('send')
             ->willReturnCallback(function (Swift_Message $swiftMessage): void {
+                self::assertCount(1, $swiftMessage->getTo());
                 self::assertTrue(isset($swiftMessage->getTo()['user.3@email.com']));
             });
 
         $command = new NotifierCommand(
-            new JiraHttpClient($this->mockJiraClient([
-                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111', 'user.1@email.com'),
-                $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222', 'user.2@email.com'),
-                $this->createAJiraIssueAsArray('user.3.jira', 'KEY-222', 'user.3@email.com'),
-            ])),
+            new JiraHttpClient($this->mockJiraClient($jiraIssues)),
             [
                 new Email\Channel(
                     new Email\MailerClient($mailer),
