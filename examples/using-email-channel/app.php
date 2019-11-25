@@ -1,6 +1,6 @@
 <?php
 /**
- * This example demonstrates how to notify via Slack to the people assigned to the JIRA-tickets
+ * This example demonstrates how to notify via Email to the people assigned to the JIRA-tickets
  * using the ENV parameters (from the .env file)
  */
 declare(strict_types=1);
