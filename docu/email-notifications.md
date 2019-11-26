@@ -1,24 +1,28 @@
 # Email Channel
 
+See an [implementation example](../examples/using-email-channel/app.php)
+
+## Parameters
+
 Apart of the [mandatory parameters](README.md), you will need:
 
-### MAILER_HOST
+#### MAILER_HOST
 
 Value example: `smtp.gmail.com`
 
-### MAILER_PORT
+#### MAILER_PORT
 
 Value example: `smtp.gmail.com`
 
-### MAILER_ENCRYPTION
+#### MAILER_ENCRYPTION
 
 Value example: `ssl`
 
-### MAILER_USERNAME
+#### MAILER_USERNAME
 
 Value example: `your@email.com`
 
-### MAILER_PASSWORD
+#### MAILER_PASSWORD
 
 Value example: `1he-p@$w0rd`
 

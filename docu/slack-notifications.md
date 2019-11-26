@@ -1,12 +1,16 @@
 # Slack Channel
 
+See an [implementation example](../examples/using-slack-channel/app.php)
+
+## Parameters
+
 Apart of the [mandatory parameters](README.md), you will need:
 
-### SLACK_BOT_USER_OAUTH_ACCESS_TOKEN
+#### SLACK_BOT_USER_OAUTH_ACCESS_TOKEN
 
 You can create your own Slack App here: https://api.slack.com/apps (inside "Oauth & Permissions")
 
-### SLACK_MAPPING_IDS
+#### SLACK_MAPPING_IDS
 
 Value example: `'{"fallback":"slack.group.id", "jira.person.id":"slack.member.id"}'`
 

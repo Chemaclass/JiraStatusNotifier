@@ -1,4 +1,4 @@
-# Scrum Master   
+# Scrum Master
 
 This tool will notify the person assigned a JIRA-ticket if the ticket remains in the same status for more than `N` days.
 
@@ -6,11 +6,12 @@ This tool will notify the person assigned a JIRA-ticket if the ticket remains in
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Chemaclass/ScrumMaster/?branch=master)
 
-## Notifications channels
+## Notifications channel documentation
 
 * [Slack](./docu/slack-notifications.md)
-* Email ([Not implemented yet](https://github.com/Chemaclass/ScrumMaster/issues/15))
+* [Email](./docu/email-notifications.md)
 
-## Example
+## Examples
 
-You can see an implementation example using [dot environment variables](examples/using-slack-channel/app.php)
+* Using [Slack](examples/using-slack-channel/app.php) as notification channel
+* Using [Email](examples/using-email-channel/app.php) as notification channel
