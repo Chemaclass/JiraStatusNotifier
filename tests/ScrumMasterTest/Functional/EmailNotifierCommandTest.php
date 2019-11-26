@@ -11,8 +11,10 @@ use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Swift_Mailer;
+use Swift_Message;
 
 final class EmailNotifierCommandTest extends TestCase
 {
@@ -65,6 +67,41 @@ final class EmailNotifierCommandTest extends TestCase
         /** @var ChannelResult $channelResult */
         $channelResult = $result[Email\Channel::class];
         $this->assertEquals(['KEY-222'], array_keys($channelResult->channelIssues()));
+    }
+
+    /** @test */
+    public function overrideEmailFromAssignee(): void
+    {
+        $jiraIssues = [
+            $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111', 'user.1@email.com'),
+            $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222', 'user.2@email.com'),
+            $this->createAJiraIssueAsArray('user.3.jira', 'KEY-222', 'user.3@email.com'),
+        ];
+
+        /** @var MockObject|Swift_Mailer $mailer */
+        $mailer = $this->createMock(Swift_Mailer::class);
+        $mailer->expects(self::exactly(count($jiraIssues)))
+            ->method('send')
+            ->willReturnCallback(function (Swift_Message $swiftMessage): void {
+                self::assertCount(1, $swiftMessage->getTo());
+                self::assertTrue(isset($swiftMessage->getTo()['user.3@email.com']));
+            });
+
+        $command = new NotifierCommand(
+            new JiraHttpClient($this->mockJiraClient($jiraIssues)),
+            [
+                new Email\Channel(
+                    new Email\MailerClient($mailer),
+                    Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
+                    Email\ByPassEmail::overriddenEmails([
+                        'user.1.jira' => 'user.3@email.com',
+                        'user.2.jira' => 'user.3@email.com',
+                    ])
+                ),
+            ]
+        );
+
+        $command->execute($this->notifierInput());
     }
 
     private function notifierInput(array $optionalFields = []): NotifierInput

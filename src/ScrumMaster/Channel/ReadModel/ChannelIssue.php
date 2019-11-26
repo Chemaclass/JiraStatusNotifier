@@ -24,8 +24,8 @@ final class ChannelIssue
 
     private function __construct(int $responseStatusCode, ?string $displayName)
     {
-        $this->displayName = $displayName;
         $this->responseStatusCode = $responseStatusCode;
+        $this->displayName = $displayName;
     }
 
     public function responseStatusCode(): int

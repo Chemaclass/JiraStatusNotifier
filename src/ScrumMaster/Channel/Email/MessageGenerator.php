@@ -33,20 +33,19 @@ final class MessageGenerator implements MessageGeneratorInterface
         $dayWord = ($daysDiff > 1) ? 'days' : 'day';
 
         return $this->headerText($assignee) . <<<TXT
-Send via EMAIL :)
-*Ticket*: {$ticket->title()}[<{$url}|{$ticket->key()}>]
-*Current status*: {$status->name()} since {$daysDiff} {$dayWord}
-*Story Points*: {$ticket->storyPoints()}
-
+Send via EMAIL :) <br>
+*Ticket*: {$ticket->title()}[{$url}|{$ticket->key()}] <br>
+*Current status*: {$status->name()} since {$daysDiff} {$dayWord} <br>
+*Story Points*: {$ticket->storyPoints()}<br>
 TXT;
     }
 
     private function headerText(Assignee $assignee): string
     {
         if ($assignee->key()) {
-            return "Hey, {$assignee->displayName()} ({$assignee->name()}), please have a look" . PHP_EOL;
+            return "Hey, {$assignee->displayName()} ({$assignee->name()}), please have a look <br>";
         }
 
-        return 'Hey Team, please have a look' . PHP_EOL;
+        return 'Hey Team, please have a look <br>';
     }
 }

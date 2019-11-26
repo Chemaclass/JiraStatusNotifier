@@ -25,7 +25,7 @@ final class Channel implements ChannelInterface
     /** @var MessageGeneratorInterface */
     private $messageGenerator;
 
-    /** @var ByPassEmail|null */
+    /** @var null|ByPassEmail */
     private $byPassEmail;
 
     public function __construct(
@@ -69,8 +69,8 @@ final class Channel implements ChannelInterface
             }
 
             $this->sendEmail($ticket, $company);
-            $slackTicket = ChannelIssue::withCodeAndAssignee(200, $assignee->displayName());
-            $result->addChannelIssue($ticket->key(), $slackTicket);
+            $issue = ChannelIssue::withCodeAndAssignee(200, $assignee->displayName());
+            $result->addChannelIssue($ticket->key(), $issue);
         }
 
         return $result;

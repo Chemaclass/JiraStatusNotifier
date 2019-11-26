@@ -6,7 +6,8 @@ namespace Chemaclass\ScrumMaster\Channel\Email;
 
 final class ByPassEmail
 {
-    private $sendAllTo = null;
+    private $sendAllTo;
+
     private $overriddenEmails = [];
 
     public static function sendAllTo(string $email): self
@@ -17,6 +18,9 @@ final class ByPassEmail
         return $self;
     }
 
+    /**
+     * @param array $overriddenEmails Example: ['assignee.key' => 'overrided@email.com']
+     */
     public static function overriddenEmails(array $overriddenEmails): self
     {
         $self = new self();
