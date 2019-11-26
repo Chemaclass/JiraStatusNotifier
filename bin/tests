@@ -5,5 +5,9 @@ for arg in "$@"; do
   args="$args $arg"
 done
 
-docker exec -ti -u dev scrum_master_php sh \
-    -c "cd /srv/scrum-master && vendor/bin/phpunit $args --coverage-html coverage"
+if [[ -f /.dockerenv ]]; then
+    cd /srv/scrum-master && vendor/bin/phpunit ${args} --coverage-html coverage;
+else
+    docker exec -ti -u dev scrum_master_php sh \
+        -c "cd /srv/scrum-master && vendor/bin/phpunit $args --coverage-html coverage"
+fi
