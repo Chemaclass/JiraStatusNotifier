@@ -12,8 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 final class JqlUrlFactoryTest extends TestCase
 {
-    use JqlUrlHelper;
-
     /** @test */
     public function buildForAnExistingStatus(): void
     {
@@ -23,10 +21,10 @@ final class JqlUrlFactoryTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->removeNewLines(
-                'https://company.atlassian.net/rest/api/3/search?jql=sprint in openSprints() 
-                    AND status IN ("statusName") 
-                    AND NOT status changed after -2d'
+            JqlUrlBuilder::removeNewLines(
+                "https://company.atlassian.net/rest/api/3/search?jql=sprint in openSprints() 
+                    AND status IN ('statusName') 
+                    AND NOT status changed after -2d"
             ),
             $factory->buildUrl('statusName')
         );
@@ -41,10 +39,10 @@ final class JqlUrlFactoryTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->removeNewLines(
-                'https://company.atlassian.net/rest/api/3/search?jql=sprint in openSprints() 
-                    AND status IN ("unknown-status") 
-                    AND NOT status changed after -99d'
+            JqlUrlBuilder::removeNewLines(
+                "https://company.atlassian.net/rest/api/3/search?jql=sprint in openSprints() 
+                    AND status IN ('unknown-status') 
+                    AND NOT status changed after -99d"
             ),
             $factory->buildUrl('unknown-status')
         );

@@ -31,6 +31,11 @@ final class JqlUrlBuilder
         return new self($company, '?jql=sprint in openSprints()');
     }
 
+    public static function removeNewLines(string $query): string
+    {
+        return trim(preg_replace('/\s+/', ' ', $query));
+    }
+
     private function __construct(Company $company, string $jqlInitParam)
     {
         $this->company = $company;
@@ -57,27 +62,21 @@ final class JqlUrlBuilder
         $finalUrl = sprintf(self::BASE_URL, $this->company->companyName()) . $this->jqlInitParam;
 
         if ($this->company->projectName()) {
-            $finalUrl .= sprintf(' AND project IN ("%s")', $this->company->projectName());
+            $finalUrl .= " AND project IN ('{$this->company->projectName()}')";
         }
 
         if ($this->status) {
-            $finalUrl .= sprintf(' AND status IN ("%s")', $this->status);
+            $finalUrl .= " AND status IN ('{$this->status}')";
         }
 
         if ($this->statusDidNotChangeSinceDays) {
             if ($this->status && $this->startSprintDate) {
                 // In order to ignore the weekend between the two working weeks sprint
-                $finalUrl .= sprintf(
-                    ' AND ((status changed TO "%s" before %s AND NOT status changed after -%dd) OR (status changed TO "%s" after %s AND NOT status changed after -%dd))',
-                    $this->status,
-                    $this->startSprintDate,
-                    $this->statusDidNotChangeSinceDays + 2,
-                    $this->status,
-                    $this->startSprintDate,
-                    $this->statusDidNotChangeSinceDays
-                );
+                $statusDidNotChangePlusWeekendDays = $this->statusDidNotChangeSinceDays + 2;
+                $finalUrl .= " AND ((status changed TO '{$this->status}' before {$this->startSprintDate} AND NOT status changed after -{$statusDidNotChangePlusWeekendDays}d)";
+                $finalUrl .= " OR (status changed TO '{$this->status}' after {$this->startSprintDate} AND NOT status changed after -{$this->statusDidNotChangeSinceDays}d))";
             } else {
-                $finalUrl .= sprintf(' AND NOT status changed after -%dd', $this->statusDidNotChangeSinceDays);
+                $finalUrl .= " AND NOT status changed after -{$this->statusDidNotChangeSinceDays}d";
             }
         }
 
