@@ -11,6 +11,8 @@ final class JqlUrlBuilder
 {
     private const BASE_URL = 'https://%s.atlassian.net/rest/api/3/search';
 
+    private const DEFAULT_WEEKEND_DAYS = 2;
+
     /** @var Company */
     private $company;
 
@@ -26,15 +28,19 @@ final class JqlUrlBuilder
     /** @var null|string */
     private $startSprintDate;
 
-    public static function inOpenSprints(Company $company): self
+    /** @var int */
+    private $weekendDays;
+
+    public static function inOpenSprints(Company $company, int $weekendDays = self::DEFAULT_WEEKEND_DAYS): self
     {
-        return new self($company, '?jql=sprint in openSprints()');
+        return new self($company, '?jql=sprint in openSprints()', $weekendDays);
     }
 
-    private function __construct(Company $company, string $jqlInitParam)
+    private function __construct(Company $company, string $jqlInitParam, int $weekendDays)
     {
         $this->company = $company;
         $this->jqlInitParam = $jqlInitParam;
+        $this->weekendDays = $weekendDays;
     }
 
     public function withStatus(string $status): self
@@ -66,8 +72,7 @@ final class JqlUrlBuilder
 
         if ($this->statusDidNotChangeSinceDays) {
             if ($this->status && $this->startSprintDate) {
-                // In order to ignore the weekend between the two working weeks sprint
-                $statusDidNotChangePlusWeekendDays = $this->statusDidNotChangeSinceDays + 2;
+                $statusDidNotChangePlusWeekendDays = $this->statusDidNotChangeSinceDays + $this->weekendDays;
                 $finalUrl .= " AND ((status changed TO '{$this->status}' before {$this->startSprintDate} AND NOT status changed after -{$statusDidNotChangePlusWeekendDays}d)";
                 $finalUrl .= " OR (status changed TO '{$this->status}' after {$this->startSprintDate} AND NOT status changed after -{$this->statusDidNotChangeSinceDays}d))";
             } else {
