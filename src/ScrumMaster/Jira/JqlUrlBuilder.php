@@ -31,11 +31,6 @@ final class JqlUrlBuilder
         return new self($company, '?jql=sprint in openSprints()');
     }
 
-    public static function removeNewLines(string $query): string
-    {
-        return trim(preg_replace('/\s+/', ' ', $query));
-    }
-
     private function __construct(Company $company, string $jqlInitParam)
     {
         $this->company = $company;

@@ -24,11 +24,11 @@ final class JqlUrlBuilderTest extends TestCase
     /** @test */
     public function forAnyProject(): void
     {
+        $expected = "https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()";
+        $expected .= " AND project IN ('AnyProject')";
+
         $this->assertEquals(
-            JqlUrlBuilder::removeNewLines(
-                "https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() 
-                    AND project IN ('AnyProject')"
-            ),
+            $expected,
             JqlUrlBuilder::inOpenSprints(
                 Company::withNameAndProject('company-name', 'AnyProject')
             )->build()
@@ -38,11 +38,11 @@ final class JqlUrlBuilderTest extends TestCase
     /** @test */
     public function forReviewStatus(): void
     {
+        $expected = "https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()";
+        $expected .= " AND status IN ('In Review')";
+
         $this->assertEquals(
-            JqlUrlBuilder::removeNewLines(
-                "https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() 
-                    AND status IN ('In Review')"
-            ),
+            $expected,
             JqlUrlBuilder::inOpenSprints(Company::withName('company-name'))
                 ->withStatus('In Review')
                 ->build()
@@ -52,11 +52,11 @@ final class JqlUrlBuilderTest extends TestCase
     /** @test */
     public function statusDidNotChangeSinceDays(): void
     {
+        $expected = "https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()";
+        $expected .= " AND NOT status changed after -1d";
+
         $this->assertEquals(
-            JqlUrlBuilder::removeNewLines(
-                'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() 
-                    AND NOT status changed after -1d'
-            ),
+            $expected,
             JqlUrlBuilder::inOpenSprints(Company::withName('company-name'))
                 ->statusDidNotChangeSinceDays(1)
                 ->build()
@@ -66,13 +66,13 @@ final class JqlUrlBuilderTest extends TestCase
     /** @test */
     public function statusDidNotChangeSinceDaysAndStartSprintDate(): void
     {
+        $expected = "https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()";
+        $expected .= " AND status IN ('IN QA')";
+        $expected .= " AND ((status changed TO 'IN QA' before 2019-10-14 AND NOT status changed after -4d)";
+        $expected .= " OR (status changed TO 'IN QA' after 2019-10-14 AND NOT status changed after -2d))";
+
         $this->assertEquals(
-            JqlUrlBuilder::removeNewLines(
-                "https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints() 
-                    AND status IN ('IN QA') 
-                    AND ((status changed TO 'IN QA' before 2019-10-14 AND NOT status changed after -4d)
-                    OR (status changed TO 'IN QA' after 2019-10-14 AND NOT status changed after -2d))"
-            ),
+            $expected,
             JqlUrlBuilder::inOpenSprints(Company::withName('company-name'))
                 ->withStatus('IN QA')
                 ->statusDidNotChangeSinceDays(2, $startSprintDate = '2019-10-14')

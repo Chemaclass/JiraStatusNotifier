@@ -20,14 +20,10 @@ final class JqlUrlFactoryTest extends TestCase
             JqlUrlBuilder::inOpenSprints(Company::withName('company'))
         );
 
-        $this->assertEquals(
-            JqlUrlBuilder::removeNewLines(
-                "https://company.atlassian.net/rest/api/3/search?jql=sprint in openSprints() 
-                    AND status IN ('statusName') 
-                    AND NOT status changed after -2d"
-            ),
-            $factory->buildUrl('statusName')
-        );
+        $expected = "https://company.atlassian.net/rest/api/3/search?jql=sprint in openSprints()";
+        $expected .= " AND status IN ('statusName')";
+        $expected .= " AND NOT status changed after -2d";
+        $this->assertEquals($expected, $factory->buildUrl('statusName'));
     }
 
     /** @test */
@@ -38,13 +34,9 @@ final class JqlUrlFactoryTest extends TestCase
             JqlUrlBuilder::inOpenSprints(Company::withName('company'))
         );
 
-        $this->assertEquals(
-            JqlUrlBuilder::removeNewLines(
-                "https://company.atlassian.net/rest/api/3/search?jql=sprint in openSprints() 
-                    AND status IN ('unknown-status') 
-                    AND NOT status changed after -99d"
-            ),
-            $factory->buildUrl('unknown-status')
-        );
+        $expected = "https://company.atlassian.net/rest/api/3/search?jql=sprint in openSprints()";
+        $expected .= " AND status IN ('unknown-status')";
+        $expected .= " AND NOT status changed after -99d";
+        $this->assertEquals($expected, $factory->buildUrl('unknown-status'));
     }
 }
