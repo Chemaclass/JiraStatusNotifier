@@ -6,8 +6,10 @@ namespace Chemaclass\ScrumMaster\Channel\Email;
 
 final class ByPassEmail
 {
+    /** @var string */
     private $sendAllTo;
 
+    /** @var array */
     private $overriddenEmails = [];
 
     public static function sendAllTo(string $email): self
@@ -31,7 +33,7 @@ final class ByPassEmail
 
     public function byAssigneeKey(?string $assigneeKey): ?string
     {
-        if ($this->sendAllTo) {
+        if (!empty($this->sendAllTo)) {
             return $this->sendAllTo;
         }
 

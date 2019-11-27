@@ -20,7 +20,7 @@ final class JqlUrlBuilder
     /** @var string */
     private $status;
 
-    /** @var int */
+    /** @var null|int */
     private $statusDidNotChangeSinceDays;
 
     /** @var null|string */

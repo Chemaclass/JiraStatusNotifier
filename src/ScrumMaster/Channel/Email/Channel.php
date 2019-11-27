@@ -11,6 +11,7 @@ use Chemaclass\ScrumMaster\Channel\Email\ReadModel\Message;
 use Chemaclass\ScrumMaster\Channel\Email\ReadModel\ToAddress;
 use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
+use Chemaclass\ScrumMaster\Common\Request;
 use Chemaclass\ScrumMaster\Jira\Board;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
@@ -69,7 +70,7 @@ final class Channel implements ChannelInterface
             }
 
             $this->sendEmail($ticket, $company);
-            $issue = ChannelIssue::withCodeAndAssignee(200, $assignee->displayName());
+            $issue = ChannelIssue::withCodeAndAssignee(Request::HTTP_OK, $assignee->displayName());
             $result->addChannelIssue($ticket->key(), $issue);
         }
 
@@ -79,7 +80,7 @@ final class Channel implements ChannelInterface
     private function sendEmail(JiraTicket $ticket, Company $company): void
     {
         $this->client->sendMessage(new Message(
-            new ToAddress([
+            ToAddress::withEmailAddresses([
                 new EmailAddress(
                     $this->emailFromTicket($ticket),
                     $ticket->assignee()->displayName()

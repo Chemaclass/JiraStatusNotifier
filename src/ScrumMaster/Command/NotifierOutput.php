@@ -7,11 +7,10 @@ namespace Chemaclass\ScrumMaster\Command;
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Command\IO\OutputInterface;
+use Chemaclass\ScrumMaster\Common\Request;
 
 final class NotifierOutput
 {
-    public const HTTP_OK = 200;
-
     /** @var OutputInterface */
     private $output;
 
@@ -59,7 +58,7 @@ final class NotifierOutput
         $notificationSuccessful = array_keys(array_filter(
             $result->channelIssues(),
             function (ChannelIssue $slackTicket) {
-                return self::HTTP_OK === $slackTicket->responseStatusCode();
+                return Request::HTTP_OK === $slackTicket->responseStatusCode();
             }
         ));
 
@@ -71,7 +70,7 @@ final class NotifierOutput
         $notificationFailed = array_keys(array_filter(
             $result->channelIssues(),
             function (ChannelIssue $slackTicket) {
-                return self::HTTP_OK !== $slackTicket->responseStatusCode();
+                return Request::HTTP_OK !== $slackTicket->responseStatusCode();
             }
         ));
 
