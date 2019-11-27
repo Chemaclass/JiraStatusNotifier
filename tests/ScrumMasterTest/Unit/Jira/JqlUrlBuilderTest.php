@@ -96,4 +96,21 @@ final class JqlUrlBuilderTest extends TestCase
                 ->build()
         );
     }
+
+    /** @test */
+    public function statusDidNotChangeSince0DaysAfter10DaysWeekend(): void
+    {
+        $expected = 'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
+        $expected .= " AND status IN ('IN QA')";
+        $expected .= " AND ((status changed TO 'IN QA' before 2019-10-14 AND NOT status changed after -10d)";
+        $expected .= " OR (status changed TO 'IN QA' after 2019-10-14 AND NOT status changed after -0d))";
+
+        $this->assertEquals(
+            $expected,
+            JqlUrlBuilder::inOpenSprints(Company::withName('company-name'), $weekendDays = 10)
+                ->withStatus('IN QA')
+                ->statusDidNotChangeSinceDays(0, $startSprintDate = '2019-10-14')
+                ->build()
+        );
+    }
 }

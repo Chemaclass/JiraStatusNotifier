@@ -70,7 +70,7 @@ final class JqlUrlBuilder
             $finalUrl .= " AND status IN ('{$this->status}')";
         }
 
-        if ($this->statusDidNotChangeSinceDays) {
+        if (null !== $this->statusDidNotChangeSinceDays) {
             if ($this->status && $this->startSprintDate) {
                 $statusDidNotChangePlusWeekendDays = $this->statusDidNotChangeSinceDays + $this->weekendDays;
                 $finalUrl .= " AND ((status changed TO '{$this->status}' before {$this->startSprintDate} AND NOT status changed after -{$statusDidNotChangePlusWeekendDays}d)";
