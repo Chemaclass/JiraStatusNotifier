@@ -16,10 +16,13 @@ final class JqlUrlBuilder
     /** @var Company */
     private $company;
 
+    /** @var int */
+    private $weekendDays;
+
     /** @var string */
     private $jqlInitParam;
 
-    /** @var string */
+    /** @var null|string */
     private $status;
 
     /** @var null|int */
@@ -28,19 +31,16 @@ final class JqlUrlBuilder
     /** @var null|string */
     private $startSprintDate;
 
-    /** @var int */
-    private $weekendDays;
-
     public static function inOpenSprints(Company $company, int $weekendDays = self::DEFAULT_WEEKEND_DAYS): self
     {
-        return new self($company, '?jql=sprint in openSprints()', $weekendDays);
+        return new self($company, $weekendDays, '?jql=sprint in openSprints()');
     }
 
-    private function __construct(Company $company, string $jqlInitParam, int $weekendDays)
+    private function __construct(Company $company, int $weekendDays, string $jqlInitParam)
     {
         $this->company = $company;
-        $this->jqlInitParam = $jqlInitParam;
         $this->weekendDays = $weekendDays;
+        $this->jqlInitParam = $jqlInitParam;
     }
 
     public function withStatus(string $status): self
@@ -66,15 +66,18 @@ final class JqlUrlBuilder
             $finalUrl .= " AND project IN ('{$this->company->projectName()}')";
         }
 
-        if ($this->status) {
+        if (null !== $this->status) {
             $finalUrl .= " AND status IN ('{$this->status}')";
         }
 
         if (null !== $this->statusDidNotChangeSinceDays) {
-            if ($this->status && $this->startSprintDate) {
+            if (null !== $this->status && null !== $this->startSprintDate) {
                 $statusDidNotChangePlusWeekendDays = $this->statusDidNotChangeSinceDays + $this->weekendDays;
-                $finalUrl .= " AND ((status changed TO '{$this->status}' before {$this->startSprintDate} AND NOT status changed after -{$statusDidNotChangePlusWeekendDays}d)";
-                $finalUrl .= " OR (status changed TO '{$this->status}' after {$this->startSprintDate} AND NOT status changed after -{$this->statusDidNotChangeSinceDays}d))";
+                $finalUrl .= ' AND (';
+                $finalUrl .= "(status changed TO '{$this->status}' before {$this->startSprintDate} AND NOT status changed after -{$statusDidNotChangePlusWeekendDays}d)";
+                $finalUrl .= ' OR ';
+                $finalUrl .= "(status changed TO '{$this->status}' after {$this->startSprintDate} AND NOT status changed after -{$this->statusDidNotChangeSinceDays}d)";
+                $finalUrl .= ')';
             } else {
                 $finalUrl .= " AND NOT status changed after -{$this->statusDidNotChangeSinceDays}d";
             }
