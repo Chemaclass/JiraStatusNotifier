@@ -2,21 +2,12 @@
 
 See an [implementation example](../examples/using-email-channel/app.php)
 
+This project is using the `symfony/mailer` which provides a really good flexibility in order
+to use a [3rd party transport](https://symfony.com/doc/current/mailer.html#using-a-3rd-party-transport).
+
 ## Parameters
 
 Apart of the [mandatory parameters](README.md), you will need:
-
-#### MAILER_HOST
-
-Value example: `smtp.gmail.com`
-
-#### MAILER_PORT
-
-Value example: `smtp.gmail.com`
-
-#### MAILER_ENCRYPTION
-
-Value example: `ssl`
 
 #### MAILER_USERNAME
 
@@ -28,5 +19,4 @@ Value example: `1he-p@$w0rd`
 
 ## References
 
-* [SwiftMailer Documentation](https://swiftmailer.symfony.com/docs/introduction.html)
-* [How To Send Email Using Gmail SMTP Server And Swift Mailer Library](https://artisansweb.net/send-email-using-gmail-smtp-server-swift-mailer-library/)
+* [Symfony Mailer Documentation](https://symfony.com/doc/current/mailer.html)
