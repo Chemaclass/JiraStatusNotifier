@@ -14,6 +14,8 @@ use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Command\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
+use Symfony\Component\Mailer\Mailer;
 
 $dotEnv = Dotenv\Dotenv::create(__DIR__);
 $dotEnv->load();
@@ -24,9 +26,6 @@ $mandatoryKeys = [
     'JIRA_API_LABEL',
     'JIRA_API_PASSWORD',
     'DAYS_FOR_STATUS',
-    'MAILER_HOST',
-    'MAILER_PORT',
-    'MAILER_ENCRYPTION',
     'MAILER_USERNAME',
     'MAILER_PASSWORD',
 ];
@@ -44,11 +43,7 @@ $command = new NotifierCommand(
     ])),
     $channels = [
         new Email\Channel(
-            new Email\MailerClient(new \Swift_Mailer(
-                (new \Swift_SmtpTransport(getenv('MAILER_HOST'), getenv('MAILER_PORT'), getenv('MAILER_ENCRYPTION')))
-                    ->setUsername(getenv('MAILER_USERNAME'))
-                    ->setPassword(getenv('MAILER_PASSWORD'))
-            )),
+            new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),
             Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
             Email\ByPassEmail::sendAllTo(getenv('MAILER_USERNAME'))
         ),

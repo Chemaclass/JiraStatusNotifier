@@ -6,9 +6,6 @@ namespace Chemaclass\ScrumMaster\Channel\Email;
 
 use Chemaclass\ScrumMaster\Channel\ChannelInterface;
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
-use Chemaclass\ScrumMaster\Channel\Email\ReadModel\EmailAddress;
-use Chemaclass\ScrumMaster\Channel\Email\ReadModel\Message;
-use Chemaclass\ScrumMaster\Channel\Email\ReadModel\ToAddress;
 use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Common\Request;
@@ -17,11 +14,14 @@ use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
 
 final class Channel implements ChannelInterface
 {
-    /** @var MailerClient */
-    private $client;
+    /** @var Mailer */
+    private $mailer;
 
     /** @var MessageGeneratorInterface */
     private $messageGenerator;
@@ -30,12 +30,12 @@ final class Channel implements ChannelInterface
     private $byPassEmail;
 
     public function __construct(
-        MailerClient $client,
+        Mailer $mailer,
         MessageGeneratorInterface $messageGenerator,
         ?ByPassEmail $byPassEmail = null
     ) {
         $this->messageGenerator = $messageGenerator;
-        $this->client = $client;
+        $this->mailer = $mailer;
         $this->byPassEmail = $byPassEmail;
     }
 
@@ -69,25 +69,29 @@ final class Channel implements ChannelInterface
                 continue;
             }
 
-            $this->sendEmail($ticket, $company);
-            $issue = ChannelIssue::withCodeAndAssignee(Request::HTTP_OK, $assignee->displayName());
+            $responseCode = $this->sendEmail($ticket, $company);
+            $issue = ChannelIssue::withCodeAndAssignee($responseCode, $assignee->displayName());
             $result->addChannelIssue($ticket->key(), $issue);
         }
 
         return $result;
     }
 
-    private function sendEmail(JiraTicket $ticket, Company $company): void
+    private function sendEmail(JiraTicket $ticket, Company $company): int
     {
-        $this->client->sendMessage(new Message(
-            ToAddress::withEmailAddresses([
-                new EmailAddress(
-                    $this->emailFromTicket($ticket),
-                    $ticket->assignee()->displayName()
-                ),
-            ]),
-            $this->messageGenerator->forJiraTicket($ticket, $company->companyName())
-        ));
+        try {
+            $email = (new Email())
+                ->to($this->emailFromTicket($ticket))
+                ->subject('Scrum Master Reminder')
+                ->addFrom('scrum.master@noreply.com')
+                ->text($this->messageGenerator->forJiraTicket($ticket, $company->companyName()));
+
+            $this->mailer->send($email);
+
+            return Request::HTTP_OK;
+        } catch (TransportExceptionInterface $e) {
+            return $e->getCode();
+        }
     }
 
     private function emailFromTicket(JiraTicket $ticket): string

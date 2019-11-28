@@ -6,6 +6,9 @@ namespace Chemaclass\ScrumMasterTests\Functional;
 
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\Email;
+use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
+use Chemaclass\ScrumMaster\Channel\Email\Channel;
+use Chemaclass\ScrumMaster\Channel\Email\MessageGenerator;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
@@ -13,8 +16,10 @@ use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Swift_Mailer;
-use Swift_Message;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport\TransportInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email as SymfonyEmail;
 
 final class EmailNotifierCommandTest extends TestCase
 {
@@ -78,22 +83,21 @@ final class EmailNotifierCommandTest extends TestCase
             $this->createAJiraIssueAsArray('user.3.jira', 'KEY-222', 'user.3@email.com'),
         ];
 
-        /** @var MockObject|Swift_Mailer $mailer */
-        $mailer = $this->createMock(Swift_Mailer::class);
-        $mailer->expects(self::exactly(count($jiraIssues)))
+        /** @var MockObject|TransportInterface $transport */
+        $transport = $this->createMock(TransportInterface::class);
+        $transport->expects(self::exactly(count($jiraIssues)))
             ->method('send')
-            ->willReturnCallback(function (Swift_Message $swiftMessage): void {
-                self::assertCount(1, $swiftMessage->getTo());
-                self::assertTrue(isset($swiftMessage->getTo()['user.3@email.com']));
+            ->willReturnCallback(function (SymfonyEmail $email): void {
+                self::assertEquals([new Address('user.3@email.com')], $email->getTo());
             });
 
         $command = new NotifierCommand(
             new JiraHttpClient($this->mockJiraClient($jiraIssues)),
             [
-                new Email\Channel(
-                    new Email\MailerClient($mailer),
-                    Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
-                    Email\ByPassEmail::overriddenEmails([
+                new Channel(
+                    new Mailer($transport),
+                    MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
+                    ByPassEmail::overriddenEmails([
                         'user.1.jira' => 'user.3@email.com',
                         'user.2.jira' => 'user.3@email.com',
                     ])
@@ -115,7 +119,7 @@ final class EmailNotifierCommandTest extends TestCase
             new JiraHttpClient($this->mockJiraClient($jiraIssues)),
             [
                 new Email\Channel(
-                    new Email\MailerClient($this->createMock(Swift_Mailer::class)),
+                    new Mailer($this->createMock(TransportInterface::class)),
                     Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
                 ),
             ]
