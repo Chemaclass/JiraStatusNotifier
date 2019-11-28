@@ -33,10 +33,9 @@ final class MessageGenerator implements MessageGeneratorInterface
         $dayWord = ($daysDiff > 1) ? 'days' : 'day';
 
         return $this->headerText($assignee) . <<<TXT
-Send via EMAIL :) <br>
-*Ticket*: {$ticket->title()}[{$url}|{$ticket->key()}] <br>
-*Current status*: {$status->name()} since {$daysDiff} {$dayWord} <br>
-*Story Points*: {$ticket->storyPoints()}<br>
+<b>Ticket</b>: {$ticket->title()} <a href="{$url}">{$ticket->key()}</a><br>
+<b>Current status</b>: {$status->name()} since {$daysDiff} {$dayWord}<br>
+<b>Story Points<b>: {$ticket->storyPoints()}<br>
 TXT;
     }
 

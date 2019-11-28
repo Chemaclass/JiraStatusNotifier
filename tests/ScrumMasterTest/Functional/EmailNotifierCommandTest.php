@@ -88,7 +88,7 @@ final class EmailNotifierCommandTest extends TestCase
         $transport->expects(self::exactly(count($jiraIssues)))
             ->method('send')
             ->willReturnCallback(function (SymfonyEmail $email): void {
-                self::assertEquals([new Address('user.3@email.com')], $email->getTo());
+                self::assertEquals([new Address('user.3@email.com', 'display.name.jira')], $email->getTo());
             });
 
         $command = new NotifierCommand(

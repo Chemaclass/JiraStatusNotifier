@@ -16,6 +16,7 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 final class Channel implements ChannelInterface
@@ -81,10 +82,10 @@ final class Channel implements ChannelInterface
     {
         try {
             $email = (new Email())
-                ->to($this->emailFromTicket($ticket))
+                ->to(new Address($this->emailFromTicket($ticket), $ticket->assignee()->displayName()))
                 ->subject('Scrum Master Reminder')
                 ->addFrom('scrum.master@noreply.com')
-                ->text($this->messageGenerator->forJiraTicket($ticket, $company->companyName()));
+                ->html($this->messageGenerator->forJiraTicket($ticket, $company->companyName()));
 
             $this->mailer->send($email);
 
