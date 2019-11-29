@@ -6,33 +6,33 @@ namespace Chemaclass\ScrumMaster\Jira\ReadModel;
 
 final class Assignee
 {
-    /** @var null|string */
+    /** @var string */
     private $name;
 
-    /** @var null|string */
+    /** @var string */
     private $key;
 
-    /** @var null|string */
+    /** @var string */
     private $displayName;
 
-    /** @var null|string */
+    /** @var string */
     private $email;
 
     public static function empty(): self
     {
         return new self(
-            $name = null,
-            $key = null,
-            $displayName = null,
-            $email = null
+            $name = '',
+            $key = '',
+            $displayName = '',
+            $email = ''
         );
     }
 
     public function __construct(
-        ?string $name,
-        ?string $key,
-        ?string $displayName,
-        ?string $email
+        string $name,
+        string $key,
+        string $displayName,
+        string $email
     ) {
         $this->name = $name;
         $this->key = $key;
@@ -40,22 +40,22 @@ final class Assignee
         $this->email = $email;
     }
 
-    public function name(): ?string
+    public function name(): string
     {
         return $this->name;
     }
 
-    public function key(): ?string
+    public function key(): string
     {
         return $this->key;
     }
 
-    public function displayName(): ?string
+    public function displayName(): string
     {
         return $this->displayName;
     }
 
-    public function email(): ?string
+    public function email(): string
     {
         return $this->email;
     }
