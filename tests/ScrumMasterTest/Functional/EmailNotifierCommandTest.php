@@ -9,6 +9,7 @@ use Chemaclass\ScrumMaster\Channel\Email;
 use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
 use Chemaclass\ScrumMaster\Channel\Email\Channel;
 use Chemaclass\ScrumMaster\Channel\Email\MessageGenerator;
+use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Command\NotifierCommand;
 use Chemaclass\ScrumMaster\Command\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
@@ -16,10 +17,12 @@ use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as SymfonyEmail;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 final class EmailNotifierCommandTest extends TestCase
 {
@@ -106,6 +109,37 @@ final class EmailNotifierCommandTest extends TestCase
         );
 
         $command->execute($this->notifierInput());
+    }
+
+    /** @test */
+    public function ensureProperResponseStatusCodePerIssue(): void
+    {
+        $code = 12345;
+
+        /** @var MockObject|TransportInterface $transport */
+        $transport = $this->createMock(TransportInterface::class);
+        $transport->expects(self::once())
+            ->method('send')
+            ->willThrowException(new TransportException('', $code));
+
+        $command = new NotifierCommand(
+            new JiraHttpClient($this->mockJiraClient([
+                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111'),
+            ])),
+            [
+                new Channel(
+                    new Mailer($transport),
+                    MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+                ),
+            ]
+        );
+
+        $results = $command->execute($this->notifierInput());
+        /** @var ChannelResult $channelResult */
+        $channelResult = $results[Email\Channel::class];
+        /** @var ChannelIssue $issue */
+        $issue = $channelResult->channelIssues()['KEY-111'];
+        self::assertEquals($code, $issue->responseStatusCode());
     }
 
     private function notifierInput(array $optionalFields = []): NotifierInput
