@@ -1,7 +1,5 @@
 # Email Channel
 
-See an [implementation example](../examples/using-email-channel/app.php)
-
 This project is using the `symfony/mailer` which provides a really good flexibility in order
 to use a [3rd party transport](https://symfony.com/doc/current/mailer.html#using-a-3rd-party-transport).
 
@@ -16,7 +14,7 @@ to use a [3rd party transport](https://symfony.com/doc/current/mailer.html#using
 
 ## Parameters
 
-Apart of the [mandatory parameters](README.md), you will need:
+Apart of the [mandatory parameters](../../docu/README.md), you will need:
 
 #### MAILER_USERNAME
 
