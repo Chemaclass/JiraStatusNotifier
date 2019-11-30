@@ -8,5 +8,5 @@ This tool will notify the person assigned a JIRA-ticket if the ticket remains in
 
 ## Documentation and Examples
 
-* Using [Slack](examples/using-slack-channel/README.md) as notification channel
-* Using [Email](examples/using-email-channel/README.md) as notification channel
+* Using [Slack](examples/using-slack-channel) as notification channel
+* Using [Email](examples/using-email-channel) as notification channel
