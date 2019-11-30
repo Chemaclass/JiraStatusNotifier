@@ -32,7 +32,6 @@
         "ext-json": "*",
         "php": "^7.2",
         "symfony/http-client": "^4.3",
-        "vlucas/phpdotenv": "^3.6",
         "symfony/mailer": "^5.0"
     },
     "require-dev": {
@@ -40,7 +39,8 @@
         "infection/infection": "^0.14.2",
         "phpunit/phpunit": "^8.4.2",
         "symfony/var-dumper": "^4.3",
-        "symfony/google-mailer": "^5.0"
+        "symfony/google-mailer": "^5.0",
+        "vlucas/phpdotenv": "^3.6"
     },
     "autoload": {
         "psr-4": {
