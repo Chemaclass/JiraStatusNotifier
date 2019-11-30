@@ -22,7 +22,6 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as SymfonyEmail;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 final class EmailNotifierCommandTest extends TestCase
 {
@@ -140,6 +139,30 @@ final class EmailNotifierCommandTest extends TestCase
         /** @var ChannelIssue $issue */
         $issue = $channelResult->channelIssues()['KEY-111'];
         self::assertEquals($code, $issue->responseStatusCode());
+    }
+
+    /** @test */
+    public function sameUserReceiveOneSingleNotification(): void
+    {
+        /** @var MockObject|TransportInterface $transport */
+        $transport = $this->createMock(TransportInterface::class);
+        $transport->expects(self::once())->method('send');
+
+        $command = new NotifierCommand(
+            new JiraHttpClient($this->mockJiraClient([
+                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111', 'email@a.com', 'statusName1'),
+                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-222', 'email@a.com', 'statusName1'),
+                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-333', 'email@a.com', 'statusName2'),
+            ])),
+            [
+                new Email\Channel(
+                    new Mailer($transport),
+                    Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+                ),
+            ]
+        );
+
+        $command->execute($this->notifierInput());
     }
 
     private function notifierInput(array $optionalFields = []): NotifierInput

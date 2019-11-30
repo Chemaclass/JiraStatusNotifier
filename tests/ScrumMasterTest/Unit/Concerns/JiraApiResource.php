@@ -26,14 +26,18 @@ trait JiraApiResource
         return $jiraClient;
     }
 
-    private function createAJiraIssueAsArray(string $assigneeKey, string $key, string $email = 'user@email.jira'): array
-    {
+    private function createAJiraIssueAsArray(
+        string $assigneeKey,
+        string $key,
+        string $email = 'user@email.jira',
+        string $statusName = 'In Progress'
+    ): array {
         return [
             'key' => $key,
             'fields' => [
                 Tickets::FIELD_STORY_POINTS => '5.0',
                 'status' => [
-                    'name' => 'In Progress',
+                    'name' => $statusName,
                 ],
                 'summary' => 'The ticket title',
                 'statuscategorychangedate' => '2019-06-15T10:35:00+00',
