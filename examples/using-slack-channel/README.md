@@ -1,10 +1,8 @@
 # Slack Channel
 
-See an [implementation example](../examples/using-slack-channel/app.php)
-
 ## Parameters
 
-Apart of the [mandatory parameters](README.md), you will need:
+Apart of the [mandatory parameters](../../docu/README.md), you will need:
 
 #### SLACK_BOT_USER_OAUTH_ACCESS_TOKEN
 
