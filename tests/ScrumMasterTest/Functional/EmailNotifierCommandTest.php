@@ -22,7 +22,6 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as SymfonyEmail;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 final class EmailNotifierCommandTest extends TestCase
 {

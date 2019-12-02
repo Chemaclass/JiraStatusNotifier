@@ -7,7 +7,7 @@ namespace Chemaclass\ScrumMaster\Channel;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use function count;
 
-final class ChannelResult implements ChannelResultInterface
+final class ChannelResult
 {
     /** @var array<string, ChannelIssue> */
     private $channelIssues = [];
