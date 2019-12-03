@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMaster\Command;
 
-use Chemaclass\ScrumMaster\Command\Exception\UndefinedParameter;
-use function count;
-use function json_decode;
-
 final class NotifierInput
 {
     public const COMPANY_NAME = 'COMPANY_NAME';
@@ -17,12 +13,6 @@ final class NotifierInput
     public const DAYS_FOR_STATUS = 'DAYS_FOR_STATUS';
 
     public const JIRA_USERS_TO_IGNORE = 'JIRA_USERS_TO_IGNORE';
-
-    private const MANDATORY_PARAMETERS = [
-        self::COMPANY_NAME,
-        self::JIRA_PROJECT_NAME,
-        self::DAYS_FOR_STATUS,
-    ];
 
     /** @var string */
     private $companyName;
@@ -36,17 +26,17 @@ final class NotifierInput
     /** @var array */
     private $jiraUsersToIgnore;
 
-    public static function fromArray(array $params): self
-    {
-        static::validateKeys($params);
-
+    public static function new(
+        string $companyName,
+        string $jiraProjectName,
+        array $daysForStatus,
+        array $jiraUsersToIgnore = []
+    ): self {
         $self = new self();
-        $self->companyName = $params[self::COMPANY_NAME];
-        $self->jiraProjectName = $params[self::JIRA_PROJECT_NAME];
-        $self->daysForStatus = json_decode($params[self::DAYS_FOR_STATUS], true);
-        $self->jiraUsersToIgnore = isset($params[self::JIRA_USERS_TO_IGNORE])
-            ? json_decode($params[self::JIRA_USERS_TO_IGNORE], true)
-            : [];
+        $self->companyName = $companyName;
+        $self->jiraProjectName = $jiraProjectName;
+        $self->daysForStatus = $daysForStatus;
+        $self->jiraUsersToIgnore = $jiraUsersToIgnore;
 
         return $self;
     }
@@ -73,20 +63,5 @@ final class NotifierInput
     public function jiraUsersToIgnore(): array
     {
         return $this->jiraUsersToIgnore;
-    }
-
-    private static function validateKeys(array $params): void
-    {
-        $errors = [];
-
-        foreach (self::MANDATORY_PARAMETERS as $name) {
-            if (!isset($params[$name])) {
-                $errors[] = $name;
-            }
-        }
-
-        if (count($errors) > 0) {
-            throw new UndefinedParameter($errors);
-        }
     }
 }

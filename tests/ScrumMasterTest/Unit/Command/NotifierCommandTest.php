@@ -18,12 +18,6 @@ final class NotifierCommandTest extends TestCase
 {
     use JiraApiResource;
 
-    private const MANDATORY_FIELDS = [
-        NotifierInput::COMPANY_NAME => 'company.name',
-        NotifierInput::JIRA_PROJECT_NAME => 'Jira project name',
-        NotifierInput::DAYS_FOR_STATUS => '{"status":1}',
-    ];
-
     /** @test */
     public function zeroNotificationsWereSent(): void
     {
@@ -51,7 +45,7 @@ final class NotifierCommandTest extends TestCase
 
     private function notifierInput(): NotifierInput
     {
-        return NotifierInput::fromArray(self::MANDATORY_FIELDS);
+        return NotifierInput::new('company.name', 'Jira project name', ['status' => 1]);
     }
 
     private function notifierCommandWithChannelIssues(array $channelIssues): NotifierCommand
