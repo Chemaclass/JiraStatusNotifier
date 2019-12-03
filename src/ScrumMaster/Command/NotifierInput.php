@@ -36,6 +36,21 @@ final class NotifierInput
     /** @var array */
     private $jiraUsersToIgnore;
 
+    public static function new(
+        string $companyName,
+        string $jiraProjectName,
+        array $daysForStatus,
+        array $jiraUsersToIgnore = []
+    ): self {
+        $self = new self();
+        $self->companyName = $companyName;
+        $self->jiraProjectName = $jiraProjectName;
+        $self->daysForStatus = $daysForStatus;
+        $self->jiraUsersToIgnore = $jiraUsersToIgnore;
+
+        return $self;
+    }
+
     public static function fromArray(array $params): self
     {
         static::validateKeys($params);

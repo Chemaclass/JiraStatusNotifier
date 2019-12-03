@@ -50,6 +50,12 @@ $command = new NotifierCommand(
     ]
 );
 
-$result = $command->execute(NotifierInput::fromArray($_ENV));
+$result = $command->execute(NotifierInput::new(
+    $_ENV[NotifierInput::COMPANY_NAME],
+    $_ENV[NotifierInput::JIRA_PROJECT_NAME],
+    json_decode($_ENV[NotifierInput::DAYS_FOR_STATUS], true),
+    json_decode($_ENV[NotifierInput::JIRA_USERS_TO_IGNORE], true)
+));
+
 $output = new NotifierOutput(new EchoOutput());
 $output->write($result);
