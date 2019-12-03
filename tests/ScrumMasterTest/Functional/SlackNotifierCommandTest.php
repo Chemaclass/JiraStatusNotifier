@@ -57,9 +57,7 @@ final class SlackNotifierCommandTest extends TestCase
         ]);
 
         $result = $command->execute(
-            $this->notifierInput([
-                NotifierInput::JIRA_USERS_TO_IGNORE => '["user.1.jira"]',
-            ])
+            $this->notifierInput($usersToIgnore = ['user.1.jira'])
         );
 
         /** @var ChannelResult $channelResult */
@@ -67,9 +65,9 @@ final class SlackNotifierCommandTest extends TestCase
         $this->assertEquals(['KEY-222'], array_keys($channelResult->channelIssues()));
     }
 
-    private function notifierInput(array $optionalFields = []): NotifierInput
+    private function notifierInput(array $jiraUsersToIgnore = []): NotifierInput
     {
-        return NotifierInput::fromArray(array_merge(self::MANDATORY_FIELDS, $optionalFields));
+        return NotifierInput::new('company.name', 'Jira project name', ['status' => 1], $jiraUsersToIgnore);
     }
 
     private function slackNotifierCommandWithJiraTickets(array $jiraIssues): NotifierCommand

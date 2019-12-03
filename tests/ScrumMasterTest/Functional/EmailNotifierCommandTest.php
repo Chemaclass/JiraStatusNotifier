@@ -27,12 +27,6 @@ final class EmailNotifierCommandTest extends TestCase
 {
     use JiraApiResource;
 
-    private const MANDATORY_FIELDS = [
-        NotifierInput::COMPANY_NAME => 'company.name',
-        NotifierInput::JIRA_PROJECT_NAME => 'Jira project name',
-        NotifierInput::DAYS_FOR_STATUS => '{"status":1}',
-    ];
-
     /** @test */
     public function zeroNotificationsWereSent(): void
     {
@@ -66,9 +60,7 @@ final class EmailNotifierCommandTest extends TestCase
         ]);
 
         $result = $command->execute(
-            $this->notifierInput([
-                NotifierInput::JIRA_USERS_TO_IGNORE => '["user.1.jira"]',
-            ])
+            $this->notifierInput($usersToIgnore = ['user.1.jira'])
         );
 
         /** @var ChannelResult $channelResult */
@@ -141,9 +133,9 @@ final class EmailNotifierCommandTest extends TestCase
         self::assertEquals($code, $issue->responseStatusCode());
     }
 
-    private function notifierInput(array $optionalFields = []): NotifierInput
+    private function notifierInput(array $jiraUsersToIgnore = []): NotifierInput
     {
-        return NotifierInput::fromArray(array_merge(self::MANDATORY_FIELDS, $optionalFields));
+        return NotifierInput::new('company.name', 'Jira project name', ['status' => 1], $jiraUsersToIgnore);
     }
 
     private function slackNotifierCommandWithJiraTickets(array $jiraIssues): NotifierCommand
