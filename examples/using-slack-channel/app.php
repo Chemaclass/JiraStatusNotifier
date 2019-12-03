@@ -23,6 +23,7 @@ $mandatoryKeys = [
     'JIRA_PROJECT_NAME',
     'JIRA_API_LABEL',
     'JIRA_API_PASSWORD',
+    'JIRA_USERS_TO_IGNORE',
     'DAYS_FOR_STATUS',
     'SLACK_BOT_USER_OAUTH_ACCESS_TOKEN',
     'SLACK_MAPPING_IDS',
@@ -50,6 +51,12 @@ $command = new NotifierCommand(
     ]
 );
 
-$result = $command->execute(NotifierInput::fromArray($_ENV));
+$result = $command->execute(NotifierInput::new(
+    $_ENV[NotifierInput::COMPANY_NAME],
+    $_ENV[NotifierInput::JIRA_PROJECT_NAME],
+    json_decode($_ENV[NotifierInput::DAYS_FOR_STATUS], true),
+    json_decode($_ENV[NotifierInput::JIRA_USERS_TO_IGNORE], true)
+));
+
 $output = new NotifierOutput(new EchoOutput());
 $output->write($result);
