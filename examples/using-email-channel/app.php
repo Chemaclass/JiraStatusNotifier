@@ -38,7 +38,7 @@ foreach ($mandatoryKeys as $mandatoryKey) {
     }
 }
 
-$command = new NotifierCommand(
+$notifier = new NotifierCommand(
     new JiraHttpClient(HttpClient::create([
         'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
     ])),
@@ -51,7 +51,7 @@ $command = new NotifierCommand(
     ]
 );
 
-$result = $command->execute(NotifierInput::new(
+$result = $notifier->execute(NotifierInput::new(
     $_ENV[NotifierInput::COMPANY_NAME],
     $_ENV[NotifierInput::JIRA_PROJECT_NAME],
     json_decode($_ENV[NotifierInput::DAYS_FOR_STATUS], true),
