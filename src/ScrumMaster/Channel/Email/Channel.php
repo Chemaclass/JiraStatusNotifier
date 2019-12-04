@@ -61,8 +61,18 @@ final class Channel implements ChannelInterface
             $ticketsByAssignee = $this->groupTicketsByAssignee($tickets, $jiraUsersToIgnore);
         }
 
+        $result->append($this->sendEmails($ticketsByAssignee, $company));
+
+        return $result;
+    }
+
+    private function sendEmails(array $ticketsByAssignee, Company $company): ChannelResult
+    {
+        $result = new ChannelResult();
+
         foreach ($ticketsByAssignee as $assigneeKey => $tickets) {
             $responseCode = $this->sendEmail($tickets, $company);
+
             foreach ($tickets as $ticket) {
                 $issue = ChannelIssue::withCodeAndAssignee($responseCode, $ticket->assignee()->displayName());
                 $result->addChannelIssue($ticket->key(), $issue);
