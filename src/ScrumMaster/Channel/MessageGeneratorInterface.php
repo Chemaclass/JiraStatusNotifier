@@ -8,5 +8,8 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 
 interface MessageGeneratorInterface
 {
-    public function forJiraTicket(JiraTicket $ticket, string $companyName): string;
+    /**
+     * @param JiraTicket[] $tickets
+     */
+    public function forJiraTickets(array $tickets, string $companyName): string;
 }

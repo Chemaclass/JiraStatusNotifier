@@ -49,19 +49,32 @@ final class Channel implements ChannelInterface
     ): ChannelResult {
         $result = new ChannelResult();
 
+        /**
+         * @var array<string,JiraTicket[]> $ticketsByAssignee
+         * For example: [$assignee->key() => [$ticket1, $ticket2]]
+         */
+        $ticketsByAssignee = [];
+
         foreach ($board->maxDaysInStatus() as $statusName => $maxDays) {
             $tickets = $jiraClient->getTickets($jqlUrlFactory, $statusName);
 
-            $result->append($this->sendEmails($company, $tickets, $jiraUsersToIgnore));
+            $ticketsByAssignee = $this->groupTicketsByAssignee($tickets, $jiraUsersToIgnore);
+        }
+
+        foreach ($ticketsByAssignee as $assigneeKey => $tickets) {
+            $responseCode = $this->sendEmail($tickets, $company);
+            foreach ($tickets as $ticket) {
+                $issue = ChannelIssue::withCodeAndAssignee($responseCode, $ticket->assignee()->displayName());
+                $result->addChannelIssue($ticket->key(), $issue);
+            }
         }
 
         return $result;
     }
 
-    private function sendEmails(Company $company, array $tickets, array $jiraUsersToIgnore): ChannelResult
+    private function groupTicketsByAssignee(array $tickets, array $jiraUsersToIgnore): array
     {
-        $result = new ChannelResult();
-
+        $ticketsByAssignee = [];
         /** @var JiraTicket $ticket */
         foreach ($tickets as $ticket) {
             $assignee = $ticket->assignee();
@@ -70,22 +83,25 @@ final class Channel implements ChannelInterface
                 continue;
             }
 
-            $responseCode = $this->sendEmail($ticket, $company);
-            $issue = ChannelIssue::withCodeAndAssignee($responseCode, $assignee->displayName());
-            $result->addChannelIssue($ticket->key(), $issue);
+            if (!isset($ticketsByAssignee[$assignee->key()])) {
+                $ticketsByAssignee[$assignee->key()] = [];
+            }
+
+            $ticketsByAssignee[$assignee->key()][] = $ticket;
         }
 
-        return $result;
+        return $ticketsByAssignee;
     }
 
-    private function sendEmail(JiraTicket $ticket, Company $company): int
+    private function sendEmail(array $tickets, Company $company): int
     {
         try {
+            $ticket = $tickets[0];
             $email = (new Email())
                 ->to(new Address($this->emailFromTicket($ticket), $ticket->assignee()->displayName()))
                 ->subject('Scrum Master Reminder')
                 ->addFrom('scrum.master@noreply.com')
-                ->html($this->messageGenerator->forJiraTicket($ticket, $company->companyName()));
+                ->html($this->messageGenerator->forJiraTickets($tickets, $company->companyName()));
 
             $this->mailer->send($email);
 

@@ -24,8 +24,9 @@ final class MessageGenerator implements MessageGeneratorInterface
         $this->timeToDiff = $timeToDiff;
     }
 
-    public function forJiraTicket(JiraTicket $ticket, string $companyName): string
+    public function forJiraTickets(array $tickets, string $companyName): string
     {
+        $ticket = $tickets[0];
         $assignee = $ticket->assignee();
         $status = $ticket->status();
         $daysDiff = $status->changeDate()->diff($this->timeToDiff)->days;

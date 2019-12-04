@@ -24,15 +24,29 @@ final class MessageGenerator implements MessageGeneratorInterface
         $this->timeToDiff = $timeToDiff;
     }
 
-    public function forJiraTicket(JiraTicket $ticket, string $companyName): string
+    public function forJiraTickets(array $tickets, string $companyName): string
     {
+        $ticket = $tickets[0];
+
         $assignee = $ticket->assignee();
+        $header = $this->headerText($assignee);
+        $text = '';
+
+        foreach ($tickets as $ticket) {
+            $text .= $this->textForTicket($ticket, $companyName);
+        }
+
+        return $header . $text;
+    }
+
+    private function textForTicket(JiraTicket $ticket, string $companyName): string
+    {
         $status = $ticket->status();
         $daysDiff = $status->changeDate()->diff($this->timeToDiff)->days;
         $url = "https://{$companyName}.atlassian.net/browse/{$ticket->key()}";
         $dayWord = ($daysDiff > 1) ? 'days' : 'day';
 
-        return $this->headerText($assignee) . <<<TXT
+        return <<<TXT
 <b>Ticket</b>: {$ticket->title()} <a href="{$url}">{$ticket->key()}</a><br>
 <b>Current status</b>: {$status->name()} since {$daysDiff} {$dayWord}<br>
 <b>Story Points<b>: {$ticket->storyPoints()}<br>

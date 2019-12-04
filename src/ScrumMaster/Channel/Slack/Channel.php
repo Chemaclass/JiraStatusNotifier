@@ -66,7 +66,7 @@ final class Channel implements ChannelInterface
 
             $response = $this->slackClient->postToChannel(
                 $this->slackMapping->toSlackId($ticket->assignee()->name()),
-                $this->messageGenerator->forJiraTicket($ticket, $company->companyName())
+                $this->messageGenerator->forJiraTickets([$ticket], $company->companyName())
             );
 
             $issue = ChannelIssue::withCodeAndAssignee($response->getStatusCode(), $assignee->displayName());
