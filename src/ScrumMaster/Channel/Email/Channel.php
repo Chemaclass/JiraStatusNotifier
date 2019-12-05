@@ -47,23 +47,62 @@ final class Channel implements ChannelInterface
         JqlUrlFactory $jqlUrlFactory,
         array $jiraUsersToIgnore = []
     ): ChannelResult {
-        $result = new ChannelResult();
+        $ticketsByAssignee = $this->ticketsByAssignee($board, $jiraClient, $jqlUrlFactory, $jiraUsersToIgnore);
 
-        /**
-         * @var array<string,JiraTicket[]> $ticketsByAssignee
-         * For example: [$assignee->key() => [$ticket1, $ticket2]]
-         */
+        return $this->sendEmails($ticketsByAssignee, $company);
+    }
+
+    /**
+     * @return array<string,JiraTicket[]> For example: [$assignee->key() => [$ticket1, $ticket2]]
+     */
+    private function ticketsByAssignee(
+        Board $board,
+        JiraHttpClient $jiraClient,
+        JqlUrlFactory $jqlUrlFactory,
+        array $jiraUsersToIgnore
+    ): array {
         $ticketsByAssignee = [];
 
         foreach ($board->maxDaysInStatus() as $statusName => $maxDays) {
-            $tickets = $jiraClient->getTickets($jqlUrlFactory, $statusName);
+            $grouped = $this->ticketsByAssigneeInStatus($jiraClient, $jqlUrlFactory, $statusName, $jiraUsersToIgnore);
 
-            $ticketsByAssignee = $this->groupTicketsByAssignee($tickets, $jiraUsersToIgnore);
+            foreach ($grouped as $assigneeKey => $tickets) {
+                if (!isset($ticketsByAssignee[$assigneeKey])) {
+                    $ticketsByAssignee[$assigneeKey] = $tickets;
+                } else {
+                    $ticketsByAssignee[$assigneeKey] = array_merge($ticketsByAssignee[$assigneeKey], $tickets);
+                }
+            }
         }
 
-        $result->append($this->sendEmails($ticketsByAssignee, $company));
+        return $ticketsByAssignee;
+    }
 
-        return $result;
+    private function ticketsByAssigneeInStatus(
+        JiraHttpClient $jiraClient,
+        JqlUrlFactory $jqlUrlFactory,
+        string $statusName,
+        array $jiraUsersToIgnore
+    ): array {
+        $tickets = $jiraClient->getTickets($jqlUrlFactory, $statusName);
+        $ticketsByAssignee = [];
+
+        /** @var JiraTicket $ticket */
+        foreach ($tickets as $ticket) {
+            $assignee = $ticket->assignee();
+
+            if (in_array($assignee->key(), $jiraUsersToIgnore)) {
+                continue;
+            }
+
+            if (!isset($ticketsByAssignee[$assignee->key()])) {
+                $ticketsByAssignee[$assignee->key()] = [];
+            }
+
+            $ticketsByAssignee[$assignee->key()][$ticket->key()] = $ticket;
+        }
+
+        return $ticketsByAssignee;
     }
 
     private function sendEmails(array $ticketsByAssignee, Company $company): ChannelResult
@@ -82,31 +121,10 @@ final class Channel implements ChannelInterface
         return $result;
     }
 
-    private function groupTicketsByAssignee(array $tickets, array $jiraUsersToIgnore): array
-    {
-        $ticketsByAssignee = [];
-        /** @var JiraTicket $ticket */
-        foreach ($tickets as $ticket) {
-            $assignee = $ticket->assignee();
-
-            if (in_array($assignee->key(), $jiraUsersToIgnore)) {
-                continue;
-            }
-
-            if (!isset($ticketsByAssignee[$assignee->key()])) {
-                $ticketsByAssignee[$assignee->key()] = [];
-            }
-
-            $ticketsByAssignee[$assignee->key()][] = $ticket;
-        }
-
-        return $ticketsByAssignee;
-    }
-
     private function sendEmail(array $tickets, Company $company): int
     {
         try {
-            $ticket = $tickets[0];
+            $ticket = $tickets[array_key_first($tickets)];
             $email = (new Email())
                 ->to(new Address($this->emailFromTicket($ticket), $ticket->assignee()->displayName()))
                 ->subject('Scrum Master Reminder')

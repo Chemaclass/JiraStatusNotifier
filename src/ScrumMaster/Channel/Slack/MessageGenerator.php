@@ -6,7 +6,6 @@ namespace Chemaclass\ScrumMaster\Channel\Slack;
 
 use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
-use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use DateTimeImmutable;
 
 final class MessageGenerator implements MessageGeneratorInterface

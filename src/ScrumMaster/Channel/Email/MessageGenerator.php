@@ -26,10 +26,9 @@ final class MessageGenerator implements MessageGeneratorInterface
 
     public function forJiraTickets(array $tickets, string $companyName): string
     {
-        $ticket = $tickets[0];
-
-        $assignee = $ticket->assignee();
+        $assignee = $tickets[array_key_first($tickets)]->assignee();
         $text = $this->headerText($assignee);
+        uksort($tickets, 'strnatcasecmp');
 
         foreach ($tickets as $ticket) {
             $text .= $this->textForTicket($ticket, $companyName);
@@ -44,13 +43,11 @@ final class MessageGenerator implements MessageGeneratorInterface
         $daysDiff = $status->changeDate()->diff($this->timeToDiff)->days;
         $url = "https://{$companyName}.atlassian.net/browse/{$ticket->key()}";
         $dayWord = ($daysDiff > 1) ? 'days' : 'day';
-        $assignee = $ticket->assignee() ? $ticket->assignee()->displayName() : 'None';
 
         return <<<TXT
 <div class="ticket">
-    <b>Ticket</b>: {$ticket->title()} <a href="{$url}">{$ticket->key()}</a><br>
-    <b>Assignee</b>: {$assignee}<br>
-    <b>Current status</b>: {$status->name()} since {$daysDiff} {$dayWord}<br>
+    <b>Jira Ticket</b>: <a href="{$url}">{$ticket->key()}</a> - <i>{$ticket->title()}</i> <br>
+    <b>Current status</b>: <i>{$status->name()}</i> since {$daysDiff} {$dayWord}<br>
     <b>Story Points</b>: {$ticket->storyPoints()}<br>
 </div>
 <hr>
@@ -65,6 +62,6 @@ TXT;
             $salutation = 'Hey Team';
         }
 
-        return '<div class="header">' . $salutation . ', please have a look:</div><hr>';
+        return '<header>' . $salutation . ', please have a look:</header><hr>';
     }
 }
