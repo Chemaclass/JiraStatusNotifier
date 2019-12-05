@@ -29,14 +29,13 @@ final class MessageGenerator implements MessageGeneratorInterface
         $ticket = $tickets[0];
 
         $assignee = $ticket->assignee();
-        $header = $this->headerText($assignee);
-        $text = '';
+        $text = $this->headerText($assignee);
 
         foreach ($tickets as $ticket) {
             $text .= $this->textForTicket($ticket, $companyName);
         }
 
-        return $header . $text;
+        return $text;
     }
 
     private function textForTicket(JiraTicket $ticket, string $companyName): string
@@ -45,20 +44,27 @@ final class MessageGenerator implements MessageGeneratorInterface
         $daysDiff = $status->changeDate()->diff($this->timeToDiff)->days;
         $url = "https://{$companyName}.atlassian.net/browse/{$ticket->key()}";
         $dayWord = ($daysDiff > 1) ? 'days' : 'day';
+        $assignee = $ticket->assignee() ? $ticket->assignee()->displayName() : 'None';
 
         return <<<TXT
-<b>Ticket</b>: {$ticket->title()} <a href="{$url}">{$ticket->key()}</a><br>
-<b>Current status</b>: {$status->name()} since {$daysDiff} {$dayWord}<br>
-<b>Story Points<b>: {$ticket->storyPoints()}<br>
+<div class="ticket">
+    <b>Ticket</b>: {$ticket->title()} <a href="{$url}">{$ticket->key()}</a><br>
+    <b>Assignee</b>: {$assignee}<br>
+    <b>Current status</b>: {$status->name()} since {$daysDiff} {$dayWord}<br>
+    <b>Story Points</b>: {$ticket->storyPoints()}<br>
+</div>
+<hr>
 TXT;
     }
 
     private function headerText(Assignee $assignee): string
     {
         if ($assignee->key()) {
-            return "Hey, {$assignee->displayName()} ({$assignee->name()}), please have a look <br>";
+            $salutation = "Hey, {$assignee->displayName()} ({$assignee->name()})";
+        } else {
+            $salutation = 'Hey Team';
         }
 
-        return 'Hey Team, please have a look <br>';
+        return '<div class="header">' . $salutation . ', please have a look:</div><hr>';
     }
 }
