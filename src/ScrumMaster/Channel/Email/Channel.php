@@ -8,6 +8,7 @@ use Chemaclass\ScrumMaster\Channel\ChannelInterface;
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
+use Chemaclass\ScrumMaster\Channel\TicketsByAssignee;
 use Chemaclass\ScrumMaster\Common\Request;
 use Chemaclass\ScrumMaster\Jira\Board;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
@@ -47,45 +48,36 @@ final class Channel implements ChannelInterface
         JqlUrlFactory $jqlUrlFactory,
         array $jiraUsersToIgnore = []
     ): ChannelResult {
-        $result = new ChannelResult();
+        $ticketsByAssignee = new TicketsByAssignee($jiraClient, $jqlUrlFactory, $jiraUsersToIgnore);
 
-        foreach ($board->maxDaysInStatus() as $statusName => $maxDays) {
-            $tickets = $jiraClient->getTickets($jqlUrlFactory, $statusName);
-
-            $result->append($this->sendEmails($company, $tickets, $jiraUsersToIgnore));
-        }
-
-        return $result;
+        return $this->sendEmails($ticketsByAssignee->fetchFromBoard($board), $company);
     }
 
-    private function sendEmails(Company $company, array $tickets, array $jiraUsersToIgnore): ChannelResult
+    private function sendEmails(array $ticketsByAssignee, Company $company): ChannelResult
     {
         $result = new ChannelResult();
 
-        /** @var JiraTicket $ticket */
-        foreach ($tickets as $ticket) {
-            $assignee = $ticket->assignee();
+        foreach ($ticketsByAssignee as $assigneeKey => $tickets) {
+            $responseCode = $this->sendEmail($tickets, $company);
 
-            if (in_array($assignee->key(), $jiraUsersToIgnore)) {
-                continue;
+            foreach ($tickets as $ticket) {
+                $issue = ChannelIssue::withCodeAndAssignee($responseCode, $ticket->assignee()->displayName());
+                $result->addChannelIssue($ticket->key(), $issue);
             }
-
-            $responseCode = $this->sendEmail($ticket, $company);
-            $issue = ChannelIssue::withCodeAndAssignee($responseCode, $assignee->displayName());
-            $result->addChannelIssue($ticket->key(), $issue);
         }
 
         return $result;
     }
 
-    private function sendEmail(JiraTicket $ticket, Company $company): int
+    private function sendEmail(array $tickets, Company $company): int
     {
         try {
+            $ticket = $tickets[array_key_first($tickets)];
             $email = (new Email())
                 ->to(new Address($this->emailFromTicket($ticket), $ticket->assignee()->displayName()))
                 ->subject('Scrum Master Reminder')
                 ->addFrom('scrum.master@noreply.com')
-                ->html($this->messageGenerator->forJiraTicket($ticket, $company->companyName()));
+                ->html($this->messageGenerator->forJiraTickets($tickets, $company->companyName()));
 
             $this->mailer->send($email);
 

@@ -24,27 +24,44 @@ final class MessageGenerator implements MessageGeneratorInterface
         $this->timeToDiff = $timeToDiff;
     }
 
-    public function forJiraTicket(JiraTicket $ticket, string $companyName): string
+    public function forJiraTickets(array $tickets, string $companyName): string
     {
-        $assignee = $ticket->assignee();
+        $assignee = $tickets[array_key_first($tickets)]->assignee();
+        $text = $this->headerText($assignee);
+        uksort($tickets, 'strnatcasecmp');
+
+        foreach ($tickets as $ticket) {
+            $text .= $this->textForTicket($ticket, $companyName);
+        }
+
+        return $text;
+    }
+
+    private function textForTicket(JiraTicket $ticket, string $companyName): string
+    {
         $status = $ticket->status();
         $daysDiff = $status->changeDate()->diff($this->timeToDiff)->days;
         $url = "https://{$companyName}.atlassian.net/browse/{$ticket->key()}";
         $dayWord = ($daysDiff > 1) ? 'days' : 'day';
 
-        return $this->headerText($assignee) . <<<TXT
-<b>Ticket</b>: {$ticket->title()} <a href="{$url}">{$ticket->key()}</a><br>
-<b>Current status</b>: {$status->name()} since {$daysDiff} {$dayWord}<br>
-<b>Story Points<b>: {$ticket->storyPoints()}<br>
+        return <<<TXT
+<div class="ticket">
+    <b>Jira Ticket</b>: <a href="{$url}">{$ticket->key()}</a> - <i>{$ticket->title()}</i> <br>
+    <b>Current status</b>: <i>{$status->name()}</i> since {$daysDiff} {$dayWord}<br>
+    <b>Story Points</b>: {$ticket->storyPoints()}<br>
+</div>
+<hr>
 TXT;
     }
 
     private function headerText(Assignee $assignee): string
     {
         if ($assignee->key()) {
-            return "Hey, {$assignee->displayName()} ({$assignee->name()}), please have a look <br>";
+            $salutation = "Hey, {$assignee->displayName()} ({$assignee->name()})";
+        } else {
+            $salutation = 'Hey Team';
         }
 
-        return 'Hey Team, please have a look <br>';
+        return '<header>' . $salutation . ', please have a look:</header><hr>';
     }
 }

@@ -133,9 +133,34 @@ final class EmailNotifierCommandTest extends TestCase
         self::assertEquals($code, $issue->responseStatusCode());
     }
 
+    /** @test */
+    public function sameUserReceiveOneSingleNotification(): void
+    {
+        /** @var MockObject|TransportInterface $transport */
+        $transport = $this->createMock(TransportInterface::class);
+        $transport->expects(self::exactly(2))->method('send');
+
+        $command = new NotifierCommand(
+            new JiraHttpClient($this->mockJiraClient([
+                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-1', 'email1@a.com', 'status1'),
+                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-2', 'email1@a.com', 'status1'),
+                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-3', 'email1@a.com', 'status2'),
+                $this->createAJiraIssueAsArray('user.2.jira', 'KEY-4', 'email2@a.com', 'status1'),
+            ])),
+            [
+                new Email\Channel(
+                    new Mailer($transport),
+                    Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+                ),
+            ]
+        );
+
+        $command->execute($this->notifierInput());
+    }
+
     private function notifierInput(array $jiraUsersToIgnore = []): NotifierInput
     {
-        return NotifierInput::new('company.name', 'Jira project name', ['status' => 1], $jiraUsersToIgnore);
+        return NotifierInput::new('company.name', 'Jira project name', ['status1' => 1, 'status2' => 2], $jiraUsersToIgnore);
     }
 
     private function slackNotifierCommandWithJiraTickets(array $jiraIssues): NotifierCommand
