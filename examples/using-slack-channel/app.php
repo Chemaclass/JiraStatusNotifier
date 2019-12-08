@@ -51,7 +51,7 @@ $notifier = new Notifier(
     ]
 );
 
-$result = $notifier(NotifierInput::new(
+$result = $notifier->notify(NotifierInput::new(
     $_ENV[NotifierInput::COMPANY_NAME],
     $_ENV[NotifierInput::JIRA_PROJECT_NAME],
     json_decode($_ENV[NotifierInput::DAYS_FOR_STATUS], true),

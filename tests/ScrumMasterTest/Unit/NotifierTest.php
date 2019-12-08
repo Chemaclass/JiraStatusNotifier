@@ -22,7 +22,7 @@ final class NotifierTest extends TestCase
     public function zeroNotificationsWereSent(): void
     {
         $notifier = $this->notifierCommandWithChannelIssues([]);
-        $result = $notifier($this->notifierInput());
+        $result = $notifier->notify($this->notifierInput());
         /** @var ChannelResult $channelResult */
         $channelResult = reset($result);
         $this->assertEmpty($channelResult->channelIssues());
@@ -37,7 +37,7 @@ final class NotifierTest extends TestCase
         ];
 
         $notifier = $this->notifierCommandWithChannelIssues($issues);
-        $result = $notifier($this->notifierInput());
+        $result = $notifier->notify($this->notifierInput());
         /** @var ChannelResult $channelResult */
         $channelResult = reset($result);
         $this->assertEquals($issues, $channelResult->channelIssues());

@@ -31,7 +31,7 @@ final class EmailNotifierCommandTest extends TestCase
     public function zeroNotificationsWereSent(): void
     {
         $notifier = $this->slackNotifierCommandWithJiraTickets([]);
-        $result = $notifier($this->notifierInput());
+        $result = $notifier->notify($this->notifierInput());
         /** @var ChannelResult $channelResult */
         $channelResult = $result[Email\Channel::class];
         $this->assertEmpty($channelResult->channelIssues());
@@ -45,7 +45,7 @@ final class EmailNotifierCommandTest extends TestCase
             $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222'),
         ]);
 
-        $result = $notifier($this->notifierInput());
+        $result = $notifier->notify($this->notifierInput());
         /** @var ChannelResult $channelResult */
         $channelResult = $result[Email\Channel::class];
         $this->assertEquals(['KEY-111', 'KEY-222'], array_keys($channelResult->channelIssues()));
@@ -59,7 +59,7 @@ final class EmailNotifierCommandTest extends TestCase
             $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222'),
         ]);
 
-        $result = $notifier(
+        $result = $notifier->notify(
             $this->notifierInput($usersToIgnore = ['user.1.jira'])
         );
 
@@ -99,7 +99,7 @@ final class EmailNotifierCommandTest extends TestCase
             ]
         );
 
-        $notifier($this->notifierInput());
+        $notifier->notify($this->notifierInput());
     }
 
     /** @test */
@@ -125,7 +125,7 @@ final class EmailNotifierCommandTest extends TestCase
             ]
         );
 
-        $results = $notifier($this->notifierInput());
+        $results = $notifier->notify($this->notifierInput());
         /** @var ChannelResult $channelResult */
         $channelResult = $results[Email\Channel::class];
         /** @var ChannelIssue $issue */
@@ -155,7 +155,7 @@ final class EmailNotifierCommandTest extends TestCase
             ]
         );
 
-        $notifier($this->notifierInput());
+        $notifier->notify($this->notifierInput());
     }
 
     private function notifierInput(array $jiraUsersToIgnore = []): NotifierInput

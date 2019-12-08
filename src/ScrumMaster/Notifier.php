@@ -28,7 +28,7 @@ final class Notifier
     }
 
     /** @return array<string,ChannelResult> */
-    public function __invoke(NotifierInput $input): array
+    public function notify(NotifierInput $input): array
     {
         $jiraBoard = new Board($input->daysForStatus());
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());
