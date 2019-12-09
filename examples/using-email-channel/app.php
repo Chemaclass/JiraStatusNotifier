@@ -8,11 +8,11 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
 use Chemaclass\ScrumMaster\Channel\Email;
-use Chemaclass\ScrumMaster\Command\IO\EchoOutput;
-use Chemaclass\ScrumMaster\Command\NotifierCommand;
-use Chemaclass\ScrumMaster\Command\NotifierInput;
-use Chemaclass\ScrumMaster\Command\NotifierOutput;
+use Chemaclass\ScrumMaster\IO\EchoOutput;
+use Chemaclass\ScrumMaster\IO\NotifierInput;
+use Chemaclass\ScrumMaster\IO\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Notifier;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 use Symfony\Component\Mailer\Mailer;
@@ -38,7 +38,7 @@ foreach ($mandatoryKeys as $mandatoryKey) {
     }
 }
 
-$notifier = new NotifierCommand(
+$notifier = new Notifier(
     new JiraHttpClient(HttpClient::create([
         'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
     ])),
@@ -51,7 +51,7 @@ $notifier = new NotifierCommand(
     ]
 );
 
-$result = $notifier->execute(NotifierInput::new(
+$result = $notifier->notify(NotifierInput::new(
     $_ENV[NotifierInput::COMPANY_NAME],
     $_ENV[NotifierInput::JIRA_PROJECT_NAME],
     json_decode($_ENV[NotifierInput::DAYS_FOR_STATUS], true),

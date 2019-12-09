@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMasterTests\Unit\Command;
+namespace Chemaclass\ScrumMasterTests\Unit\IO;
 
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
-use Chemaclass\ScrumMaster\Command\IO\OutputInterface;
-use Chemaclass\ScrumMaster\Command\NotifierOutput;
+use Chemaclass\ScrumMaster\IO\OutputInterface;
+use Chemaclass\ScrumMaster\IO\NotifierOutput;
 use PHPUnit\Framework\TestCase;
 
 final class NotifierOutputTest extends TestCase

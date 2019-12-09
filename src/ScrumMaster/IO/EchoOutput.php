@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Command\IO;
+namespace Chemaclass\ScrumMaster\IO;
 
 final class EchoOutput implements OutputInterface
 {
