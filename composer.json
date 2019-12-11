@@ -37,7 +37,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.15",
         "infection/infection": "^0.14.2",
-        "phpunit/phpunit": "^8.4.2",
+        "phpunit/phpunit": "^8.5.0",
         "symfony/var-dumper": "^4.3",
         "symfony/google-mailer": "^5.0",
         "vlucas/phpdotenv": "^3.6"
@@ -51,5 +51,8 @@
         "psr-4": {
             "Chemaclass\\ScrumMasterTests\\": "tests/ScrumMasterTest"
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }

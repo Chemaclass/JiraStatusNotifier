@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Command;
+namespace Chemaclass\ScrumMaster;
 
 use Chemaclass\ScrumMaster\Channel\ChannelInterface;
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
+use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\Board;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JqlUrlBuilder;
 use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 
-final class NotifierCommand
+final class Notifier
 {
     /** @var JiraHttpClient */
     private $jiraHttpClient;
@@ -27,7 +28,7 @@ final class NotifierCommand
     }
 
     /** @return array<string,ChannelResult> */
-    public function execute(NotifierInput $input): array
+    public function notify(NotifierInput $input): array
     {
         $jiraBoard = new Board($input->daysForStatus());
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());

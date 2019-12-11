@@ -36,8 +36,8 @@ final class Channel implements ChannelInterface
         MessageGeneratorInterface $messageGenerator,
         ?ByPassEmail $byPassEmail = null
     ) {
-        $this->messageGenerator = $messageGenerator;
         $this->mailer = $mailer;
+        $this->messageGenerator = $messageGenerator;
         $this->byPassEmail = $byPassEmail;
     }
 

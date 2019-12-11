@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Command;
+namespace Chemaclass\ScrumMaster\IO;
 
 final class NotifierInput
 {

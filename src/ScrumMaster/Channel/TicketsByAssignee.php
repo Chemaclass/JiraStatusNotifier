@@ -11,14 +11,13 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 
 final class TicketsByAssignee
 {
-
     /** @var JiraHttpClient */
     private $jiraClient;
 
     /** @var JqlUrlFactory */
     private $jqlUrlFactory;
 
-    /**  @var array */
+    /** @var array */
     private $jiraUsersToIgnore;
 
     public function __construct(
@@ -50,7 +49,8 @@ final class TicketsByAssignee
         return $ticketsByAssignee;
     }
 
-    private function ticketsByAssigneeInStatus(string $statusName): array {
+    private function ticketsByAssigneeInStatus(string $statusName): array
+    {
         $tickets = $this->jiraClient->getTickets($this->jqlUrlFactory, $statusName);
         $ticketsByAssignee = [];
 
