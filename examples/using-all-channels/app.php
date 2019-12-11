@@ -1,14 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+/**
+ * This example demonstrates how to notify via Email and Slack
+ * using the ENV parameters (from the .env file)
+ */
+declare(strict_types=1);
 
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
 use Chemaclass\ScrumMaster\Channel\Email;
 use Chemaclass\ScrumMaster\Channel\Slack;
-use Chemaclass\ScrumMaster\Command\IO\EchoOutput;
-use Chemaclass\ScrumMaster\Command\NotifierCommand;
-use Chemaclass\ScrumMaster\Command\NotifierInput;
-use Chemaclass\ScrumMaster\Command\NotifierOutput;
+use Chemaclass\ScrumMaster\IO\EchoOutput;
+use Chemaclass\ScrumMaster\IO\NotifierInput;
+use Chemaclass\ScrumMaster\IO\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Notifier;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 use Symfony\Component\Mailer\Mailer;
@@ -55,9 +60,9 @@ $channels = [
     ),
 ];
 
-$notifier = new NotifierCommand($jiraHttpClient, $channels);
+$notifier = new Notifier($jiraHttpClient, $channels);
 
-$result = $notifier->execute(NotifierInput::new(
+$result = $notifier->notify(NotifierInput::new(
     getenv(NotifierInput::COMPANY_NAME),
     getenv(NotifierInput::JIRA_PROJECT_NAME),
     json_decode(getenv(NotifierInput::DAYS_FOR_STATUS), true),
