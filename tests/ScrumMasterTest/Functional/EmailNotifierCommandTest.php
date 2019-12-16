@@ -6,6 +6,7 @@ namespace Chemaclass\ScrumMasterTests\Functional;
 
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\Email;
+use Chemaclass\ScrumMaster\Channel\Email\AddressGenerator;
 use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
 use Chemaclass\ScrumMaster\Channel\Email\Channel;
 use Chemaclass\ScrumMaster\Channel\Email\MessageGenerator;
@@ -91,10 +92,10 @@ final class EmailNotifierCommandTest extends TestCase
                 new Channel(
                     new Mailer($transport),
                     MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
-                    ByPassEmail::overriddenEmails([
+                    new AddressGenerator((new ByPassEmail())->setOverriddenEmails([
                         'user.1.jira' => 'user.3@email.com',
                         'user.2.jira' => 'user.3@email.com',
-                    ])
+                    ]))
                 ),
             ]
         );
@@ -160,7 +161,8 @@ final class EmailNotifierCommandTest extends TestCase
 
     private function notifierInput(array $jiraUsersToIgnore = []): NotifierInput
     {
-        return NotifierInput::new('company.name', 'Jira project name', ['status1' => 1, 'status2' => 2], $jiraUsersToIgnore);
+        return NotifierInput::new('company.name', 'Jira project name', ['status1' => 1, 'status2' => 2],
+            $jiraUsersToIgnore);
     }
 
     private function slackNotifierCommandWithJiraTickets(array $jiraIssues): Notifier
