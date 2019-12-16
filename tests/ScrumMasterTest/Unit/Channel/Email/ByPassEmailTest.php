@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMasterTests\Unit\Channel\Email\ByPass;
+namespace Chemaclass\ScrumMasterTests\Unit\Channel\Email;
 
 use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
@@ -31,8 +31,8 @@ final class ByPassEmailTest extends TestCase
     public function sendAllTo(): void
     {
         $byPass = (new ByPassEmail())->setSendCopyTo('other@email.com');
+        self::assertNull($byPass->getByAssigneeKey('unknown'));
+        self::assertNull($byPass->getByAssigneeKey(null));
         self::assertEquals('other@email.com', $byPass->getSendCopyTo());
-        self::assertEquals('other@email.com', $byPass->getByAssigneeKey('unknown'));
-        self::assertEquals('other@email.com', $byPass->getByAssigneeKey(null));
     }
 }

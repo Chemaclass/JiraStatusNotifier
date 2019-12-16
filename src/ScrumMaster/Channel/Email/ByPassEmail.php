@@ -51,10 +51,6 @@ final class ByPassEmail
 
     public function getByAssigneeKey(?string $assigneeKey): ?string
     {
-        if (!empty($this->sendCopyTo)) {
-            return $this->sendCopyTo;
-        }
-
         if (!$assigneeKey) {
             return null;
         }
