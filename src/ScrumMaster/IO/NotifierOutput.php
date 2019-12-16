@@ -6,7 +6,6 @@ namespace Chemaclass\ScrumMaster\IO;
 
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
-use Chemaclass\ScrumMaster\IO\OutputInterface;
 use Chemaclass\ScrumMaster\Common\Request;
 
 final class NotifierOutput
