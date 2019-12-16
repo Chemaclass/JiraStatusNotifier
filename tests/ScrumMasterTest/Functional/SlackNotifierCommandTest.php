@@ -6,9 +6,9 @@ namespace Chemaclass\ScrumMasterTests\Functional;
 
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\Slack;
-use Chemaclass\ScrumMaster\Notifier;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Notifier;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;

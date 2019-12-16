@@ -6,8 +6,8 @@ namespace Chemaclass\ScrumMasterTests\Unit\IO;
 
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
-use Chemaclass\ScrumMaster\IO\OutputInterface;
 use Chemaclass\ScrumMaster\IO\NotifierOutput;
+use Chemaclass\ScrumMaster\IO\OutputInterface;
 use PHPUnit\Framework\TestCase;
 
 final class NotifierOutputTest extends TestCase
