@@ -30,6 +30,7 @@ $mandatoryKeys = [
     'DAYS_FOR_STATUS',
     'MAILER_USERNAME',
     'MAILER_PASSWORD',
+    'OVERRIDDEN_EMAILS',
 ];
 
 foreach ($mandatoryKeys as $mandatoryKey) {
@@ -49,7 +50,7 @@ $notifier = new Notifier(
             Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
             new Email\AddressGenerator((new ByPassEmail())
                 ->setSendEmailsToAssignee(false) // <- OverriddenEmails wont have effect as long as this is false
-                ->setOverriddenEmails(json_decode($_ENV['OVERRIDDEN_EMAILS'], true))
+                ->setOverriddenEmails(json_decode(getenv('OVERRIDDEN_EMAILS'), true))
                 ->setSendCopyTo(getenv('MAILER_USERNAME')))
         ),
     ]
