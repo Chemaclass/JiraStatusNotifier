@@ -20,11 +20,10 @@ final class AddressGeneratorTest extends TestCase
     {
         $jiraTicket = $this->newJiraTicket();
         $assignee = $jiraTicket->assignee();
-        $generator = new AddressGenerator();
 
         self::assertEquals([
             new Address($assignee->email(), $assignee->displayName()),
-        ], $generator->forJiraTicket($jiraTicket));
+        ], (new AddressGenerator())->forJiraTicket($jiraTicket));
     }
 
     /** @test */
