@@ -20,17 +20,19 @@ final class ByPassEmailTest extends TestCase
             $email = 'assignee@company.com'
         );
 
-        $byPass = ByPassEmail::overriddenEmails([$assignee->key() => 'other2@email.com']);
-        self::assertEquals('other2@email.com', $byPass->byAssigneeKey($assignee->key()));
-        self::assertNull($byPass->byAssigneeKey('unknown'));
-        self::assertNull($byPass->byAssigneeKey(null));
+        $byPass = (new ByPassEmail())->setOverriddenEmails([$assignee->key() => 'other2@email.com']);
+        self::assertEquals('other2@email.com', $byPass->getByAssigneeKey($assignee->key()));
+        self::assertNull($byPass->getByAssigneeKey('unknown'));
+        self::assertNull($byPass->getByAssigneeKey(null));
+        self::assertEmpty($byPass->getSendCopyTo());
     }
 
     /** @test */
     public function sendAllTo(): void
     {
-        $byPass = ByPassEmail::sendAllTo('other@email.com');
-        self::assertEquals('other@email.com', $byPass->byAssigneeKey('unknown'));
-        self::assertEquals('other@email.com', $byPass->byAssigneeKey(null));
+        $byPass = (new ByPassEmail())->setSendCopyTo('other@email.com');
+        self::assertNull($byPass->getByAssigneeKey('unknown'));
+        self::assertNull($byPass->getByAssigneeKey(null));
+        self::assertEquals('other@email.com', $byPass->getSendCopyTo());
     }
 }

@@ -8,6 +8,7 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
 use Chemaclass\ScrumMaster\Channel\Email;
+use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
 use Chemaclass\ScrumMaster\Channel\Slack;
 use Chemaclass\ScrumMaster\IO\EchoOutput;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
@@ -30,6 +31,7 @@ $mandatoryKeys = [
     'DAYS_FOR_STATUS',
     'MAILER_USERNAME',
     'MAILER_PASSWORD',
+    'OVERRIDDEN_EMAILS',
     'SLACK_BOT_USER_OAUTH_ACCESS_TOKEN',
     'SLACK_MAPPING_IDS',
 ];
@@ -49,7 +51,10 @@ $channels = [
     new Email\Channel(
         new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),
         Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
-        Email\ByPassEmail::sendAllTo(getenv('MAILER_USERNAME'))
+        new Email\AddressGenerator((new ByPassEmail())
+            ->setSendEmailsToAssignee(false) // <- OverriddenEmails wont have no effect as long as this is false
+            ->setOverriddenEmails(json_decode(getenv('OVERRIDDEN_EMAILS'), true))
+            ->setSendCopyTo(getenv('MAILER_USERNAME')))
     ),
     new Slack\Channel(
         new Slack\HttpClient(HttpClient::create([

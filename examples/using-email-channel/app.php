@@ -8,6 +8,7 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
 use Chemaclass\ScrumMaster\Channel\Email;
+use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
 use Chemaclass\ScrumMaster\IO\EchoOutput;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\IO\NotifierOutput;
@@ -29,6 +30,7 @@ $mandatoryKeys = [
     'DAYS_FOR_STATUS',
     'MAILER_USERNAME',
     'MAILER_PASSWORD',
+    'OVERRIDDEN_EMAILS',
 ];
 
 foreach ($mandatoryKeys as $mandatoryKey) {
@@ -46,7 +48,10 @@ $notifier = new Notifier(
         new Email\Channel(
             new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),
             Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
-            Email\ByPassEmail::sendAllTo(getenv('MAILER_USERNAME'))
+            new Email\AddressGenerator((new ByPassEmail())
+                ->setSendEmailsToAssignee(false) // <- OverriddenEmails wont have effect as long as this is false
+                ->setOverriddenEmails(json_decode(getenv('OVERRIDDEN_EMAILS'), true))
+                ->setSendCopyTo(getenv('MAILER_USERNAME')))
         ),
     ]
 );

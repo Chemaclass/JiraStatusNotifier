@@ -14,10 +14,8 @@ use Chemaclass\ScrumMaster\Jira\Board;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
-use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 final class Channel implements ChannelInterface
@@ -28,17 +26,17 @@ final class Channel implements ChannelInterface
     /** @var MessageGeneratorInterface */
     private $messageGenerator;
 
-    /** @var null|ByPassEmail */
-    private $byPassEmail;
+    /** @var AddressGenerator */
+    private $addressGenerator;
 
     public function __construct(
         Mailer $mailer,
         MessageGeneratorInterface $messageGenerator,
-        ?ByPassEmail $byPassEmail = null
+        ?AddressGenerator $addresses = null
     ) {
         $this->mailer = $mailer;
         $this->messageGenerator = $messageGenerator;
-        $this->byPassEmail = $byPassEmail;
+        $this->addressGenerator = $addresses ?? new AddressGenerator();
     }
 
     public function sendNotifications(
@@ -73,8 +71,9 @@ final class Channel implements ChannelInterface
     {
         try {
             $ticket = $tickets[array_key_first($tickets)];
+
             $email = (new Email())
-                ->to(new Address($this->emailFromTicket($ticket), $ticket->assignee()->displayName()))
+                ->to(...$this->addressGenerator->forJiraTicket($ticket))
                 ->subject('Scrum Master Reminder')
                 ->addFrom('scrum.master@noreply.com')
                 ->html($this->messageGenerator->forJiraTickets($tickets, $company->companyName()));
@@ -85,19 +84,5 @@ final class Channel implements ChannelInterface
         } catch (TransportExceptionInterface $e) {
             return $e->getCode();
         }
-    }
-
-    private function emailFromTicket(JiraTicket $ticket): string
-    {
-        if ($this->byPassEmail) {
-            $assigneeKey = $ticket->assignee()->key();
-            $overriddenEmail = $this->byPassEmail->byAssigneeKey($assigneeKey);
-
-            if ($overriddenEmail) {
-                return $overriddenEmail;
-            }
-        }
-
-        return $ticket->assignee()->email();
     }
 }

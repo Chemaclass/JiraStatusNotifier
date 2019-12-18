@@ -7,36 +7,50 @@ namespace Chemaclass\ScrumMaster\Channel\Email;
 final class ByPassEmail
 {
     /** @var string */
-    private $sendAllTo;
+    private $sendCopyTo = '';
+
+    /** @var bool */
+    private $sendEmailsToAssignee = true;
 
     /** @var array */
     private $overriddenEmails = [];
 
-    public static function sendAllTo(string $email): self
+    public function setSendCopyTo(string $email): self
     {
-        $self = new self();
-        $self->sendAllTo = $email;
+        $this->sendCopyTo = $email;
 
-        return $self;
+        return $this;
+    }
+
+    public function getSendCopyTo(): string
+    {
+        return $this->sendCopyTo;
     }
 
     /**
      * @param array $overriddenEmails Example: ['assignee.key' => 'overrided@email.com']
      */
-    public static function overriddenEmails(array $overriddenEmails): self
+    public function setOverriddenEmails(array $overriddenEmails): self
     {
-        $self = new self();
-        $self->overriddenEmails = $overriddenEmails;
+        $this->overriddenEmails = $overriddenEmails;
 
-        return $self;
+        return $this;
     }
 
-    public function byAssigneeKey(?string $assigneeKey): ?string
+    public function setSendEmailsToAssignee(bool $bool): self
     {
-        if (!empty($this->sendAllTo)) {
-            return $this->sendAllTo;
-        }
+        $this->sendEmailsToAssignee = $bool;
 
+        return $this;
+    }
+
+    public function isSendEmailsToAssignee(): bool
+    {
+        return $this->sendEmailsToAssignee;
+    }
+
+    public function getByAssigneeKey(?string $assigneeKey): ?string
+    {
         if (!$assigneeKey) {
             return null;
         }
