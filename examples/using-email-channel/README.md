@@ -24,6 +24,13 @@ Value example: `your@email.com`
 
 Value example: `1he-p@$w0rd`
 
+#### OVERRIDDEN_EMAILS
+
+Value example: `['jira.user.key': 'other@email.com']`
+
+It will "override" the email destination from the user which will receive
+the email as a notification.
+
 ## References
 
 * [Symfony Mailer Documentation](https://symfony.com/doc/current/mailer.html)
