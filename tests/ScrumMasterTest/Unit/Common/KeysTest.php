@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMasterTests\Unit\Common;
 
-use Chemaclass\ScrumMaster\Common\Keys;
+use Chemaclass\ScrumMaster\Common\EnvKeys;
 use PHPUnit\Framework\TestCase;
 
 final class KeysTest extends TestCase
@@ -25,6 +25,6 @@ ENV;
             'JIRA_USERS_TO_IGNORE',
             'MAILER_USERNAME',
             'OVERRIDDEN_EMAILS',
-        ], Keys::fromEnvFile($content));
+        ], EnvKeys::fromFile($content));
     }
 }
