@@ -13,18 +13,19 @@ final class KeysTest extends TestCase
     public function fromEnvFile(): void
     {
         $content = <<<ENV
-COMPANY_NAME=~
-JIRA_USERS_TO_IGNORE='[]'
-# Email Channel
-MAILER_USERNAME=~
-OVERRIDDEN_EMAILS='[]'
+#A comment
+KEY_1=~
+KEY_2=null
+# Another comment
+KEY_3="true"
+KEY_4='[]'
 
 ENV;
         self::assertEquals([
-            'COMPANY_NAME',
-            'JIRA_USERS_TO_IGNORE',
-            'MAILER_USERNAME',
-            'OVERRIDDEN_EMAILS',
-        ], EnvKeys::fromFile($content));
+            'KEY_1',
+            'KEY_2',
+            'KEY_3',
+            'KEY_4',
+        ], EnvKeys::fromFile($content)->keys());
     }
 }

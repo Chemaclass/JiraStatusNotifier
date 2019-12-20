@@ -9,7 +9,7 @@ final class EnvKeys
     /** @var array */
     private $keys = [];
 
-    public static function fromFile(string $content): EnvKeys
+    public static function fromFile(string $content): self
     {
         $self = new self();
 
@@ -22,14 +22,9 @@ final class EnvKeys
         return $self;
     }
 
-    private static function isAComment(string $line): bool
+    public function keys(): array
     {
-        return 0 === strpos($line, '#');
-    }
-
-    private static function getKeyFromLine(string $line): string
-    {
-        return substr($line, 0, strpos($line, '='));
+        return $this->keys;
     }
 
     public function validate(): void
@@ -45,5 +40,15 @@ final class EnvKeys
         if ($missingKeys) {
             throw new \Exception(implode(', ', $missingKeys) . ' keys are mandatory but missing!');
         }
+    }
+
+    private static function isAComment(string $line): bool
+    {
+        return 0 === mb_strpos($line, '#');
+    }
+
+    private static function getKeyFromLine(string $line): string
+    {
+        return mb_substr($line, 0, mb_strpos($line, '='));
     }
 }

@@ -161,8 +161,12 @@ final class EmailNotifierCommandTest extends TestCase
 
     private function notifierInput(array $jiraUsersToIgnore = []): NotifierInput
     {
-        return NotifierInput::new('company.name', 'Jira project name', ['status1' => 1, 'status2' => 2],
-            $jiraUsersToIgnore);
+        return NotifierInput::new(
+            'company.name',
+            'Jira project name',
+            ['status1' => 1, 'status2' => 2],
+            $jiraUsersToIgnore
+        );
     }
 
     private function slackNotifierCommandWithJiraTickets(array $jiraIssues): Notifier
