@@ -7,7 +7,7 @@ namespace Chemaclass\ScrumMasterTests\Unit\Common;
 use Chemaclass\ScrumMaster\Common\EnvKeys;
 use PHPUnit\Framework\TestCase;
 
-final class KeysTest extends TestCase
+final class EnvKeysTest extends TestCase
 {
     /** @test */
     public function fromEnvFile(): void
