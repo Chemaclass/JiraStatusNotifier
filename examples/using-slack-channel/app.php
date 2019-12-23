@@ -14,9 +14,10 @@ use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\IO\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Notifier;
+use Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 
-$dotEnv = Dotenv\Dotenv::create(__DIR__);
+$dotEnv = Dotenv::create(__DIR__);
 $dotEnv->load();
 
 $mandatoryKeys = EnvKeys::fromFile(file_get_contents(__DIR__ . '/.env.dist'));
