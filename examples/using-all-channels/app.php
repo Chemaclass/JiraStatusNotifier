@@ -10,6 +10,7 @@ require dirname(__DIR__) . '/../vendor/autoload.php';
 use Chemaclass\ScrumMaster\Channel\Email;
 use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
 use Chemaclass\ScrumMaster\Channel\Slack;
+use Chemaclass\ScrumMaster\Common\EnvKeys;
 use Chemaclass\ScrumMaster\IO\EchoOutput;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\IO\NotifierOutput;
@@ -22,26 +23,8 @@ use Symfony\Component\Mailer\Mailer;
 $dotEnv = Dotenv\Dotenv::create(__DIR__);
 $dotEnv->load();
 
-$mandatoryKeys = [
-    'COMPANY_NAME',
-    'JIRA_PROJECT_NAME',
-    'JIRA_API_LABEL',
-    'JIRA_API_PASSWORD',
-    'JIRA_USERS_TO_IGNORE',
-    'DAYS_FOR_STATUS',
-    'MAILER_USERNAME',
-    'MAILER_PASSWORD',
-    'OVERRIDDEN_EMAILS',
-    'SLACK_BOT_USER_OAUTH_ACCESS_TOKEN',
-    'SLACK_MAPPING_IDS',
-];
-
-foreach ($mandatoryKeys as $mandatoryKey) {
-    if (!isset($_ENV[$mandatoryKey])) {
-        echo implode(', ', $mandatoryKeys) . 'keys are mandatory!';
-        exit(1);
-    }
-}
+$mandatoryKeys = EnvKeys::fromFile(file_get_contents(__DIR__ . '/.env.dist'));
+$mandatoryKeys->validate();
 
 $jiraHttpClient = new JiraHttpClient(HttpClient::create([
     'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
