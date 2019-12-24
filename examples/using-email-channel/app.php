@@ -23,8 +23,8 @@ use Symfony\Component\Mailer\Mailer;
 $dotEnv = Dotenv::create(__DIR__);
 $dotEnv->load();
 
-$mandatoryKeys = EnvKeys::fromFile(file_get_contents(__DIR__ . '/.env.dist'));
-$mandatoryKeys->validate();
+$mandatoryKeys = new EnvKeys(getenv());
+$mandatoryKeys->validate(file_get_contents(__DIR__ . '/.env.dist'));
 
 $notifier = new Notifier(
     new JiraHttpClient(HttpClient::create([
