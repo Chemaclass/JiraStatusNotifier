@@ -23,8 +23,7 @@ use Symfony\Component\Mailer\Mailer;
 
 Dotenv::create(__DIR__)->load();
 
-$mandatoryKeys = new EnvKeys(getenv());
-$mandatoryKeys->validate(file_get_contents(__DIR__ . '/.env.dist'));
+(new EnvKeys(getenv()))->validate(file_get_contents(__DIR__ . '/.env.dist'));
 
 $jiraHttpClient = new JiraHttpClient(HttpClient::create([
     'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
