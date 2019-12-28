@@ -17,8 +17,7 @@ use Chemaclass\ScrumMaster\Notifier;
 use Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 
-$dotEnv = Dotenv::create(__DIR__);
-$dotEnv->load();
+Dotenv::create(__DIR__)->load();
 
 $mandatoryKeys = new EnvKeys(getenv());
 $mandatoryKeys->validate(file_get_contents(__DIR__ . '/.env.dist'));

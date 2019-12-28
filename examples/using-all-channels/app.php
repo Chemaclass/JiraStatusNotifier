@@ -21,8 +21,7 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 use Symfony\Component\Mailer\Mailer;
 
-$dotEnv = Dotenv::create(__DIR__);
-$dotEnv->load();
+Dotenv::create(__DIR__)->load();
 
 $mandatoryKeys = new EnvKeys(getenv());
 $mandatoryKeys->validate(file_get_contents(__DIR__ . '/.env.dist'));
