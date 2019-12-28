@@ -18,8 +18,7 @@ use Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 
 Dotenv::create(__DIR__)->load();
-
-(new EnvKeys(getenv()))->validate(file_get_contents(__DIR__ . '/.env.dist'));
+EnvKeys::create(getenv())->validate(file_get_contents(__DIR__ . '/.env.dist'));
 
 $notifier = new Notifier(
     new JiraHttpClient(HttpClient::create([

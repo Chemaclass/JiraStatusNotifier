@@ -11,11 +11,21 @@ final class EnvKeys
     /** @var array */
     private $envVars;
 
-    public function __construct(array $envVars)
+    public static function create(array $envVars): self
+    {
+        return new self($envVars);
+    }
+
+    private function __construct(array $envVars)
     {
         $this->envVars = $envVars;
     }
 
+    /**
+     * @param string $content The ".env.dist" content
+     *
+     * @throws MissingKeysException
+     */
     public function validate(string $content): void
     {
         $lines = explode(PHP_EOL, $content);

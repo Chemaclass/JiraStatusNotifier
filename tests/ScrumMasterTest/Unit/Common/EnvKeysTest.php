@@ -21,13 +21,13 @@ KEY_2=null
 KEY_3="true"
 KEY_4='[]'
 ENV;
-        $envKeys = new EnvKeys([
+        EnvKeys::create([
             'KEY_1' => 'value1',
             'KEY_2' => 'value2',
             'KEY_3' => 'value3',
             'KEY_4' => 'value4',
-        ]);
-        $envKeys->validate($content);
+        ])->validate($content);
+
         self::assertTrue(true);//No exception was thrown
     }
 
@@ -42,8 +42,13 @@ KEY_2=null
 KEY_3="true"
 KEY_4='[]'
 ENV;
-        self::expectExceptionObject(new MissingKeysException(['KEY_3', 'KEY_4']));
-        $envKeys = new EnvKeys(['KEY_1' => 'value1', 'KEY_2' => 'value2']);
-        $envKeys->validate($content);
+        self::expectExceptionObject(
+            new MissingKeysException(['KEY_3', 'KEY_4'])
+        );
+
+        EnvKeys::create([
+            'KEY_1' => 'value1',
+            'KEY_2' => 'value2',
+        ])->validate($content);
     }
 }
