@@ -7,6 +7,8 @@ namespace Chemaclass\ScrumMaster\IO;
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Common\Request;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 final class NotifierOutput
 {
@@ -28,14 +30,25 @@ final class NotifierOutput
 
     private function writeChannel(string $name, ChannelResult $result): void
     {
-        $this->output->writeln("# CHANNEL: {$name}");
+        $loader = new FilesystemLoader(__DIR__ . '/templates');
+        $twig = new Environment($loader);
+
         $notificationTitles = $this->buildNotificationTitles($result);
         $notificationSuccessful = $this->buildNotificationSuccessful($result);
         $notificationFailed = $this->buildNotificationFailed($result);
 
-        $this->output->writeln("Total notifications: {$result->total()} ($notificationTitles)");
-        $this->output->writeln("Total successful notifications sent: {$result->totalSuccessful()} ($notificationSuccessful)");
-        $this->output->writeln("Total failed notifications sent: {$result->totalFailed()} ($notificationFailed)");
+        $render = $twig->render('ticket_status.twig', [
+            'name' => $name,
+            'result' => $result,
+            'notificationTitles' => $notificationTitles,
+            'notificationSucessful' => $notificationSuccessful,
+            'notificationFailed' => $notificationFailed,
+        ]);
+
+        $lines = explode("\n", $render);
+        foreach ($lines as $line) {
+            $this->output->writeln($line);
+        }
     }
 
     private function buildNotificationTitles(ChannelResult $result): string
