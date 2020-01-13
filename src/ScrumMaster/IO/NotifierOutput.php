@@ -21,18 +21,15 @@ final class NotifierOutput
     }
 
     /** @param array<string,ChannelResult> $results */
-    public function write(array $results): void
+    public function write(array $results, Environment $twig): void
     {
         foreach ($results as $channelName => $result) {
-            $this->writeChannel($channelName, $result);
+            $this->writeChannel($channelName, $result, $twig);
         }
     }
 
-    private function writeChannel(string $name, ChannelResult $result): void
+    private function writeChannel(string $name, ChannelResult $result, Environment $twig): void
     {
-        $loader = new FilesystemLoader(__DIR__ . '/templates');
-        $twig = new Environment($loader);
-
         $notificationTitles = $this->buildNotificationTitles($result);
         $notificationSuccessful = $this->buildNotificationSuccessful($result);
         $notificationFailed = $this->buildNotificationFailed($result);

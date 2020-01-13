@@ -8,13 +8,23 @@ use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\IO\NotifierOutput;
 use Chemaclass\ScrumMaster\IO\OutputInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
+use Twig\Loader\LoaderInterface;
+use Twig\Source;
 
 final class NotifierOutputTest extends TestCase
 {
     /** @test */
     public function writeFromSlackNotifierOutput(): void
     {
+        /** @var MockObject|LoaderInterface $loader */
+        $loader = $this->createMock(LoaderInterface::class);
+        $loader->method('getSourceContext')
+            ->willReturn(new Source('null', 'null'));
+        $dummyEnv = new Environment($loader);
+
         $result = (new ChannelResult())
             ->addChannelIssue('K-1', ChannelIssue::withStatusCode(100))
             ->addChannelIssue('K-2', ChannelIssue::withCodeAndAssignee(200, 'j.user.1'))
@@ -23,7 +33,7 @@ final class NotifierOutputTest extends TestCase
             ->addChannelIssue('K-5', ChannelIssue::withCodeAndAssignee(100, 'j.user.1'));
 
         $inMemoryOutput = $this->inMemoryOutput();
-        (new NotifierOutput($inMemoryOutput))->write(['any channel name' => $result]);
+        (new NotifierOutput($inMemoryOutput))->write(['any channel name' => $result], $dummyEnv);
         $lines = $inMemoryOutput->lines();
 
         $this->assertContains('# CHANNEL: any channel name', $lines);
