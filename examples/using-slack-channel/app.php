@@ -44,7 +44,7 @@ $result = $notifier->notify(NotifierInput::new(
     json_decode($_ENV[NotifierInput::JIRA_USERS_TO_IGNORE], true)
 ));
 
-$loader = new FilesystemLoader(__DIR__ . '/templates');
+$loader = new FilesystemLoader('/templates');
 $twig = new Environment($loader);
 
 $output = new NotifierOutput(new EchoOutput());
