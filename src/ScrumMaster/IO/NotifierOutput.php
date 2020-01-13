@@ -8,7 +8,6 @@ use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Common\Request;
 use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 final class NotifierOutput
 {
@@ -47,6 +46,7 @@ final class NotifierOutput
         ]);
 
         $lines = explode("\n", $render);
+
         foreach ($lines as $line) {
             $this->output->writeln($line);
         }
