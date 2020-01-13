@@ -15,27 +15,31 @@ final class NotifierOutput
     /** @var OutputInterface */
     private $output;
 
-    public function __construct(OutputInterface $output)
+    /** @var Environment */
+    private $twig;
+
+    public function __construct(OutputInterface $output, Environment $twig)
     {
         $this->output = $output;
+        $this->twig = $twig;
     }
 
     /** @param array<string,ChannelResult> $results */
-    public function write(array $results, Environment $twig): void
+    public function write(array $results): void
     {
         foreach ($results as $channelName => $result) {
-            $this->writeChannel($channelName, $result, $twig);
+            $this->writeChannel($channelName, $result);
         }
     }
 
-    private function writeChannel(string $name, ChannelResult $result, Environment $twig): void
+    private function writeChannel(string $channelName, ChannelResult $result): void
     {
         $notificationTitles = $this->buildNotificationTitles($result);
         $notificationSuccessful = $this->buildNotificationSuccessful($result);
         $notificationFailed = $this->buildNotificationFailed($result);
 
-        $render = $twig->render('ticket_status.twig', [
-            'name' => $name,
+        $render = $this->twig->render('ticket_status.twig', [
+            'channelName' => $channelName,
             'result' => $result,
             'notificationTitles' => $notificationTitles,
             'notificationSucessful' => $notificationSuccessful,
