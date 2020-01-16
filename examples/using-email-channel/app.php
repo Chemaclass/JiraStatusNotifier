@@ -51,4 +51,4 @@ $result = $notifier->notify(NotifierInput::new(
 (new NotifierOutput(
     new EchoOutput(),
     new Environment(new FilesystemLoader('../templates'))
-))->write($result);
+))->write($result, 'output/channel-result.twig');
