@@ -16,6 +16,8 @@ use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Notifier;
 use Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 Dotenv::create(__DIR__)->load();
 EnvKeys::create((array) getenv())->validate(file_get_contents(__DIR__ . '/.env.dist'));
@@ -42,5 +44,7 @@ $result = $notifier->notify(NotifierInput::new(
     json_decode($_ENV[NotifierInput::JIRA_USERS_TO_IGNORE], true)
 ));
 
-$output = new NotifierOutput(new EchoOutput());
-$output->write($result);
+(new NotifierOutput(
+    new EchoOutput(),
+    new Environment(new FilesystemLoader('../templates'))
+))->write($result, 'output/channel-result.twig');
