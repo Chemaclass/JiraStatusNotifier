@@ -39,7 +39,7 @@ final class Notifier
                 $jiraBoard,
                 $this->jiraHttpClient,
                 $company,
-                new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company)),
+                new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company), $input->startSpringDate()),
                 $input->jiraUsersToIgnore()
             );
         }

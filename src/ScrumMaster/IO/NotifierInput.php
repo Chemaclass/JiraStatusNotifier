@@ -12,6 +12,8 @@ final class NotifierInput
 
     public const DAYS_FOR_STATUS = 'DAYS_FOR_STATUS';
 
+    public const START_SPRINT_DATE = 'START_SPRINT_DATE';
+
     public const JIRA_USERS_TO_IGNORE = 'JIRA_USERS_TO_IGNORE';
 
     /** @var string */
@@ -23,6 +25,9 @@ final class NotifierInput
     /** @var array */
     private $daysForStatus;
 
+    /** @var string */
+    private $startSpringDate;
+
     /** @var array */
     private $jiraUsersToIgnore;
 
@@ -30,12 +35,14 @@ final class NotifierInput
         string $companyName,
         string $jiraProjectName,
         array $daysForStatus,
+        string $startSpringDate,
         array $jiraUsersToIgnore = []
     ): self {
         $self = new self();
         $self->companyName = $companyName;
         $self->jiraProjectName = $jiraProjectName;
         $self->daysForStatus = $daysForStatus;
+        $self->startSpringDate = $startSpringDate;
         $self->jiraUsersToIgnore = $jiraUsersToIgnore;
 
         return $self;
@@ -63,5 +70,10 @@ final class NotifierInput
     public function jiraUsersToIgnore(): array
     {
         return $this->jiraUsersToIgnore;
+    }
+
+    public function startSpringDate(): string
+    {
+        return $this->startSpringDate;
     }
 }

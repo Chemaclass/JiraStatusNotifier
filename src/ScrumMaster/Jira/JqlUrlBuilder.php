@@ -74,15 +74,15 @@ final class JqlUrlBuilder
             if (null !== $this->status && null !== $this->startSprintDate) {
                 $statusDidNotChangePlusWeekendDays = $this->statusDidNotChangeSinceDays + $this->weekendDays;
                 $finalUrl .= ' AND (';
-                $finalUrl .= "(status changed TO '{$this->status}' before {$this->startSprintDate} AND NOT status changed after -{$statusDidNotChangePlusWeekendDays}d)";
+                $finalUrl .= "(status changed TO '{$this->status}' before '{$this->startSprintDate}' AND NOT status changed after -{$statusDidNotChangePlusWeekendDays}d)";
                 $finalUrl .= ' OR ';
-                $finalUrl .= "(status changed TO '{$this->status}' after {$this->startSprintDate} AND NOT status changed after -{$this->statusDidNotChangeSinceDays}d)";
+                $finalUrl .= "(status changed TO '{$this->status}' after '{$this->startSprintDate}' AND NOT status changed after -{$this->statusDidNotChangeSinceDays}d)";
                 $finalUrl .= ')';
             } else {
                 $finalUrl .= " AND NOT status changed after -{$this->statusDidNotChangeSinceDays}d";
             }
         }
-
+//dd($finalUrl);
         return $finalUrl;
     }
 }

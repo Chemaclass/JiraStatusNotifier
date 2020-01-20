@@ -68,8 +68,8 @@ final class JqlUrlBuilderTest extends TestCase
     {
         $expected = 'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
         $expected .= " AND status IN ('IN QA')";
-        $expected .= " AND ((status changed TO 'IN QA' before 2019-10-14 AND NOT status changed after -4d)";
-        $expected .= " OR (status changed TO 'IN QA' after 2019-10-14 AND NOT status changed after -2d))";
+        $expected .= " AND ((status changed TO 'IN QA' before '2019-10-14' AND NOT status changed after -4d)";
+        $expected .= " OR (status changed TO 'IN QA' after '2019-10-14' AND NOT status changed after -2d))";
 
         $this->assertEquals(
             $expected,
@@ -85,8 +85,8 @@ final class JqlUrlBuilderTest extends TestCase
     {
         $expected = 'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
         $expected .= " AND status IN ('IN QA')";
-        $expected .= " AND ((status changed TO 'IN QA' before 2019-10-14 AND NOT status changed after -12d)";
-        $expected .= " OR (status changed TO 'IN QA' after 2019-10-14 AND NOT status changed after -2d))";
+        $expected .= " AND ((status changed TO 'IN QA' before '2019-10-14' AND NOT status changed after -12d)";
+        $expected .= " OR (status changed TO 'IN QA' after '2019-10-14' AND NOT status changed after -2d))";
 
         $this->assertEquals(
             $expected,
@@ -102,8 +102,8 @@ final class JqlUrlBuilderTest extends TestCase
     {
         $expected = 'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
         $expected .= " AND status IN ('IN QA')";
-        $expected .= " AND ((status changed TO 'IN QA' before 2019-10-14 AND NOT status changed after -10d)";
-        $expected .= " OR (status changed TO 'IN QA' after 2019-10-14 AND NOT status changed after -0d))";
+        $expected .= " AND ((status changed TO 'IN QA' before '2019-10-14' AND NOT status changed after -10d)";
+        $expected .= " OR (status changed TO 'IN QA' after '2019-10-14' AND NOT status changed after -0d))";
 
         $this->assertEquals(
             $expected,

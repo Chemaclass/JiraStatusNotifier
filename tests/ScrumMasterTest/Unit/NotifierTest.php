@@ -45,7 +45,12 @@ final class NotifierTest extends TestCase
 
     private function notifierInput(): NotifierInput
     {
-        return NotifierInput::new('company.name', 'Jira project name', ['status' => 1]);
+        return NotifierInput::new(
+            'company.name',
+            'Jira project name',
+            ['status' => 1],
+            date('d-m-Y')
+        );
     }
 
     private function notifierCommandWithChannelIssues(array $channelIssues): Notifier

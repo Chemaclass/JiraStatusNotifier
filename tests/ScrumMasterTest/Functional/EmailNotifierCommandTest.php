@@ -165,6 +165,7 @@ final class EmailNotifierCommandTest extends TestCase
             'company.name',
             'Jira project name',
             ['status1' => 1, 'status2' => 2],
+            date('d-m-Y'),
             $jiraUsersToIgnore
         );
     }

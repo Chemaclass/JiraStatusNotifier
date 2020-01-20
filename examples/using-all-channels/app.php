@@ -54,6 +54,7 @@ $result = $notifier->notify(NotifierInput::new(
     getenv(NotifierInput::COMPANY_NAME),
     getenv(NotifierInput::JIRA_PROJECT_NAME),
     json_decode(getenv(NotifierInput::DAYS_FOR_STATUS), true),
+    getenv(NotifierInput::START_SPRINT_DATE),
     json_decode(getenv(NotifierInput::JIRA_USERS_TO_IGNORE), true)
 ));
 
