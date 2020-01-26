@@ -3,7 +3,7 @@ cache: false
 sudo: false
 
 php:
-  - 7.2
+  - 7.4
 
 before_install:
   - composer install
