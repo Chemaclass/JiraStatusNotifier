@@ -5,74 +5,45 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMaster\IO;
 
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
-use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
-use Chemaclass\ScrumMaster\Common\Request;
+use Twig;
 
 final class NotifierOutput
 {
     /** @var OutputInterface */
     private $output;
 
-    public function __construct(OutputInterface $output)
+    /** @var Twig\Environment */
+    private $twig;
+
+    public function __construct(OutputInterface $output, Twig\Environment $twig)
     {
         $this->output = $output;
+        $this->twig = $twig;
     }
 
-    /** @param array<string,ChannelResult> $results */
-    public function write(array $results): void
+    /**
+     * @param array<string,ChannelResult> $results
+     * @param string $templatePath Twig template path
+     */
+    public function write(array $results, string $templatePath): void
     {
         foreach ($results as $channelName => $result) {
-            $this->writeChannel($channelName, $result);
+            $this->writeChannel($channelName, $result, $templatePath);
         }
     }
 
-    private function writeChannel(string $name, ChannelResult $result): void
+    private function writeChannel(string $channelName, ChannelResult $result, string $templatePath): void
     {
-        $this->output->writeln("# CHANNEL: {$name}");
-        $notificationTitles = $this->buildNotificationTitles($result);
-        $notificationSuccessful = $this->buildNotificationSuccessful($result);
-        $notificationFailed = $this->buildNotificationFailed($result);
+        $outputExtractor = new NotificationOutputExtractor($result);
 
-        $this->output->writeln("Total notifications: {$result->total()} ($notificationTitles)");
-        $this->output->writeln("Total successful notifications sent: {$result->totalSuccessful()} ($notificationSuccessful)");
-        $this->output->writeln("Total failed notifications sent: {$result->totalFailed()} ($notificationFailed)");
-    }
+        $render = $this->twig->render($templatePath, [
+            'channelName' => $channelName,
+            'result' => $result,
+            'notificationTitles' => $outputExtractor->titles(),
+            'notificationSuccessful' => $outputExtractor->successful(),
+            'notificationFailed' => $outputExtractor->failed(),
+        ]);
 
-    private function buildNotificationTitles(ChannelResult $result): string
-    {
-        $notificationTitles = [];
-
-        /** @var ChannelIssue $channelIssue */
-        foreach ($result->channelIssues() as $statusCode => $channelIssue) {
-            $notificationTitles[] = (null !== $channelIssue->displayName())
-                ? "$statusCode: {$channelIssue->displayName()}"
-                : $statusCode;
-        }
-
-        return implode(', ', $notificationTitles);
-    }
-
-    private function buildNotificationSuccessful(ChannelResult $result): string
-    {
-        $notificationSuccessful = array_keys(array_filter(
-            $result->channelIssues(),
-            function (ChannelIssue $slackTicket) {
-                return Request::HTTP_OK === $slackTicket->responseStatusCode();
-            }
-        ));
-
-        return implode(', ', $notificationSuccessful);
-    }
-
-    private function buildNotificationFailed(ChannelResult $result): string
-    {
-        $notificationFailed = array_keys(array_filter(
-            $result->channelIssues(),
-            function (ChannelIssue $slackTicket) {
-                return Request::HTTP_OK !== $slackTicket->responseStatusCode();
-            }
-        ));
-
-        return implode(', ', $notificationFailed);
+        $this->output->writeln($render);
     }
 }

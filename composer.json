@@ -32,7 +32,8 @@
         "ext-json": "*",
         "php": "^7.4",
         "symfony/http-client": "^4.3",
-        "symfony/mailer": "^5.0"
+        "symfony/mailer": "^5.0",
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.15",
