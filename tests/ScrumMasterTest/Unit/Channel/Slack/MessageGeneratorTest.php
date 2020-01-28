@@ -38,7 +38,7 @@ TXT;
             $storyPoints = 5
         );
 
-        $slackMessage = MessageGenerator::withTimeToDiff($statusDateChange);
+        $slackMessage = MessageGenerator::beingNow($statusDateChange);
         $this->assertEquals($expectedMessage, $slackMessage->forJiraTickets([$jiraTicket], 'company-name'));
     }
 
@@ -62,7 +62,7 @@ TXT;
             $storyPoints = 5
         );
 
-        $slackMessage = MessageGenerator::withTimeToDiff($statusDateChange);
+        $slackMessage = MessageGenerator::beingNow($statusDateChange);
         $this->assertEquals($expectedMessage, $slackMessage->forJiraTickets([$jiraTicket], 'company-name'));
     }
 }

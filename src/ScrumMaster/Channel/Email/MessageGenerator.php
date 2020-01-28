@@ -14,7 +14,7 @@ final class MessageGenerator implements MessageGeneratorInterface
     /** @var DateTimeImmutable */
     private $timeToDiff;
 
-    public static function withTimeToDiff(DateTimeImmutable $timeToDiff): self
+    public static function beingNow(DateTimeImmutable $timeToDiff): self
     {
         return new self($timeToDiff);
     }

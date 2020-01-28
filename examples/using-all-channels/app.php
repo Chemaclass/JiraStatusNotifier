@@ -33,7 +33,7 @@ $jiraHttpClient = new JiraHttpClient(HttpClient::create([
 $channels = [
     new Email\Channel(
         new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),
-        Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
+        Email\MessageGenerator::beingNow(new DateTimeImmutable()),
         new Email\AddressGenerator((new ByPassEmail())
             ->setSendEmailsToAssignee(false) // <- OverriddenEmails wont have no effect as long as this is false
             ->setOverriddenEmails(json_decode(getenv('OVERRIDDEN_EMAILS'), true))
@@ -44,7 +44,7 @@ $channels = [
             'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
         ])),
         Slack\JiraMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
-        Slack\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+        Slack\MessageGenerator::beingNow(new DateTimeImmutable())
     ),
 ];
 

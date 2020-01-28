@@ -76,7 +76,7 @@ final class SlackNotifierCommandTest extends TestCase
                 new Slack\Channel(
                     new Slack\HttpClient($this->createMock(HttpClientInterface::class)),
                     Slack\JiraMapping::jiraNameWithSlackId(['jira.id' => 'slack.id']),
-                    Slack\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+                    Slack\MessageGenerator::beingNow(new DateTimeImmutable())
                 ),
             ]
         );

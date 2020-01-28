@@ -32,7 +32,7 @@ $notifier = new Notifier(
     $channels = [
         new Email\Channel(
             new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),
-            Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
+            Email\MessageGenerator::beingNow(new DateTimeImmutable()),
             new Email\AddressGenerator((new ByPassEmail())
                 ->setSendEmailsToAssignee(false) // <- OverriddenEmails wont have effect as long as this is false
                 ->setOverriddenEmails(json_decode(getenv('OVERRIDDEN_EMAILS'), true))

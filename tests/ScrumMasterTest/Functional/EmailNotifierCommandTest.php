@@ -91,7 +91,7 @@ final class EmailNotifierCommandTest extends TestCase
             [
                 new Channel(
                     new Mailer($transport),
-                    MessageGenerator::withTimeToDiff(new DateTimeImmutable()),
+                    MessageGenerator::beingNow(new DateTimeImmutable()),
                     new AddressGenerator((new ByPassEmail())->setOverriddenEmails([
                         'user.1.jira' => 'user.3@email.com',
                         'user.2.jira' => 'user.3@email.com',
@@ -121,7 +121,7 @@ final class EmailNotifierCommandTest extends TestCase
             [
                 new Channel(
                     new Mailer($transport),
-                    MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+                    MessageGenerator::beingNow(new DateTimeImmutable())
                 ),
             ]
         );
@@ -151,7 +151,7 @@ final class EmailNotifierCommandTest extends TestCase
             [
                 new Email\Channel(
                     new Mailer($transport),
-                    Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+                    Email\MessageGenerator::beingNow(new DateTimeImmutable())
                 ),
             ]
         );
@@ -176,7 +176,7 @@ final class EmailNotifierCommandTest extends TestCase
             [
                 new Email\Channel(
                     new Mailer($this->createMock(TransportInterface::class)),
-                    Email\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+                    Email\MessageGenerator::beingNow(new DateTimeImmutable())
                 ),
             ]
         );

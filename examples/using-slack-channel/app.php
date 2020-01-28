@@ -32,7 +32,7 @@ $notifier = new Notifier(
                 'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
             ])),
             Slack\JiraMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
-            Slack\MessageGenerator::withTimeToDiff(new DateTimeImmutable())
+            Slack\MessageGenerator::beingNow(new DateTimeImmutable())
         ),
     ]
 );
