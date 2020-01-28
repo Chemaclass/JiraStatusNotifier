@@ -6,29 +6,30 @@ namespace Chemaclass\ScrumMaster\Channel\Slack;
 
 use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
+use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use DateTimeImmutable;
 
 final class MessageGenerator implements MessageGeneratorInterface
 {
-    /** @var DateTimeImmutable */
-    private $timeToDiff;
+    private DateTimeImmutable $now;
 
-    public static function beingNow(DateTimeImmutable $timeToDiff): self
+    public static function beingNow(DateTimeImmutable $now): self
     {
-        return new self($timeToDiff);
+        return new self($now);
     }
 
-    private function __construct(DateTimeImmutable $timeToDiff)
+    private function __construct(DateTimeImmutable $now)
     {
-        $this->timeToDiff = $timeToDiff;
+        $this->now = $now;
     }
 
     public function forJiraTickets(array $tickets, string $companyName): string
     {
+        /** @var JiraTicket $ticket */
         $ticket = $tickets[0];
         $assignee = $ticket->assignee();
         $status = $ticket->status();
-        $daysDiff = $status->changeDate()->diff($this->timeToDiff)->days;
+        $daysDiff = $status->changeDate()->diff($this->now)->days;
         $url = "https://{$companyName}.atlassian.net/browse/{$ticket->key()}";
         $dayWord = ($daysDiff > 1) ? 'days' : 'day';
 
