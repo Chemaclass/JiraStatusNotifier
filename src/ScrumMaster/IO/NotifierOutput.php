@@ -23,7 +23,7 @@ final class NotifierOutput
 
     /**
      * @param array<string,ChannelResult> $results
-     * @param string $templatePath Twig template path
+     * @param string                      $templatePath Twig template path
      */
     public function write(array $results, string $templatePath): void
     {

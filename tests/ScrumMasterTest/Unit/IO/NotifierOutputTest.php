@@ -36,6 +36,6 @@ final class NotifierOutputTest extends TestCase
         );
 
         $output = new NotifierOutput($this->createMock(OutputInterface::class), $twig);
-        $output->write([$channelName => $result,], $templatePath);
+        $output->write([$channelName => $result], $templatePath);
     }
 }
