@@ -6,11 +6,9 @@ namespace Chemaclass\ScrumMaster\Jira\ReadModel;
 
 final class Company
 {
-    /** @var string */
-    private $companyName;
+    private string $companyName;
 
-    /** @var null|string */
-    private $projectName;
+    private ?string $projectName;
 
     public static function withName(string $company): self
     {

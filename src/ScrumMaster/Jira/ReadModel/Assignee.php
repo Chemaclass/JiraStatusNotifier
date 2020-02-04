@@ -6,17 +6,13 @@ namespace Chemaclass\ScrumMaster\Jira\ReadModel;
 
 final class Assignee
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string */
-    private $key;
+    private string $key;
 
-    /** @var string */
-    private $displayName;
+    private string $displayName;
 
-    /** @var string */
-    private $email;
+    private string $email;
 
     public static function empty(): self
     {

@@ -8,11 +8,9 @@ use DateTimeImmutable;
 
 final class TicketStatus
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var DateTimeImmutable */
-    private $changeDate;
+    private DateTimeImmutable $changeDate;
 
     public function __construct(string $name, DateTimeImmutable $changeDate)
     {

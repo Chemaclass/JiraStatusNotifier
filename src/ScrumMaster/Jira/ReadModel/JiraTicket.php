@@ -6,20 +6,15 @@ namespace Chemaclass\ScrumMaster\Jira\ReadModel;
 
 final class JiraTicket
 {
-    /** @var string */
-    private $title;
+    private string $title;
 
-    /** @var string */
-    private $key;
+    private string $key;
 
-    /** @var TicketStatus */
-    private $status;
+    private TicketStatus $status;
 
-    /** @var Assignee */
-    private $assignee;
+    private Assignee $assignee;
 
-    /** @var null|int */
-    private $storyPoints;
+    private ?int $storyPoints;
 
     public function __construct(
         string $title,
