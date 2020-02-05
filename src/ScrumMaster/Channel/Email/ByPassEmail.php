@@ -6,11 +6,9 @@ namespace Chemaclass\ScrumMaster\Channel\Email;
 
 final class ByPassEmail
 {
-    /** @var string */
-    private $sendCopyTo = '';
+    private string $sendCopyTo = '';
 
-    /** @var bool */
-    private $sendEmailsToAssignee = true;
+    private bool $sendEmailsToAssignee = true;
 
     /** @var array */
     private $overriddenEmails = [];

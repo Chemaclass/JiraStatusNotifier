@@ -6,11 +6,9 @@ namespace Chemaclass\ScrumMaster\Channel\ReadModel;
 
 final class ChannelIssue
 {
-    /** @var int */
-    private $responseStatusCode;
+    private int $responseStatusCode;
 
-    /** @var null|string */
-    private $displayName;
+    private ?string $displayName;
 
     public static function withStatusCode(int $responseStatusCode): self
     {

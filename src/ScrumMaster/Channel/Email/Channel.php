@@ -20,14 +20,11 @@ use Symfony\Component\Mime\Email;
 
 final class Channel implements ChannelInterface
 {
-    /** @var Mailer */
-    private $mailer;
+    private Mailer $mailer;
 
-    /** @var MessageGeneratorInterface */
-    private $messageGenerator;
+    private MessageGeneratorInterface $messageGenerator;
 
-    /** @var AddressGenerator */
-    private $addressGenerator;
+    private AddressGenerator $addressGenerator;
 
     public function __construct(
         Mailer $mailer,

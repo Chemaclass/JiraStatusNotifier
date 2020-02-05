@@ -9,8 +9,7 @@ use Symfony\Component\Mime\Address;
 
 final class AddressGenerator
 {
-    /** @var null|ByPassEmail */
-    private $byPassEmail;
+    private ?ByPassEmail $byPassEmail;
 
     public function __construct(?ByPassEmail $byPassEmail = null)
     {
