@@ -9,8 +9,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class JiraHttpClient
 {
-    /** @var HttpClientInterface */
-    private $jiraClient;
+    private HttpClientInterface $jiraClient;
 
     public function __construct(HttpClientInterface $jiraClient)
     {

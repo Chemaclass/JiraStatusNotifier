@@ -13,23 +13,17 @@ final class JqlUrlBuilder
 
     private const DEFAULT_WEEKEND_DAYS = 2;
 
-    /** @var Company */
-    private $company;
+    private Company $company;
 
-    /** @var int */
-    private $weekendDays;
+    private int $weekendDays;
 
-    /** @var string */
-    private $jqlInitParam;
+    private string $jqlInitParam;
 
-    /** @var null|string */
-    private $status;
+    private ?string $status = null;
 
-    /** @var null|int */
-    private $statusDidNotChangeSinceDays;
+    private ?int $statusDidNotChangeSinceDays = null;
 
-    /** @var null|string */
-    private $startSprintDate;
+    private ?string $startSprintDate = null;
 
     public static function inOpenSprints(Company $company, int $weekendDays = self::DEFAULT_WEEKEND_DAYS): self
     {

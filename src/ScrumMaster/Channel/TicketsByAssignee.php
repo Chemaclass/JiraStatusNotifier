@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMaster\Channel;
 
+use function array_merge;
 use Chemaclass\ScrumMaster\Jira\Board;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
+use function in_array;
 
 final class TicketsByAssignee
 {
-    /** @var JiraHttpClient */
-    private $jiraClient;
+    private JiraHttpClient $jiraClient;
 
-    /** @var JqlUrlFactory */
-    private $jqlUrlFactory;
+    private JqlUrlFactory $jqlUrlFactory;
 
     /** @var array */
     private $jiraUsersToIgnore;

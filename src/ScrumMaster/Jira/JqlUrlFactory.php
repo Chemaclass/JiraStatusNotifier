@@ -6,11 +6,9 @@ namespace Chemaclass\ScrumMaster\Jira;
 
 final class JqlUrlFactory implements UrlFactoryInterface
 {
-    /** @var Board */
-    private $board;
+    private Board $board;
 
-    /** @var JqlUrlBuilder */
-    private $urlBuilder;
+    private JqlUrlBuilder $urlBuilder;
 
     public function __construct(Board $board, JqlUrlBuilder $urlBuilder)
     {

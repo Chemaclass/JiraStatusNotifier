@@ -11,8 +11,7 @@ final class Board implements BoardInterface
     /** @var array<string,int> */
     private $maxDaysInStatus;
 
-    /** @var int */
-    private $fallbackValue;
+    private int $fallbackValue;
 
     public function __construct(array $maxDaysInStatus, int $fallbackValue = self::FALLBACK_VALUE_DEFAULT)
     {

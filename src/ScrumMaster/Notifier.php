@@ -15,8 +15,7 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 
 final class Notifier
 {
-    /** @var JiraHttpClient */
-    private $jiraHttpClient;
+    private JiraHttpClient $jiraHttpClient;
 
     /** @var ChannelInterface[] */
     private $channels;
