@@ -16,14 +16,11 @@ use function in_array;
 
 final class Channel implements ChannelInterface
 {
-    /** @var HttpClient */
-    private $slackClient;
+    private HttpClient $slackClient;
 
-    /** @var JiraMapping */
-    private $slackMapping;
+    private JiraMapping $slackMapping;
 
-    /** @var MessageGeneratorInterface */
-    private $messageGenerator;
+    private MessageGeneratorInterface $messageGenerator;
 
     public function __construct(
         HttpClient $slackClient,
@@ -46,8 +43,8 @@ final class Channel implements ChannelInterface
 
         foreach ($board->maxDaysInStatus() as $statusName => $maxDays) {
             $tickets = $jiraClient->getTickets($jqlUrlFactory, $statusName);
-
-            $result->append($this->postToSlack($company, $tickets, $jiraUsersToIgnore));
+            $resultForCurrentStatus = $this->postToSlack($company, $tickets, $jiraUsersToIgnore);
+            $result->append($resultForCurrentStatus);
         }
 
         return $result;

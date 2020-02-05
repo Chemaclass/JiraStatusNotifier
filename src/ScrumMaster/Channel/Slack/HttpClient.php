@@ -11,8 +11,7 @@ final class HttpClient
 {
     public const SLACK_API_POST_MESSAGE = 'https://slack.com/api/chat.postMessage';
 
-    /** @var HttpClientInterface */
-    private $client;
+    private HttpClientInterface $client;
 
     public function __construct(HttpClientInterface $client)
     {
