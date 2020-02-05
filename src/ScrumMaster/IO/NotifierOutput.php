@@ -9,11 +9,9 @@ use Twig;
 
 final class NotifierOutput
 {
-    /** @var OutputInterface */
-    private $output;
+    private OutputInterface $output;
 
-    /** @var Twig\Environment */
-    private $twig;
+    private Twig\Environment $twig;
 
     public function __construct(OutputInterface $output, Twig\Environment $twig)
     {

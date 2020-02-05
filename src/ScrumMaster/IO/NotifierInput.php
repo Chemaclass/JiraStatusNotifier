@@ -14,11 +14,9 @@ final class NotifierInput
 
     public const JIRA_USERS_TO_IGNORE = 'JIRA_USERS_TO_IGNORE';
 
-    /** @var string */
-    private $companyName;
+    private string $companyName;
 
-    /** @var string */
-    private $jiraProjectName;
+    private string $jiraProjectName;
 
     /** @var array */
     private $daysForStatus;

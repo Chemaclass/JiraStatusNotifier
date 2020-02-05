@@ -10,8 +10,7 @@ use Chemaclass\ScrumMaster\Common\Request;
 
 final class NotificationOutputExtractor
 {
-    /** @var ChannelResult */
-    private $result;
+    private ChannelResult $result;
 
     public function __construct(ChannelResult $result)
     {
