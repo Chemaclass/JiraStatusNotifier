@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMaster\Channel;
 
-use Chemaclass\ScrumMaster\Jira\Board;
-use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
-use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 
 interface ChannelInterface
