@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
+use Chemaclass\ScrumMaster\Channel\Cli;
 use Chemaclass\ScrumMaster\Channel\Email;
 use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
 use Chemaclass\ScrumMaster\Channel\Slack;
@@ -24,7 +25,7 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 Dotenv::create(__DIR__)->load();
-EnvKeys::create((array) getenv())->validate(file_get_contents(__DIR__ . '/.env.dist'));
+EnvKeys::create((array)getenv())->validate(file_get_contents(__DIR__ . '/.env.dist'));
 
 $jiraHttpClient = new JiraHttpClient(HttpClient::create([
     'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
@@ -46,6 +47,7 @@ $channels = [
         Slack\JiraMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
         Slack\MessageGenerator::beingNow(new DateTimeImmutable())
     ),
+    new Cli\Channel(),
 ];
 
 $notifier = new Notifier($jiraHttpClient, $channels);
