@@ -8,7 +8,6 @@ use Chemaclass\ScrumMaster\Channel\ChannelInterface;
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
-use Chemaclass\ScrumMaster\Channel\TicketsByAssignee;
 use Chemaclass\ScrumMaster\Common\Request;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
