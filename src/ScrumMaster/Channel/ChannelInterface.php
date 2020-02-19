@@ -11,11 +11,5 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 
 interface ChannelInterface
 {
-    public function sendNotifications(
-        Board $board,
-        JiraHttpClient $jiraClient,
-        Company $company,
-        JqlUrlFactory $jqlUrlFactory,
-        array $jiraUsersToIgnore = []
-    ): ChannelResult;
+    public function sendNotifications(array $ticketsByAssignee, Company $company): ChannelResult;
 }

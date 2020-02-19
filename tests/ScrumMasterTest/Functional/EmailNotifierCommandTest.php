@@ -31,7 +31,7 @@ final class EmailNotifierCommandTest extends TestCase
     /** @test */
     public function zeroNotificationsWereSent(): void
     {
-        $notifier = $this->slackNotifierCommandWithJiraTickets([]);
+        $notifier = $this->emailNotifierCommandWithJiraTickets([]);
         $result = $notifier->notify($this->notifierInput());
         /** @var ChannelResult $channelResult */
         $channelResult = $result[Email\Channel::class];
@@ -41,7 +41,7 @@ final class EmailNotifierCommandTest extends TestCase
     /** @test */
     public function twoSuccessfulNotificationsWereSent(): void
     {
-        $notifier = $this->slackNotifierCommandWithJiraTickets([
+        $notifier = $this->emailNotifierCommandWithJiraTickets([
             $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111'),
             $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222'),
         ]);
@@ -55,7 +55,7 @@ final class EmailNotifierCommandTest extends TestCase
     /** @test */
     public function ignoredUserShouldNotReceiveAnyNotification(): void
     {
-        $notifier = $this->slackNotifierCommandWithJiraTickets([
+        $notifier = $this->emailNotifierCommandWithJiraTickets([
             $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111'),
             $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222'),
         ]);
@@ -169,7 +169,7 @@ final class EmailNotifierCommandTest extends TestCase
         );
     }
 
-    private function slackNotifierCommandWithJiraTickets(array $jiraIssues): Notifier
+    private function emailNotifierCommandWithJiraTickets(array $jiraIssues): Notifier
     {
         return new Notifier(
             new JiraHttpClient($this->mockJiraClient($jiraIssues)),
