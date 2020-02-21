@@ -16,12 +16,6 @@ final class CliNotifierCommandTest extends TestCase
 {
     use JiraApiResource;
 
-    private const MANDATORY_FIELDS = [
-        NotifierInput::COMPANY_NAME => 'company.name',
-        NotifierInput::JIRA_PROJECT_NAME => 'Jira project name',
-        NotifierInput::DAYS_FOR_STATUS => '{"status":1}',
-    ];
-
     /** @test */
     public function zeroNotificationsWereSent(): void
     {
