@@ -8,11 +8,7 @@ use Chemaclass\ScrumMaster\Channel\ChannelInterface;
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
-use Chemaclass\ScrumMaster\Channel\TicketsByAssignee;
 use Chemaclass\ScrumMaster\Common\Request;
-use Chemaclass\ScrumMaster\Jira\Board;
-use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
-use Chemaclass\ScrumMaster\Jira\JqlUrlFactory;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
@@ -36,19 +32,7 @@ final class Channel implements ChannelInterface
         $this->addressGenerator = $addresses ?? new AddressGenerator();
     }
 
-    public function sendNotifications(
-        Board $board,
-        JiraHttpClient $jiraClient,
-        Company $company,
-        JqlUrlFactory $jqlUrlFactory,
-        array $jiraUsersToIgnore = []
-    ): ChannelResult {
-        $ticketsByAssignee = new TicketsByAssignee($jiraClient, $jqlUrlFactory, $jiraUsersToIgnore);
-
-        return $this->sendEmails($ticketsByAssignee->fetchFromBoard($board), $company);
-    }
-
-    private function sendEmails(array $ticketsByAssignee, Company $company): ChannelResult
+    public function sendNotifications(array $ticketsByAssignee, Company $company): ChannelResult
     {
         $result = new ChannelResult();
 

@@ -6,6 +6,7 @@ namespace Chemaclass\ScrumMaster;
 
 use Chemaclass\ScrumMaster\Channel\ChannelInterface;
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
+use Chemaclass\ScrumMaster\Channel\TicketsByAssignee;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\Board;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
@@ -33,13 +34,16 @@ final class Notifier
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());
         $result = [];
 
+        $ticketsByAssignee = new TicketsByAssignee(
+            $this->jiraHttpClient,
+            new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company)),
+            $input->jiraUsersToIgnore()
+        );
+
         foreach ($this->channels as $channel) {
             $result[get_class($channel)] = $channel->sendNotifications(
-                $jiraBoard,
-                $this->jiraHttpClient,
-                $company,
-                new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company)),
-                $input->jiraUsersToIgnore()
+                $ticketsByAssignee->fetchFromBoard($jiraBoard),
+                $company
             );
         }
 
