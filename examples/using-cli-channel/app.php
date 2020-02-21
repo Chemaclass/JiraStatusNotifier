@@ -38,4 +38,4 @@ $result = $notifier->notify(NotifierInput::new(
 (new NotifierOutput(
     new EchoOutput(),
     new Environment(new FilesystemLoader('../templates'))
-))->write($result, 'output/channel-result.twig');
+))->write($result, 'output/cli-template.twig');

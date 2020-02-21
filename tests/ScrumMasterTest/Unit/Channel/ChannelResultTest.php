@@ -10,27 +10,27 @@ use PHPUnit\Framework\TestCase;
 
 final class ChannelResultTest extends TestCase
 {
-    /** @var ChannelResult */
-    private $result;
+    private ChannelResult $result;
 
     protected function setUp(): void
     {
         $this->result = (new ChannelResult())
             ->addChannelIssue('K-1', ChannelIssue::withStatusCode(100))
             ->addChannelIssue('K-2', ChannelIssue::withCodeAndAssignee(200, 'j.user.1'))
-            ->addChannelIssue('K-3', ChannelIssue::withCodeAndAssignee(300, 'j.user.1'));
+            ->addChannelIssue('K-3', ChannelIssue::withCodeAndAssignee(300, 'j.user.1'))
+            ->addChannelIssue('K-4', ChannelIssue::withCodeAndAssignee(400, 'j.user.2'));
     }
 
     /** @test */
     public function total(): void
     {
-        self::assertEquals(3, $this->result->total());
+        self::assertEquals(4, $this->result->total());
     }
 
     /** @test */
     public function totalFailed(): void
     {
-        self::assertEquals(2, $this->result->totalFailed());
+        self::assertEquals(3, $this->result->totalFailed());
     }
 
     /** @test */
@@ -45,5 +45,16 @@ final class ChannelResultTest extends TestCase
         self::assertEquals(ChannelIssue::withStatusCode(100), $this->result->channelIssues()['K-1']);
         self::assertEquals(ChannelIssue::withCodeAndAssignee(200, 'j.user.1'), $this->result->channelIssues()['K-2']);
         self::assertEquals(ChannelIssue::withCodeAndAssignee(300, 'j.user.1'), $this->result->channelIssues()['K-3']);
+        self::assertEquals(ChannelIssue::withCodeAndAssignee(400, 'j.user.2'), $this->result->channelIssues()['K-4']);
+    }
+
+    /** @test */
+    public function ticketsAssignedToPeople(): void
+    {
+        self::assertEquals([
+            null => ['K-1'],
+            'j.user.1' => ['K-2', 'K-3'],
+            'j.user.2' => ['K-4'],
+        ], $this->result->ticketsAssignedToPeople());
     }
 }

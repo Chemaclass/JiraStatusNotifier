@@ -1,0 +1,7 @@
+=====================
+======== Cli ========
+=====================
+
+{% for person, tickets in result.ticketsAssignedToPeople %}
+    {{ person }} -> {{ tickets|join(', ') }}
+{% endfor %}
