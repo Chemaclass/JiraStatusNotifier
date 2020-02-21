@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
+use Chemaclass\ScrumMaster\Channel\Cli;
 use Chemaclass\ScrumMaster\Common\EnvKeys;
 use Chemaclass\ScrumMaster\IO\EchoOutput;
 use Chemaclass\ScrumMaster\IO\NotifierInput;

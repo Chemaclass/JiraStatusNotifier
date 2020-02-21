@@ -54,10 +54,10 @@ final class Tickets
         }
 
         return new Assignee(
-            $assignee['name'],
-            $assignee['key'],
-            $assignee['displayName'],
-            $assignee['emailAddress']
+            $assignee['name'] ?? '',
+            $assignee['key'] ?? '',
+            $assignee['displayName'] ?? '',
+            $assignee['emailAddress'] ?? ''
         );
     }
 }
