@@ -6,6 +6,8 @@ namespace Chemaclass\ScrumMaster\Channel\ReadModel;
 
 final class ChannelIssue
 {
+    private const DEFAULT_STATUS_CODE = 0;
+
     private int $responseStatusCode;
 
     private ?string $displayName;
@@ -13,6 +15,11 @@ final class ChannelIssue
     public static function withStatusCode(int $responseStatusCode): self
     {
         return new self($responseStatusCode, null);
+    }
+
+    public static function withAssignee(string $displayName): self
+    {
+        return new self(self::DEFAULT_STATUS_CODE, $displayName);
     }
 
     public static function withCodeAndAssignee(int $responseStatusCode, string $displayName): self
