@@ -36,6 +36,40 @@ final class ChannelResult
         return $this->channelIssues;
     }
 
+    /** @return string[] */
+    public function ticketsAssignedToPeople(): array
+    {
+        $tickets = [];
+
+        foreach ($this->peopleAssigned() as $people) {
+            if (!isset($tickets[$people])) {
+                $tickets[$people] = [];
+            }
+            /** @var ChannelIssue $issue */
+            foreach ($this->channelIssues as $key => $issue) {
+                if ($issue->displayName() === $people) {
+                    $tickets[$people][] = $key;
+                }
+            }
+        }
+
+        return $tickets;
+    }
+
+    /** @return string[] */
+    private function peopleAssigned(): array
+    {
+        $values = array_map(
+            fn(ChannelIssue $i) => $i->displayName(),
+            $this->channelIssues
+        );
+
+        $people = array_values(array_unique($values));
+        sort($people);
+
+        return $people;
+    }
+
     public function total(): int
     {
         return count($this->channelIssues);
