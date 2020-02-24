@@ -15,3 +15,4 @@ Using composer: ```composer require chemaclass/scrum-master```
 
 * Using [Slack](examples/using-slack-channel) as notification channel
 * Using [Email](examples/using-email-channel) as notification channel
+* Using [Cli](examples/using-cli-channel) to render the tickets for each assignee without notifying anybody
