@@ -1,6 +1,7 @@
+#!/usr/local/bin/php
 <?php
 /**
- * This example demonstrates how to notify via Email and Slack
+ * This example demonstrates how to notify via the client terminal
  * using the ENV parameters (from the .env file)
  */
 declare(strict_types=1);
