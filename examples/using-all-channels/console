@@ -1,3 +1,4 @@
+#!/usr/local/bin/php
 <?php
 /**
  * This example demonstrates how to notify via Email and Slack
