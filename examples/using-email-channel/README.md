@@ -34,3 +34,9 @@ the email as a notification.
 ## References
 
 * [Symfony Mailer Documentation](https://symfony.com/doc/current/mailer.html)
+
+## Usage
+
+1. Create the `.env` file from its dist version: `cp .env.dist .env`
+2. Update the `.env` values
+3. Execute it: `php console` or `./console`
