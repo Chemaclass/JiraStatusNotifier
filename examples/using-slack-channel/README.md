@@ -17,3 +17,9 @@ It is the mapping between the "person.id" from JIRA to the "channel name" or "pe
 > Important: in case you want to post something using a slack-bot into a slack channel, you have to
 allow first this bot (as an app) to publish messages into that channel:
 `Channel > Configuration > Add an app`
+
+## Usage
+
+1. Create the `.env` file from its dist version: `cp .env.dist .env`
+2. Update the `.env` values
+3. Execute it: `php console` or `./console`
