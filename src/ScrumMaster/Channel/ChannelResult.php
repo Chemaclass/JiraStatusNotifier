@@ -56,20 +56,6 @@ final class ChannelResult
         return $tickets;
     }
 
-    /** @return string[] */
-    private function peopleAssigned(): array
-    {
-        $values = array_map(
-            fn(ChannelIssue $i) => $i->displayName(),
-            $this->channelIssues
-        );
-
-        $people = array_values(array_unique($values));
-        sort($people);
-
-        return $people;
-    }
-
     public function total(): int
     {
         return count($this->channelIssues);
@@ -94,5 +80,19 @@ final class ChannelResult
         foreach ($other->channelIssues() as $ticketKey => $channelIssue) {
             $this->addChannelIssue($ticketKey, $channelIssue);
         }
+    }
+
+    /** @return string[] */
+    private function peopleAssigned(): array
+    {
+        $values = array_map(
+            fn (ChannelIssue $i) => $i->displayName(),
+            $this->channelIssues
+        );
+
+        $people = array_values(array_unique($values));
+        sort($people);
+
+        return $people;
     }
 }

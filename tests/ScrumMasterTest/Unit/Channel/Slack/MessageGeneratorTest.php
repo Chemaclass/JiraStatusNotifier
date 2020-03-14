@@ -18,9 +18,8 @@ final class MessageGeneratorTest extends TestCase
     {
         $expectedMessage = <<<TXT
 Hey, Full Name (assignee.name), please have a look
-*Ticket*: Ticket Title[<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>]
-*Current status*: IN QA since 1 day
-*Story Points*: 5
+> [<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>] Ticket Title
+*Current status*: IN QA since 1 day | *Story Points*: 5
 
 TXT;
         $statusDateChange = new DateTimeImmutable();
@@ -47,9 +46,8 @@ TXT;
     {
         $expectedMessage = <<<TXT
 Hey Team, please have a look
-*Ticket*: Ticket Title[<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>]
-*Current status*: IN QA since 2 days
-*Story Points*: 5
+> [<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>] Ticket Title
+*Current status*: IN QA since 2 days | *Story Points*: 5
 
 TXT;
         $statusDateChange = new DateTimeImmutable();

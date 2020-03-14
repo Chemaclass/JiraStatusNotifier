@@ -9,7 +9,6 @@ use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
-use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 
 final class Channel implements ChannelInterface
 {
@@ -34,29 +33,26 @@ final class Channel implements ChannelInterface
         $result = new ChannelResult();
 
         foreach ($ticketsByAssignee as $assigneeKey => $tickets) {
-            $result->append($this->postToSlack($company, $tickets));
+            $responseCode = $this->postToSlack($tickets, $company);
+
+            foreach ($tickets as $ticket) {
+                $issue = ChannelIssue::withCodeAndAssignee($responseCode, $ticket->assignee()->displayName());
+                $result->addChannelIssue($ticket->key(), $issue);
+            }
         }
 
         return $result;
     }
 
-    private function postToSlack(Company $company, array $tickets): ChannelResult
+    private function postToSlack(array $tickets, Company $company): int
     {
-        $result = new ChannelResult();
+        $ticket = $tickets[array_key_first($tickets)];
 
-        /** @var JiraTicket $ticket */
-        foreach ($tickets as $ticket) {
-            $assignee = $ticket->assignee();
+        $response = $this->slackClient->postToChannel(
+            $this->slackMapping->toSlackId($ticket->assignee()->name()),
+            $this->messageGenerator->forJiraTickets($tickets, $company->companyName())
+        );
 
-            $response = $this->slackClient->postToChannel(
-                $this->slackMapping->toSlackId($ticket->assignee()->name()),
-                $this->messageGenerator->forJiraTickets([$ticket], $company->companyName())
-            );
-
-            $issue = ChannelIssue::withCodeAndAssignee($response->getStatusCode(), $assignee->displayName());
-            $result->addChannelIssue($ticket->key(), $issue);
-        }
-
-        return $result;
+        return $response->getStatusCode();
     }
 }
