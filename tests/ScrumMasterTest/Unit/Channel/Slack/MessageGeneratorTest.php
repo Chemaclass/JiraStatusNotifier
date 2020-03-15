@@ -14,18 +14,19 @@ use PHPUnit\Framework\TestCase;
 final class MessageGeneratorTest extends TestCase
 {
     /** @test */
-    public function renderMessageWithAssignee(): void
+    public function renderMessageWithAssigneeAndMultipleJiraTickets(): void
     {
         $expectedMessage = <<<TXT
 Hey, Full Name (assignee.name), please have a look
-*Ticket*: Ticket Title[<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>]
-*Current status*: IN QA since 1 day
-*Story Points*: 5
+> [<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>] Ticket Title
+*Current status*: IN QA since 1 day | *Story Points*: 5
+> [<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>] Ticket Title
+*Current status*: IN QA since 1 day | *Story Points*: 5
 
 TXT;
         $statusDateChange = new DateTimeImmutable();
 
-        $jiraTicket = new JiraTicket(
+        $ticket = new JiraTicket(
             $title = 'Ticket Title',
             $key = 'CST-KEY',
             new TicketStatus('IN QA', $statusDateChange->modify('-1 days')),
@@ -39,7 +40,7 @@ TXT;
         );
 
         $slackMessage = MessageGenerator::beingNow($statusDateChange);
-        $this->assertEquals($expectedMessage, $slackMessage->forJiraTickets([$jiraTicket], 'company-name'));
+        $this->assertEquals($expectedMessage, $slackMessage->forJiraTickets([$ticket,$ticket], 'company-name'));
     }
 
     /** @test */
@@ -47,9 +48,8 @@ TXT;
     {
         $expectedMessage = <<<TXT
 Hey Team, please have a look
-*Ticket*: Ticket Title[<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>]
-*Current status*: IN QA since 2 days
-*Story Points*: 5
+> [<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>] Ticket Title
+*Current status*: IN QA since 2 days | *Story Points*: 5
 
 TXT;
         $statusDateChange = new DateTimeImmutable();
