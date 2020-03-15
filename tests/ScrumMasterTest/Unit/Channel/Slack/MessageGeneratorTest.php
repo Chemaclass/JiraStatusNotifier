@@ -40,7 +40,7 @@ TXT;
         );
 
         $slackMessage = MessageGenerator::beingNow($statusDateChange);
-        $this->assertEquals($expectedMessage, $slackMessage->forJiraTickets([$ticket,$ticket], 'company-name'));
+        $this->assertEquals($expectedMessage, $slackMessage->forJiraTickets([$ticket, $ticket], 'company-name'));
     }
 
     /** @test */
