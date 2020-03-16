@@ -53,7 +53,7 @@ final class ChannelResult
             }
         }
 
-        return $tickets;
+        return $this->replaceEmptyKeyArray($tickets);
     }
 
     public function total(): int
@@ -94,5 +94,13 @@ final class ChannelResult
         sort($people);
 
         return $people;
+    }
+
+    private function replaceEmptyKeyArray(array $tickets, string $replacement = 'None'): array
+    {
+        $tickets[$replacement] = $tickets[''];
+        unset($tickets['']);
+
+        return $tickets;
     }
 }
