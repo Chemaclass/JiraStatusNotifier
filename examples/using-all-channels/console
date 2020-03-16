@@ -28,6 +28,8 @@ use Twig\Loader\FilesystemLoader;
 Dotenv::create(__DIR__)->load();
 EnvKeys::create((array)getenv())->validate(file_get_contents(__DIR__ . '/.env.dist'));
 
+$twig = new Environment(new FilesystemLoader('../templates'));
+
 $jiraHttpClient = new JiraHttpClient(HttpClient::create([
     'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
 ]));
@@ -35,7 +37,7 @@ $jiraHttpClient = new JiraHttpClient(HttpClient::create([
 $channels = [
     new Email\Channel(
         new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),
-        Email\MessageGenerator::beingNow(new DateTimeImmutable()),
+        new Email\MessageGenerator(new DateTimeImmutable(), $twig),
         new Email\AddressGenerator((new ByPassEmail())
             ->setSendEmailsToAssignee(false) // <- OverriddenEmails wont have no effect as long as this is false
             ->setOverriddenEmails(json_decode(getenv('OVERRIDDEN_EMAILS'), true))
@@ -62,5 +64,5 @@ $result = $notifier->notify(NotifierInput::new(
 
 (new NotifierOutput(
     new EchoOutput(),
-    new Environment(new FilesystemLoader('../templates'))
+    $twig
 ))->write($result, 'output/channel-result.twig');

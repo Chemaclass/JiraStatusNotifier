@@ -23,6 +23,7 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as SymfonyEmail;
+use Twig\Environment;
 
 final class EmailNotifierCommandTest extends TestCase
 {
@@ -91,7 +92,7 @@ final class EmailNotifierCommandTest extends TestCase
             [
                 new Channel(
                     new Mailer($transport),
-                    MessageGenerator::beingNow(new DateTimeImmutable()),
+                    $this->messageGenerator(),
                     new AddressGenerator((new ByPassEmail())->setOverriddenEmails([
                         'user.1.jira' => 'user.3@email.com',
                         'user.2.jira' => 'user.3@email.com',
@@ -121,7 +122,7 @@ final class EmailNotifierCommandTest extends TestCase
             [
                 new Channel(
                     new Mailer($transport),
-                    MessageGenerator::beingNow(new DateTimeImmutable())
+                    $this->messageGenerator()
                 ),
             ]
         );
@@ -151,7 +152,7 @@ final class EmailNotifierCommandTest extends TestCase
             [
                 new Email\Channel(
                     new Mailer($transport),
-                    Email\MessageGenerator::beingNow(new DateTimeImmutable())
+                    $this->messageGenerator()
                 ),
             ]
         );
@@ -176,9 +177,14 @@ final class EmailNotifierCommandTest extends TestCase
             [
                 new Email\Channel(
                     new Mailer($this->createMock(TransportInterface::class)),
-                    Email\MessageGenerator::beingNow(new DateTimeImmutable())
+                    $this->messageGenerator()
                 ),
             ]
         );
+    }
+
+    private function messageGenerator(): Email\MessageGenerator
+    {
+        return new Email\MessageGenerator(new DateTimeImmutable(), $this->createMock(Environment::class));
     }
 }
