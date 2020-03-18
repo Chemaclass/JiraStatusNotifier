@@ -53,7 +53,7 @@ final class ChannelResult
             }
         }
 
-        return $this->replaceKey($tickets);
+        return $this->replaceKey($tickets, $from = '', $to = 'None');
     }
 
     public function total(): int
@@ -96,7 +96,7 @@ final class ChannelResult
         return $people;
     }
 
-    private function replaceKey(array $tickets, string $from = '', string $to = 'None'): array
+    private function replaceKey(array $tickets, string $from, string $to): array
     {
         $tickets[$to] = $tickets[$from];
         unset($tickets[$from]);
