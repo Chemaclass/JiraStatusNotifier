@@ -52,7 +52,7 @@ final class ChannelResultTest extends TestCase
     public function ticketsAssignedToPeople(): void
     {
         self::assertEquals([
-            null => ['K-1'],
+            'None' => ['K-1'],
             'j.user.1' => ['K-2', 'K-3'],
             'j.user.2' => ['K-4'],
         ], $this->result->ticketsAssignedToPeople());
