@@ -75,13 +75,6 @@ final class ChannelResult
         }));
     }
 
-    public function append(self $other): void
-    {
-        foreach ($other->channelIssues() as $ticketKey => $channelIssue) {
-            $this->addChannelIssue($ticketKey, $channelIssue);
-        }
-    }
-
     /** @return string[] */
     private function peopleAssigned(): array
     {
