@@ -63,26 +63,24 @@ final class ChannelResult
 
     public function totalSuccessful(): int
     {
-        return count(array_filter($this->channelIssues, function (ChannelIssue $channelIssue) {
-            return 200 === $channelIssue->responseStatusCode();
-        }));
+        return count(array_filter(
+            $this->channelIssues,
+            fn (ChannelIssue $issue): bool => 200 === $issue->responseStatusCode()
+        ));
     }
 
     public function totalFailed(): int
     {
-        return count(array_filter($this->channelIssues, function (ChannelIssue $channelIssue) {
-            return 200 !== $channelIssue->responseStatusCode();
-        }));
+        return count(array_filter(
+            $this->channelIssues,
+            fn (ChannelIssue $issue): bool => 200 !== $issue->responseStatusCode()
+        ));
     }
 
     /** @return string[] */
     private function peopleAssigned(): array
     {
-        $values = array_map(
-            fn (ChannelIssue $i) => $i->displayName(),
-            $this->channelIssues
-        );
-
+        $values = array_map(fn (ChannelIssue $issue): ?string => $issue->displayName(), $this->channelIssues);
         $people = array_values(array_unique($values));
         sort($people);
 
