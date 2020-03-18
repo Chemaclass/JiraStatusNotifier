@@ -53,7 +53,7 @@ final class ChannelResult
             }
         }
 
-        return $this->replaceEmptyKeyArray($tickets);
+        return $this->replaceKey($tickets);
     }
 
     public function total(): int
@@ -96,10 +96,10 @@ final class ChannelResult
         return $people;
     }
 
-    private function replaceEmptyKeyArray(array $tickets, string $replacement = 'None'): array
+    private function replaceKey(array $tickets, string $from = '', string $to = 'None'): array
     {
-        $tickets[$replacement] = $tickets[''];
-        unset($tickets['']);
+        $tickets[$to] = $tickets[$from];
+        unset($tickets[$from]);
 
         return $tickets;
     }
