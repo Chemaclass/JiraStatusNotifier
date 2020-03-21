@@ -9,7 +9,6 @@ use Chemaclass\ScrumMaster\Channel\Email;
 use Chemaclass\ScrumMaster\Channel\Email\AddressGenerator;
 use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
 use Chemaclass\ScrumMaster\Channel\Email\Channel;
-use Chemaclass\ScrumMaster\Channel\Email\MessageGenerator;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
@@ -25,7 +24,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as SymfonyEmail;
 use Twig\Environment;
 
-final class EmailNotifierCommandTest extends TestCase
+final class EmailNotifierTest extends TestCase
 {
     use JiraApiResource;
 
