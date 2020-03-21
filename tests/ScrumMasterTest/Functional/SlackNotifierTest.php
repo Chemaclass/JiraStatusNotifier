@@ -71,7 +71,11 @@ final class SlackNotifierTest extends TestCase
                 new Slack\Channel(
                     new Slack\HttpClient($this->createMock(HttpClientInterface::class)),
                     Slack\JiraMapping::jiraNameWithSlackId(['jira.id' => 'slack.id']),
-                    new Slack\MessageGenerator(new DateTimeImmutable(), $this->createMock(Environment::class))
+                    new Slack\MessageGenerator(
+                        new DateTimeImmutable(),
+                        $this->createMock(Environment::class),
+                        'template-name.twig'
+                    )
                 ),
             ]
         );

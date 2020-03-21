@@ -36,7 +36,7 @@ $notifier = new Notifier(
                 'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
             ])),
             Slack\JiraMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
-            new MessageGenerator(new DateTimeImmutable(), $twig)
+            new MessageGenerator(new DateTimeImmutable(), $twig, 'slack-template.twig')
         ),
     ]
 );

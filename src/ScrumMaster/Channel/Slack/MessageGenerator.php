@@ -12,16 +12,17 @@ use Webmozart\Assert\Assert;
 
 final class MessageGenerator implements MessageGeneratorInterface
 {
-    public const TEMPLATE_NAME = 'slack-template.twig';
-
     private DateTimeImmutable $now;
 
     private Twig\Environment $twig;
 
-    public function __construct(DateTimeImmutable $now, Twig\Environment $twig)
+    private string $templateName;
+
+    public function __construct(DateTimeImmutable $now, Twig\Environment $twig, string $templateName)
     {
         $this->now = $now;
         $this->twig = $twig;
+        $this->templateName = $templateName;
     }
 
     public function forJiraTickets(array $tickets, string $companyName): string
@@ -30,7 +31,7 @@ final class MessageGenerator implements MessageGeneratorInterface
         uksort($tickets, 'strnatcasecmp');
 
         return $this->twig->render(
-            self::TEMPLATE_NAME,
+            $this->templateName,
             [
                 'tickets' => $tickets,
                 'now' => $this->now,
