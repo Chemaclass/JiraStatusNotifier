@@ -9,6 +9,7 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
 use Chemaclass\ScrumMaster\Channel\Slack;
+use Chemaclass\ScrumMaster\Channel\Slack\MessageGenerator;
 use Chemaclass\ScrumMaster\Common\EnvKeys;
 use Chemaclass\ScrumMaster\IO\EchoOutput;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
@@ -23,6 +24,8 @@ use Twig\Loader\FilesystemLoader;
 Dotenv::create(__DIR__)->load();
 EnvKeys::create((array) getenv())->validate(file_get_contents(__DIR__ . '/.env.dist'));
 
+$twig = new Environment(new FilesystemLoader('../templates'));
+
 $notifier = new Notifier(
     new JiraHttpClient(HttpClient::create([
         'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
@@ -33,7 +36,7 @@ $notifier = new Notifier(
                 'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
             ])),
             Slack\JiraMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
-            Slack\MessageGenerator::beingNow(new DateTimeImmutable())
+            new MessageGenerator(new DateTimeImmutable(), $twig)
         ),
     ]
 );
@@ -47,5 +50,5 @@ $result = $notifier->notify(NotifierInput::new(
 
 (new NotifierOutput(
     new EchoOutput(),
-    new Environment(new FilesystemLoader('../templates'))
+    $twig
 ))->write($result, 'output/channel-result.twig');
