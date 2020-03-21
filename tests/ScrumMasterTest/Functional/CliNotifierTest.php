@@ -12,7 +12,7 @@ use Chemaclass\ScrumMaster\Notifier;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use PHPUnit\Framework\TestCase;
 
-final class CliNotifierCommandTest extends TestCase
+final class CliNotifierTest extends TestCase
 {
     use JiraApiResource;
 

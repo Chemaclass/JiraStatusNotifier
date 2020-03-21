@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Twig\Environment;
 
-final class SlackNotifierCommandTest extends TestCase
+final class SlackNotifierTest extends TestCase
 {
     use JiraApiResource;
 

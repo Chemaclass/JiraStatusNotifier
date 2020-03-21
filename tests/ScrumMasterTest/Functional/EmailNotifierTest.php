@@ -24,7 +24,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as SymfonyEmail;
 use Twig\Environment;
 
-final class EmailNotifierCommandTest extends TestCase
+final class EmailNotifierTest extends TestCase
 {
     use JiraApiResource;
 
@@ -184,6 +184,10 @@ final class EmailNotifierCommandTest extends TestCase
 
     private function messageGenerator(): Email\MessageGenerator
     {
-        return new Email\MessageGenerator(new DateTimeImmutable(), $this->createMock(Environment::class));
+        return new Email\MessageGenerator(
+            new DateTimeImmutable(),
+            $this->createMock(Environment::class),
+            'templateName.twig'
+        );
     }
 }
