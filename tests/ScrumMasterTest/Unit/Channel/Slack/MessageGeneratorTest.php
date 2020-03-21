@@ -23,7 +23,8 @@ final class MessageGeneratorTest extends TestCase
 
         $generator = new MessageGenerator(
             new DateTimeImmutable(),
-            self::createMock(Twig\Environment::class)
+            self::createMock(Twig\Environment::class),
+            'template-name.twig'
         );
 
         $invalidTypes = [new \stdClass()];
@@ -36,12 +37,13 @@ final class MessageGeneratorTest extends TestCase
         $tickets = Tickets::fromArrayIssues([
             $this->createAJiraIssueAsArray('$assigneeKey', '$email'),
         ]);
-        $companyName = 'Any company name';
         $now = new DateTimeImmutable();
+        $companyName = 'Any company name';
+        $templateName = 'template-name.twig';
 
         $twigMock = self::createMock(Twig\Environment::class);
         $twigMock->expects(self::once())->method('render')->with(
-            $this->equalTo(MessageGenerator::TEMPLATE_NAME),
+            $this->equalTo($templateName),
             $this->equalTo([
                 'tickets' => $tickets,
                 'now' => $now,
@@ -49,7 +51,7 @@ final class MessageGeneratorTest extends TestCase
             ])
         );
 
-        $generator = new MessageGenerator($now, $twigMock);
+        $generator = new MessageGenerator($now, $twigMock, $templateName);
         $generator->forJiraTickets($tickets, $companyName);
     }
 }
