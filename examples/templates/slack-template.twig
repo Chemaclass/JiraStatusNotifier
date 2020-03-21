@@ -7,19 +7,12 @@
     {% set salutation = 'Hey Team' %}
 {% endif %}
 
-<header> {{ salutation }}, please have a look</header>
-<hr>
-
+{{ salutation }}, please have a look
 {% for ticket in tickets %}
     {% set status = ticket.status %}
     {% set daysDiff = status.changeDate.diff(now).days %}
     {% set url = "https://" ~ companyName ~ ".atlassian.net/browse/" ~ ticket.key %}
-    {% set dayWord = (daysDiff > 1) ? 'days' : 'day' %}
+    {% set dayWord = (daysDiff > 1) ? 'days' : 'day' %}> [<{{ url }}|{{ ticket->key() }}>] {{ ticket->title() }}
+*Current status*: {{ status->name() }} since {{ daysDiff }} {{ dayWord }} | *Story Points*: {{ ticket->storyPoints() }}
 
-    <div class="ticket">
-        <b>Jira Ticket</b>: <a href='{{ url }}'>{{ ticket.key }}</a> - <i>{{ ticket.title }}</i> <br>
-        <b>Current status</b>: <i>{{ status.name }} </i> since {{ daysDiff }} {{ dayWord }}<br>
-        <b>Story Points</b>: {{ ticket.storyPoints }}<br>
-    </div>
-    <hr>
 {% endfor %}
