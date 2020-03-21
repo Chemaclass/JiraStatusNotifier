@@ -184,6 +184,10 @@ final class EmailNotifierTest extends TestCase
 
     private function messageGenerator(): Email\MessageGenerator
     {
-        return new Email\MessageGenerator(new DateTimeImmutable(), $this->createMock(Environment::class));
+        return new Email\MessageGenerator(
+            new DateTimeImmutable(),
+            $this->createMock(Environment::class),
+            'templateName.twig'
+        );
     }
 }
