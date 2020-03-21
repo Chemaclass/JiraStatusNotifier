@@ -20,12 +20,16 @@ final class HttpClient
 
     public function postToChannel(string $channel, string $text, bool $asUser = true): ResponseInterface
     {
-        return $this->client->request('POST', self::SLACK_API_POST_MESSAGE, [
-            'json' => [
-                'channel' => $channel,
-                'text' => $text,
-                'as_user' => $asUser,
-            ],
-        ]);
+        return $this->client->request(
+            'POST',
+            self::SLACK_API_POST_MESSAGE,
+            [
+                'json' => [
+                    'channel' => $channel,
+                    'text' => $text,
+                    'as_user' => $asUser,
+                ],
+            ]
+        );
     }
 }

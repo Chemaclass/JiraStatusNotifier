@@ -13,20 +13,24 @@ final class HttpClientTest extends TestCase
     /** @test */
     public function postToChannel(): void
     {
+        $channelId = 'channel.id';
+        $text = 'Any text';
+        $asUser = true;
+
         $httpClientMock = $this->createMock(HttpClientInterface::class);
         $httpClientMock->expects(self::once())->method('request')->with(
             $this->equalTo('POST'),
             $this->equalTo(HttpClient::SLACK_API_POST_MESSAGE),
             $this->equalTo([
                 'json' => [
-                    'channel' => 'channel.id',
-                    'text' => 'any text',
-                    'as_user' => true,
+                    'channel' => $channelId,
+                    'text' => $text,
+                    'as_user' => $asUser,
                 ],
             ])
         );
 
         $client = new HttpClient($httpClientMock);
-        $client->postToChannel('channel.id', 'any text');
+        $client->postToChannel($channelId, $text, $asUser);
     }
 }
