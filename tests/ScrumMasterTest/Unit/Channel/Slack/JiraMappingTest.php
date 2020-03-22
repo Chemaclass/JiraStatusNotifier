@@ -9,8 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 final class JiraMappingTest extends TestCase
 {
-    /** @var JiraMapping */
-    private $mapping;
+    private JiraMapping $mapping;
 
     protected function setUp(): void
     {

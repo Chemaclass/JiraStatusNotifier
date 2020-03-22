@@ -1,0 +1,21 @@
+{% set firstTicket = tickets | first %}
+{% set assignee = firstTicket.assignee %}
+
+{% if assignee.key %}
+    {% set salutation = "Hey, " ~ assignee.displayName ~ "(" ~ assignee.name ~ ")" %}
+{% else %}
+    {% set salutation = 'Hey Team' %}
+{% endif %}
+
+{{ salutation }}, please have a look
+
+{% for ticket in tickets %}
+    {% set status = ticket.status %}
+    {% set daysDiff = status.changeDate.diff(now).days %}
+    {% set url = "https://" ~ companyName ~ ".atlassian.net/browse/" ~ ticket.key %}
+    {% set dayWord = (daysDiff > 1) ? 'days' : 'day' %}
+
+> [<{{ url }}|{{ ticket.key }}>] {{ ticket.title | raw }}
+{{ ticket.storyPoints }} *SP* | *Current status*: {{ status.name }} since {{ daysDiff }} {{ dayWord }}
+
+{% endfor %}

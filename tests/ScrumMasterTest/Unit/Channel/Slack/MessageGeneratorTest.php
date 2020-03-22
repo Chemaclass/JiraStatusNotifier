@@ -5,64 +5,53 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMasterTests\Unit\Channel\Slack;
 
 use Chemaclass\ScrumMaster\Channel\Slack\MessageGenerator;
-use Chemaclass\ScrumMaster\Jira\ReadModel\Assignee;
-use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
-use Chemaclass\ScrumMaster\Jira\ReadModel\TicketStatus;
+use Chemaclass\ScrumMaster\Jira\Tickets;
+use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Twig;
 
 final class MessageGeneratorTest extends TestCase
 {
+    use JiraApiResource;
+
     /** @test */
-    public function renderMessageWithAssigneeAndMultipleJiraTickets(): void
+    public function forJiraTicketsWrongType(): void
     {
-        $expectedMessage = <<<TXT
-Hey, Full Name (assignee.name), please have a look
-> [<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>] Ticket Title
-*Current status*: IN QA since 1 day | *Story Points*: 5
-> [<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>] Ticket Title
-*Current status*: IN QA since 1 day | *Story Points*: 5
+        self::expectException(InvalidArgumentException::class);
 
-TXT;
-        $statusDateChange = new DateTimeImmutable();
-
-        $ticket = new JiraTicket(
-            $title = 'Ticket Title',
-            $key = 'CST-KEY',
-            new TicketStatus('IN QA', $statusDateChange->modify('-1 days')),
-            new Assignee(
-                $name = 'assignee.name',
-                $key = 'assignee-key',
-                $displayName = 'Full Name',
-                $email = 'any@example.com'
-            ),
-            $storyPoints = 5
+        $generator = new MessageGenerator(
+            new DateTimeImmutable(),
+            self::createMock(Twig\Environment::class),
+            'template-name.twig'
         );
 
-        $slackMessage = MessageGenerator::beingNow($statusDateChange);
-        $this->assertEquals($expectedMessage, $slackMessage->forJiraTickets([$ticket, $ticket], 'company-name'));
+        $invalidTypes = [new \stdClass()];
+        $generator->forJiraTickets($invalidTypes, 'Any company name');
     }
 
     /** @test */
-    public function renderMessageWithoutAssignee(): void
+    public function forJiraTickets(): void
     {
-        $expectedMessage = <<<TXT
-Hey Team, please have a look
-> [<https://company-name.atlassian.net/browse/CST-KEY|CST-KEY>] Ticket Title
-*Current status*: IN QA since 2 days | *Story Points*: 5
+        $tickets = Tickets::fromArrayIssues([
+            $this->createAJiraIssueAsArray('$assigneeKey', '$email'),
+        ]);
+        $now = new DateTimeImmutable();
+        $companyName = 'Any company name';
+        $templateName = 'template-name.twig';
 
-TXT;
-        $statusDateChange = new DateTimeImmutable();
-
-        $jiraTicket = new JiraTicket(
-            $title = 'Ticket Title',
-            $key = 'CST-KEY',
-            new TicketStatus('IN QA', $statusDateChange->modify('-2 days')),
-            Assignee::empty(),
-            $storyPoints = 5
+        $twigMock = self::createMock(Twig\Environment::class);
+        $twigMock->expects(self::once())->method('render')->with(
+            $this->equalTo($templateName),
+            $this->equalTo([
+                'tickets' => $tickets,
+                'now' => $now,
+                'companyName' => $companyName,
+            ])
         );
 
-        $slackMessage = MessageGenerator::beingNow($statusDateChange);
-        $this->assertEquals($expectedMessage, $slackMessage->forJiraTickets([$jiraTicket], 'company-name'));
+        $generator = new MessageGenerator($now, $twigMock, $templateName);
+        $generator->forJiraTickets($tickets, $companyName);
     }
 }

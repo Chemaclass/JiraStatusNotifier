@@ -13,6 +13,7 @@ use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Twig\Environment;
 
 final class SlackNotifierTest extends TestCase
 {
@@ -70,7 +71,11 @@ final class SlackNotifierTest extends TestCase
                 new Slack\Channel(
                     new Slack\HttpClient($this->createMock(HttpClientInterface::class)),
                     Slack\JiraMapping::jiraNameWithSlackId(['jira.id' => 'slack.id']),
-                    Slack\MessageGenerator::beingNow(new DateTimeImmutable())
+                    new Slack\MessageGenerator(
+                        new DateTimeImmutable(),
+                        $this->createMock(Environment::class),
+                        'template-name.twig'
+                    )
                 ),
             ]
         );

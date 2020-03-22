@@ -17,9 +17,15 @@ final class Tickets
     /** @return JiraTicket[] */
     public static function fromJiraResponse(ResponseInterface $response): array
     {
+        return static::fromArrayIssues($response->toArray()['issues']);
+    }
+
+    /** @return JiraTicket[] */
+    public static function fromArrayIssues(array $issues): array
+    {
         $jiraTickets = [];
 
-        foreach ($response->toArray()['issues'] ?? [] as $item) {
+        foreach ($issues ?? [] as $item) {
             $jiraTickets[] = static::newJiraTicket($item);
         }
 
