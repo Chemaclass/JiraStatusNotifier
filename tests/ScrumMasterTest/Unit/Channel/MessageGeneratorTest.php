@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMasterTests\Unit\Channel\Slack;
+namespace Chemaclass\ScrumMasterTests\Unit\Channel;
 
 use Chemaclass\ScrumMaster\Channel\MessageGenerator;
 use Chemaclass\ScrumMaster\Jira\Tickets;
@@ -19,11 +19,11 @@ final class MessageGeneratorTest extends TestCase
     /** @test */
     public function forJiraTicketsWrongType(): void
     {
-        self::expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $generator = new MessageGenerator(
             new DateTimeImmutable(),
-            self::createMock(Twig\Environment::class),
+            $this->createMock(Twig\Environment::class),
             'template-name.twig'
         );
 
@@ -41,7 +41,7 @@ final class MessageGeneratorTest extends TestCase
         $companyName = 'Any company name';
         $templateName = 'template-name.twig';
 
-        $twigMock = self::createMock(Twig\Environment::class);
+        $twigMock = $this->createMock(Twig\Environment::class);
         $twigMock->expects(self::once())->method('render')->with(
             $this->equalTo($templateName),
             $this->equalTo([
