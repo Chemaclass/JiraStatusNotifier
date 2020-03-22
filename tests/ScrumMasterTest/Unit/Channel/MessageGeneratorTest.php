@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMasterTests\Unit\Channel\Slack;
 
-use Chemaclass\ScrumMaster\Channel\Slack\MessageGenerator;
+use Chemaclass\ScrumMaster\Channel\MessageGenerator;
 use Chemaclass\ScrumMaster\Jira\Tickets;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;

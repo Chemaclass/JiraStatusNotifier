@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\ScrumMaster\Channel\Email;
+namespace Chemaclass\ScrumMaster\Channel;
 
-use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
 use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use DateTimeImmutable;
 use Twig;
 use Webmozart\Assert\Assert;
 
-final class MessageGenerator implements MessageGeneratorInterface
+final class MessageGenerator
 {
     private DateTimeImmutable $now;
 

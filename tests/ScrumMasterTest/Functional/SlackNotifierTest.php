@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMasterTests\Functional;
 
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
+use Chemaclass\ScrumMaster\Channel\MessageGenerator;
 use Chemaclass\ScrumMaster\Channel\Slack;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
@@ -60,7 +61,12 @@ final class SlackNotifierTest extends TestCase
 
     private function notifierInput(array $jiraUsersToIgnore = []): NotifierInput
     {
-        return NotifierInput::new('company.name', 'Jira project name', ['status' => 1], $jiraUsersToIgnore);
+        return NotifierInput::new(
+            'company.name',
+            'Jira project name',
+            ['status' => 1],
+            $jiraUsersToIgnore
+        );
     }
 
     private function slackNotifierCommandWithJiraTickets(array $jiraIssues): Notifier
@@ -71,7 +77,7 @@ final class SlackNotifierTest extends TestCase
                 new Slack\Channel(
                     new Slack\HttpClient($this->createMock(HttpClientInterface::class)),
                     Slack\JiraMapping::jiraNameWithSlackId(['jira.id' => 'slack.id']),
-                    new Slack\MessageGenerator(
+                    new MessageGenerator(
                         new DateTimeImmutable(),
                         $this->createMock(Environment::class),
                         'template-name.twig'

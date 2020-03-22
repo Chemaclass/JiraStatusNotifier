@@ -57,7 +57,12 @@ final class CliNotifierTest extends TestCase
 
     private function notifierInput(array $jiraUsersToIgnore = []): NotifierInput
     {
-        return NotifierInput::new('company.name', 'Jira project name', ['status' => 1], $jiraUsersToIgnore);
+        return NotifierInput::new(
+            'company.name',
+            'Jira project name',
+            ['status' => 1],
+            $jiraUsersToIgnore
+        );
     }
 
     private function cliNotifierCommandWithJiraTickets(array $jiraIssues): Notifier

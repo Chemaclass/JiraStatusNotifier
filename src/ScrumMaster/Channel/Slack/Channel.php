@@ -6,7 +6,7 @@ namespace Chemaclass\ScrumMaster\Channel\Slack;
 
 use Chemaclass\ScrumMaster\Channel\ChannelInterface;
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
-use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
+use Chemaclass\ScrumMaster\Channel\MessageGenerator;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 
@@ -16,12 +16,12 @@ final class Channel implements ChannelInterface
 
     private JiraMapping $slackMapping;
 
-    private MessageGeneratorInterface $messageGenerator;
+    private MessageGenerator $messageGenerator;
 
     public function __construct(
         HttpClient $slackClient,
         JiraMapping $slackMapping,
-        MessageGeneratorInterface $messageGenerator
+        MessageGenerator $messageGenerator
     ) {
         $this->slackClient = $slackClient;
         $this->slackMapping = $slackMapping;
