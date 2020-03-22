@@ -6,7 +6,7 @@ namespace Chemaclass\ScrumMaster\Channel\Email;
 
 use Chemaclass\ScrumMaster\Channel\ChannelInterface;
 use Chemaclass\ScrumMaster\Channel\ChannelResult;
-use Chemaclass\ScrumMaster\Channel\MessageGeneratorInterface;
+use Chemaclass\ScrumMaster\Channel\MessageGenerator;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\Common\Request;
 use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
@@ -18,13 +18,13 @@ final class Channel implements ChannelInterface
 {
     private Mailer $mailer;
 
-    private MessageGeneratorInterface $messageGenerator;
+    private MessageGenerator $messageGenerator;
 
     private AddressGenerator $addressGenerator;
 
     public function __construct(
         Mailer $mailer,
-        MessageGeneratorInterface $messageGenerator,
+        MessageGenerator $messageGenerator,
         ?AddressGenerator $addresses = null
     ) {
         $this->mailer = $mailer;

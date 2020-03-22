@@ -9,6 +9,7 @@ use Chemaclass\ScrumMaster\Channel\Email;
 use Chemaclass\ScrumMaster\Channel\Email\AddressGenerator;
 use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
 use Chemaclass\ScrumMaster\Channel\Email\Channel;
+use Chemaclass\ScrumMaster\Channel\MessageGenerator;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
@@ -119,10 +120,7 @@ final class EmailNotifierTest extends TestCase
                 $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111'),
             ])),
             [
-                new Channel(
-                    new Mailer($transport),
-                    $this->messageGenerator()
-                ),
+                new Channel(new Mailer($transport), $this->messageGenerator()),
             ]
         );
 
@@ -149,10 +147,7 @@ final class EmailNotifierTest extends TestCase
                 $this->createAJiraIssueAsArray('user.2.jira', 'KEY-4', 'email2@a.com', 'status1'),
             ])),
             [
-                new Email\Channel(
-                    new Mailer($transport),
-                    $this->messageGenerator()
-                ),
+                new Email\Channel(new Mailer($transport), $this->messageGenerator()),
             ]
         );
 
@@ -182,9 +177,9 @@ final class EmailNotifierTest extends TestCase
         );
     }
 
-    private function messageGenerator(): Email\MessageGenerator
+    private function messageGenerator(): MessageGenerator
     {
-        return new Email\MessageGenerator(
+        return new MessageGenerator(
             new DateTimeImmutable(),
             $this->createMock(Environment::class),
             'templateName.twig'

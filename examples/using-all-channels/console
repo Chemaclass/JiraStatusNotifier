@@ -11,6 +11,7 @@ require dirname(__DIR__) . '/../vendor/autoload.php';
 use Chemaclass\ScrumMaster\Channel\Cli;
 use Chemaclass\ScrumMaster\Channel\Email;
 use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
+use Chemaclass\ScrumMaster\Channel\MessageGenerator;
 use Chemaclass\ScrumMaster\Channel\Slack;
 use Chemaclass\ScrumMaster\Common\EnvKeys;
 use Chemaclass\ScrumMaster\IO\EchoOutput;
@@ -37,7 +38,7 @@ $jiraHttpClient = new JiraHttpClient(HttpClient::create([
 $channels = [
     new Email\Channel(
         new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),
-        new Email\MessageGenerator(new DateTimeImmutable(), $twig, 'email-template.twig'),
+        new MessageGenerator(new DateTimeImmutable(), $twig, 'email-template.twig'),
         new Email\AddressGenerator((new ByPassEmail())
             ->setSendEmailsToAssignee(false) // <- OverriddenEmails wont have no effect as long as this is false
             ->setOverriddenEmails(json_decode(getenv('OVERRIDDEN_EMAILS'), true))
@@ -48,7 +49,7 @@ $channels = [
             'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
         ])),
         Slack\JiraMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
-        Slack\MessageGenerator::beingNow(new DateTimeImmutable())
+        new MessageGenerator(new DateTimeImmutable(), $twig, 'slack-template.twig')
     ),
     new Cli\Channel(),
 ];
