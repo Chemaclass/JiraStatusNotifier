@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chemaclass\ScrumMasterTests\Unit\IO;
 
 use Chemaclass\ScrumMaster\IO\EchoOutput;
 use PHPUnit\Framework\TestCase;
 
-class EchoOutputTest extends TestCase
+final class EchoOutputTest extends TestCase
 {
     /** @test */
     public function write(): void
