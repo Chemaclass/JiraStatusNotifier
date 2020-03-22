@@ -9,10 +9,11 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Chemaclass\ScrumMaster\Jira\ReadModel\TicketStatus;
 use DateTimeImmutable;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Webmozart\Assert\Assert;
 
 final class Tickets
 {
-    public const FIELD_STORY_POINTS = 'customfield_10005';
+    private static string $fieldStoryPoints;
 
     /** @return JiraTicket[] */
     public static function fromJiraResponse(ResponseInterface $response): array
@@ -41,7 +42,7 @@ final class Tickets
             $item['key'],
             static::newTicketStatus($fields),
             static::newAssignee($fields['assignee'] ?? []),
-            $storyPoints = (int) $fields[self::FIELD_STORY_POINTS]
+            $storyPoints = (int) $fields[self::$fieldStoryPoints]
         );
     }
 
@@ -65,5 +66,16 @@ final class Tickets
             $assignee['displayName'] ?? '',
             $assignee['emailAddress'] ?? ''
         );
+    }
+
+    public function __construct(string $fieldStoryPoints)
+    {
+        Assert::notEmpty($fieldStoryPoints);
+        self::$fieldStoryPoints = $fieldStoryPoints;
+    }
+
+    public function getFieldStoryPoints(): string
+    {
+        return self::$fieldStoryPoints;
     }
 }

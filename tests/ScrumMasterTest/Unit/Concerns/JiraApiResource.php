@@ -35,7 +35,7 @@ trait JiraApiResource
         return [
             'key' => $key,
             'fields' => [
-                Tickets::FIELD_STORY_POINTS => '5.0',
+                (new Tickets('customfield_10005'))->getFieldStoryPoints() => '5.0',
                 'status' => [
                     'name' => $statusName,
                 ],
