@@ -9,11 +9,20 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\JiraTicket;
 use Chemaclass\ScrumMaster\Jira\ReadModel\TicketStatus;
 use Chemaclass\ScrumMaster\Jira\Tickets;
 use DateTimeImmutable;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class TicketsTest extends TestCase
 {
+    /** @test */
+    public function constructorNotEmpty(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new Tickets('');
+    }
+
     /** @test */
     public function fromJira(): void
     {

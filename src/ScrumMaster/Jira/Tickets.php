@@ -33,6 +33,17 @@ final class Tickets
         return $jiraTickets;
     }
 
+    public function __construct(string $fieldStoryPoints)
+    {
+        Assert::notEmpty($fieldStoryPoints);
+        self::$fieldStoryPoints = $fieldStoryPoints;
+    }
+
+    public function getFieldStoryPoints(): string
+    {
+        return self::$fieldStoryPoints;
+    }
+
     private static function newJiraTicket(array $item): JiraTicket
     {
         $fields = $item['fields'];
@@ -66,16 +77,5 @@ final class Tickets
             $assignee['displayName'] ?? '',
             $assignee['emailAddress'] ?? ''
         );
-    }
-
-    public function __construct(string $fieldStoryPoints)
-    {
-        Assert::notEmpty($fieldStoryPoints);
-        self::$fieldStoryPoints = $fieldStoryPoints;
-    }
-
-    public function getFieldStoryPoints(): string
-    {
-        return self::$fieldStoryPoints;
     }
 }
