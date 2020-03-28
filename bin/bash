@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-if [[ ! -f /.dockerenv ]]; then
-    docker exec -ti -u dev scrum_master_php bash
-else
-    echo "You are already into the docker bash.";
-fi
