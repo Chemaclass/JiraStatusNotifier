@@ -16,6 +16,7 @@ use Chemaclass\ScrumMaster\IO\EchoOutput;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\IO\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
 use Chemaclass\ScrumMaster\Notifier;
 use Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
@@ -25,14 +26,17 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 Dotenv::create(__DIR__)->load();
-EnvKeys::create((array) getenv())->validate(file_get_contents(__DIR__ . '/.env.dist'));
+EnvKeys::create((array)getenv())->validate(file_get_contents(__DIR__ . '/.env.dist'));
 
 $twig = new Environment(new FilesystemLoader('../templates'));
 
 $notifier = new Notifier(
-    new JiraHttpClient(HttpClient::create([
-        'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
-    ])),
+    new JiraHttpClient(
+        HttpClient::create([
+            'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
+        ]),
+        new JiraTicketsFactory(['customfield_10005' => 'StoryPoints'])
+    ),
     $channels = [
         new Email\Channel(
             new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),

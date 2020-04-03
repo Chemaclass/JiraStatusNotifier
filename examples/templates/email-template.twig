@@ -19,7 +19,7 @@
     <div class="ticket">
         <b>Jira Ticket</b>: <a href='{{ url }}'>{{ ticket.key }}</a> - <i>{{ ticket.title }}</i> <br>
         <b>Current status</b>: <i>{{ status.name }} </i> since {{ daysDiff }} {{ dayWord }}<br>
-        <b>Story Points</b>: {{ ticket.storyPoints }}<br>
+        <b>Story Points</b>: {{ ticket.customFields['StoryPoints'] }}<br>
     </div>
     <hr>
 {% endfor %}
