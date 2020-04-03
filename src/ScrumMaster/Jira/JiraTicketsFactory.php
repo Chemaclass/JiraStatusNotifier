@@ -15,11 +15,6 @@ final class JiraTicketsFactory
     /** @var array */
     private $customFields;
 
-    public static function withCustomFields(array $customFields = []): self
-    {
-        return new self($customFields);
-    }
-
     /**
      * @var array list of custom fields `[$realKey => $newKey]`
      *            to be able to use in the render templates, for example.

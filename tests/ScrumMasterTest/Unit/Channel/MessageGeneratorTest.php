@@ -34,7 +34,7 @@ final class MessageGeneratorTest extends TestCase
     /** @test */
     public function forJiraTickets(): void
     {
-        $tickets = $this->jiraTicketsFactory()->fromArrayIssues([
+        $tickets = (new JiraTicketsFactory())->fromArrayIssues([
             $this->createAJiraIssueAsArray('$assigneeKey', '$email'),
         ]);
         $now = new DateTimeImmutable();
@@ -53,10 +53,5 @@ final class MessageGeneratorTest extends TestCase
 
         $generator = new MessageGenerator($now, $twigMock, $templateName);
         $generator->forJiraTickets($tickets, $companyName);
-    }
-
-    private function jiraTicketsFactory(): JiraTicketsFactory
-    {
-        return JiraTicketsFactory::withCustomFields([]);
     }
 }

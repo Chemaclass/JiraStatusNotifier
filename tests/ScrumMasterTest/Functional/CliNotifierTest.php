@@ -69,7 +69,7 @@ final class CliNotifierTest extends TestCase
     private function cliNotifierCommandWithJiraTickets(array $jiraIssues): Notifier
     {
         return new Notifier(
-            new JiraHttpClient($this->mockJiraClient($jiraIssues), JiraTicketsFactory::withCustomFields([])),
+            new JiraHttpClient($this->mockJiraClient($jiraIssues), new JiraTicketsFactory()),
             [new Cli\Channel()]
         );
     }
