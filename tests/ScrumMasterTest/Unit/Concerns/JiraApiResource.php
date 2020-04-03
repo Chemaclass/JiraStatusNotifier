@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMasterTests\Unit\Concerns;
 
-use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;

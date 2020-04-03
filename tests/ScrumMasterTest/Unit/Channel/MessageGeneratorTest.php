@@ -7,7 +7,6 @@ namespace Chemaclass\ScrumMasterTests\Unit\Channel;
 use Chemaclass\ScrumMaster\Channel\MessageGenerator;
 use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
-use Chemaclass\ScrumMasterTests\Unit\Jira\JiraTicketsFactoryTest;
 use DateTimeImmutable;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;

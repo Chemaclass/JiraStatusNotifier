@@ -21,8 +21,8 @@ final class JiraTicketsFactory
     }
 
     /**
-     * @var array $customFields list of custom fields `[$realKey => $newKey]`
-     * to be able to use in the render templates, for example.
+     * @var array list of custom fields `[$realKey => $newKey]`
+     *            to be able to use in the render templates, for example.
      */
     public function __construct(array $customFields = [])
     {
