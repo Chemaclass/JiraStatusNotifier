@@ -49,9 +49,10 @@ final class JiraTicketTest extends TestCase
     public function status(): void
     {
         self::assertSame('statusName', $this->ticket->status()->name());
-        self::assertSame(
-            (new DateTimeImmutable())->format('Y-m-d'),
-            $this->ticket->status()->changeDate()->format('Y-m-d')
+
+        self::assertEquals(
+            (new DateTimeImmutable())->setTime(0, 0, 0),
+            $this->ticket->status()->changeDate()
         );
     }
 
