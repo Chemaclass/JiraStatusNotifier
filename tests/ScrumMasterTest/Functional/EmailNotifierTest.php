@@ -13,6 +13,7 @@ use Chemaclass\ScrumMaster\Channel\MessageGenerator;
 use Chemaclass\ScrumMaster\Channel\ReadModel\ChannelIssue;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
 use Chemaclass\ScrumMaster\Notifier;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
@@ -88,7 +89,7 @@ final class EmailNotifierTest extends TestCase
             });
 
         $notifier = new Notifier(
-            new JiraHttpClient($this->mockJiraClient($jiraIssues)),
+            new JiraHttpClient($this->mockJiraClient($jiraIssues), new JiraTicketsFactory()),
             [
                 new Channel(
                     new Mailer($transport),
@@ -116,9 +117,12 @@ final class EmailNotifierTest extends TestCase
             ->willThrowException(new TransportException('', $code));
 
         $notifier = new Notifier(
-            new JiraHttpClient($this->mockJiraClient([
-                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111'),
-            ])),
+            new JiraHttpClient(
+                $this->mockJiraClient([
+                    $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111'),
+                ]),
+                new JiraTicketsFactory()
+            ),
             [
                 new Channel(new Mailer($transport), $this->messageGenerator()),
             ]
@@ -140,12 +144,15 @@ final class EmailNotifierTest extends TestCase
         $transport->expects(self::exactly(2))->method('send');
 
         $notifier = new Notifier(
-            new JiraHttpClient($this->mockJiraClient([
-                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-1', 'email1@a.com', 'status1'),
-                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-2', 'email1@a.com', 'status1'),
-                $this->createAJiraIssueAsArray('user.1.jira', 'KEY-3', 'email1@a.com', 'status2'),
-                $this->createAJiraIssueAsArray('user.2.jira', 'KEY-4', 'email2@a.com', 'status1'),
-            ])),
+            new JiraHttpClient(
+                $this->mockJiraClient([
+                    $this->createAJiraIssueAsArray('user.1.jira', 'KEY-1', 'email1@a.com', 'status1'),
+                    $this->createAJiraIssueAsArray('user.1.jira', 'KEY-2', 'email1@a.com', 'status1'),
+                    $this->createAJiraIssueAsArray('user.1.jira', 'KEY-3', 'email1@a.com', 'status2'),
+                    $this->createAJiraIssueAsArray('user.2.jira', 'KEY-4', 'email2@a.com', 'status1'),
+                ]),
+                new JiraTicketsFactory()
+            ),
             [
                 new Email\Channel(new Mailer($transport), $this->messageGenerator()),
             ]
@@ -167,7 +174,10 @@ final class EmailNotifierTest extends TestCase
     private function emailNotifierCommandWithJiraTickets(array $jiraIssues): Notifier
     {
         return new Notifier(
-            new JiraHttpClient($this->mockJiraClient($jiraIssues)),
+            new JiraHttpClient(
+                $this->mockJiraClient($jiraIssues),
+                new JiraTicketsFactory()
+            ),
             [
                 new Email\Channel(
                     new Mailer($this->createMock(TransportInterface::class)),

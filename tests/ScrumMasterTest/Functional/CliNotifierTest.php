@@ -8,6 +8,7 @@ use Chemaclass\ScrumMaster\Channel\ChannelResult;
 use Chemaclass\ScrumMaster\Channel\Cli;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
 use Chemaclass\ScrumMaster\Notifier;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use PHPUnit\Framework\TestCase;
@@ -68,7 +69,7 @@ final class CliNotifierTest extends TestCase
     private function cliNotifierCommandWithJiraTickets(array $jiraIssues): Notifier
     {
         return new Notifier(
-            new JiraHttpClient($this->mockJiraClient($jiraIssues)),
+            new JiraHttpClient($this->mockJiraClient($jiraIssues), JiraTicketsFactory::withCustomFields([])),
             [new Cli\Channel()]
         );
     }

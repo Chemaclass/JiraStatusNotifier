@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMasterTests\Unit\Channel;
 
 use Chemaclass\ScrumMaster\Channel\MessageGenerator;
-use Chemaclass\ScrumMaster\Jira\Tickets;
+use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
+use Chemaclass\ScrumMasterTests\Unit\Jira\JiraTicketsFactoryTest;
 use DateTimeImmutable;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +35,7 @@ final class MessageGeneratorTest extends TestCase
     /** @test */
     public function forJiraTickets(): void
     {
-        $tickets = Tickets::fromArrayIssues([
+        $tickets = $this->jiraTicketsFactory()->fromArrayIssues([
             $this->createAJiraIssueAsArray('$assigneeKey', '$email'),
         ]);
         $now = new DateTimeImmutable();
@@ -53,5 +54,10 @@ final class MessageGeneratorTest extends TestCase
 
         $generator = new MessageGenerator($now, $twigMock, $templateName);
         $generator->forJiraTickets($tickets, $companyName);
+    }
+
+    private function jiraTicketsFactory(): JiraTicketsFactory
+    {
+        return JiraTicketsFactory::withCustomFields([]);
     }
 }

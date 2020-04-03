@@ -9,6 +9,7 @@ use Chemaclass\ScrumMaster\Channel\MessageGenerator;
 use Chemaclass\ScrumMaster\Channel\Slack;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
 use Chemaclass\ScrumMaster\Notifier;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
@@ -72,7 +73,10 @@ final class SlackNotifierTest extends TestCase
     private function slackNotifierCommandWithJiraTickets(array $jiraIssues): Notifier
     {
         return new Notifier(
-            new JiraHttpClient($this->mockJiraClient($jiraIssues)),
+            new JiraHttpClient(
+                $this->mockJiraClient($jiraIssues),
+                new JiraTicketsFactory()
+            ),
             [
                 new Slack\Channel(
                     new Slack\HttpClient($this->createMock(HttpClientInterface::class)),
