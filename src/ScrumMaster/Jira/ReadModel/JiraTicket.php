@@ -14,20 +14,21 @@ final class JiraTicket
 
     private Assignee $assignee;
 
-    private ?int $storyPoints;
+    /** @var array */
+    private $customFields;
 
     public function __construct(
         string $title,
         string $key,
         TicketStatus $status,
         Assignee $assignee,
-        ?int $storyPoints
+        array $customFields = []
     ) {
         $this->title = $title;
         $this->key = $key;
         $this->status = $status;
         $this->assignee = $assignee;
-        $this->storyPoints = $storyPoints;
+        $this->customFields = $customFields;
     }
 
     public function title(): string
@@ -50,8 +51,8 @@ final class JiraTicket
         return $this->assignee;
     }
 
-    public function storyPoints(): ?int
+    public function customFields(): array
     {
-        return $this->storyPoints;
+        return $this->customFields;
     }
 }

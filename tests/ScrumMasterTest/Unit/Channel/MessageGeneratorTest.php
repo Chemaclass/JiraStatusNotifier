@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chemaclass\ScrumMasterTests\Unit\Channel;
 
 use Chemaclass\ScrumMaster\Channel\MessageGenerator;
-use Chemaclass\ScrumMaster\Jira\Tickets;
+use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
 use Chemaclass\ScrumMasterTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
 use InvalidArgumentException;
@@ -34,7 +34,7 @@ final class MessageGeneratorTest extends TestCase
     /** @test */
     public function forJiraTickets(): void
     {
-        $tickets = Tickets::fromArrayIssues([
+        $tickets = (new JiraTicketsFactory())->fromArrayIssues([
             $this->createAJiraIssueAsArray('$assigneeKey', '$email'),
         ]);
         $now = new DateTimeImmutable();

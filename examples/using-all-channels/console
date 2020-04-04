@@ -18,6 +18,7 @@ use Chemaclass\ScrumMaster\IO\EchoOutput;
 use Chemaclass\ScrumMaster\IO\NotifierInput;
 use Chemaclass\ScrumMaster\IO\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
+use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
 use Chemaclass\ScrumMaster\Notifier;
 use Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
@@ -31,9 +32,12 @@ EnvKeys::create((array)getenv())->validate(file_get_contents(__DIR__ . '/.env.di
 
 $twig = new Environment(new FilesystemLoader('../templates'));
 
-$jiraHttpClient = new JiraHttpClient(HttpClient::create([
-    'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
-]));
+$jiraHttpClient = new JiraHttpClient(
+    HttpClient::create([
+        'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
+    ]),
+    new JiraTicketsFactory(['customfield_10005' => 'StoryPoints'])
+);
 
 $channels = [
     new Email\Channel(

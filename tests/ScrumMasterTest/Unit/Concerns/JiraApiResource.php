@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMasterTests\Unit\Concerns;
 
-use Chemaclass\ScrumMaster\Jira\Tickets;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -35,7 +34,7 @@ trait JiraApiResource
         return [
             'key' => $key,
             'fields' => [
-                Tickets::FIELD_STORY_POINTS => '5.0',
+                'customfield_sp' => '5.0',
                 'status' => [
                     'name' => $statusName,
                 ],

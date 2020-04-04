@@ -16,6 +16,6 @@
     {% set dayWord = (daysDiff > 1) ? 'days' : 'day' %}
 
 > [<{{ url }}|{{ ticket.key }}>] {{ ticket.title | raw }}
-{{ ticket.storyPoints }} *SP* | *Current status*: {{ status.name }} since {{ daysDiff }} {{ dayWord }}
+{{ ticket.customFields['StoryPoints'] }} *SP* | *Current status*: {{ status.name }} since {{ daysDiff }} {{ dayWord }}
 
 {% endfor %}
