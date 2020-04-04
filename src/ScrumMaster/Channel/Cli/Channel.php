@@ -11,7 +11,7 @@ use Chemaclass\ScrumMaster\Jira\ReadModel\Company;
 
 final class Channel implements ChannelInterface
 {
-    public function sendNotifications(array $ticketsByAssignee, Company $company): ChannelResult
+    public function send(array $ticketsByAssignee, Company $company): ChannelResult
     {
         $result = new ChannelResult();
 

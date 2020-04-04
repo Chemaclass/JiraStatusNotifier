@@ -11,11 +11,11 @@ require dirname(__DIR__) . '/../vendor/autoload.php';
 use Chemaclass\ScrumMaster\Channel\Cli;
 use Chemaclass\ScrumMaster\Common\EnvKeys;
 use Chemaclass\ScrumMaster\IO\EchoOutput;
-use Chemaclass\ScrumMaster\IO\NotifierInput;
+use Chemaclass\ScrumMaster\IO\JiraConnectorInput;
 use Chemaclass\ScrumMaster\IO\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
-use Chemaclass\ScrumMaster\Notifier;
+use Chemaclass\ScrumMaster\JiraConnector;
 use Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 use Twig\Environment;
@@ -31,13 +31,13 @@ $jiraHttpClient = new JiraHttpClient(
     new JiraTicketsFactory(['customfield_10005' => 'StoryPoints'])
 );
 
-$notifier = new Notifier($jiraHttpClient, [new Cli\Channel()]);
+$jiraConnector = new JiraConnector($jiraHttpClient, [new Cli\Channel()]);
 
-$result = $notifier->notify(NotifierInput::new(
-    getenv(NotifierInput::COMPANY_NAME),
-    getenv(NotifierInput::JIRA_PROJECT_NAME),
-    json_decode(getenv(NotifierInput::DAYS_FOR_STATUS), true),
-    json_decode(getenv(NotifierInput::JIRA_USERS_TO_IGNORE), true)
+$result = $jiraConnector->handle(JiraConnectorInput::new(
+    getenv(JiraConnectorInput::COMPANY_NAME),
+    getenv(JiraConnectorInput::JIRA_PROJECT_NAME),
+    json_decode(getenv(JiraConnectorInput::DAYS_FOR_STATUS), true),
+    json_decode(getenv(JiraConnectorInput::JIRA_USERS_TO_IGNORE), true)
 ));
 
 (new NotifierOutput(

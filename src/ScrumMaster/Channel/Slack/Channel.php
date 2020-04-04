@@ -28,7 +28,7 @@ final class Channel implements ChannelInterface
         $this->messageGenerator = $messageGenerator;
     }
 
-    public function sendNotifications(array $ticketsByAssignee, Company $company): ChannelResult
+    public function send(array $ticketsByAssignee, Company $company): ChannelResult
     {
         $result = new ChannelResult();
 
