@@ -16,8 +16,8 @@ final class JiraTicketsFactory
     private $customFields;
 
     /**
-     * @var array list of custom fields `[$realKey => $newKey]`
-     *            to be able to use in the render templates, for example.
+     * @var array list of custom fields to be able to use in the render templates.
+     *            Usage: `['realKey' => 'newKey']` OR `['realKey']`
      */
     public function __construct(array $customFields = [])
     {
@@ -83,7 +83,7 @@ final class JiraTicketsFactory
 
         foreach ($this->customFields as $key => $newKey) {
             $realKey = is_numeric($key) ? $newKey : $key;
-            $return[$newKey] = $fields[$realKey];
+            $return[$newKey] = $fields[$realKey] ?? null;
         }
 
         return $return;

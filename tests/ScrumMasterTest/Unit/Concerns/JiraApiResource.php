@@ -34,7 +34,6 @@ trait JiraApiResource
         return [
             'key' => $key,
             'fields' => [
-                'customfield_sp' => '5.0',
                 'status' => [
                     'name' => $statusName,
                 ],
