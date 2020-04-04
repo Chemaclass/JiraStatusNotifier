@@ -32,7 +32,7 @@ final class Channel implements ChannelInterface
         $this->addressGenerator = $addresses ?? new AddressGenerator();
     }
 
-    public function sendNotifications(array $ticketsByAssignee, Company $company): ChannelResult
+    public function send(array $ticketsByAssignee, Company $company): ChannelResult
     {
         $result = new ChannelResult();
 

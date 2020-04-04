@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chemaclass\ScrumMaster\IO;
 
-final class NotifierInput
+final class JiraConnectorInput
 {
     public const COMPANY_NAME = 'COMPANY_NAME';
 

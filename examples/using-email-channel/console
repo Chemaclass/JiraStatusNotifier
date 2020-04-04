@@ -13,11 +13,11 @@ use Chemaclass\ScrumMaster\Channel\Email\ByPassEmail;
 use Chemaclass\ScrumMaster\Channel\MessageGenerator;
 use Chemaclass\ScrumMaster\Common\EnvKeys;
 use Chemaclass\ScrumMaster\IO\EchoOutput;
-use Chemaclass\ScrumMaster\IO\NotifierInput;
+use Chemaclass\ScrumMaster\IO\JiraConnectorInput;
 use Chemaclass\ScrumMaster\IO\NotifierOutput;
 use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
 use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
-use Chemaclass\ScrumMaster\Notifier;
+use Chemaclass\ScrumMaster\JiraConnector;
 use Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
@@ -30,7 +30,7 @@ EnvKeys::create((array)getenv())->validate(file_get_contents(__DIR__ . '/.env.di
 
 $twig = new Environment(new FilesystemLoader('../templates'));
 
-$notifier = new Notifier(
+$jiraConnector = new JiraConnector(
     new JiraHttpClient(
         HttpClient::create([
             'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
@@ -49,11 +49,11 @@ $notifier = new Notifier(
     ]
 );
 
-$result = $notifier->notify(NotifierInput::new(
-    $_ENV[NotifierInput::COMPANY_NAME],
-    $_ENV[NotifierInput::JIRA_PROJECT_NAME],
-    json_decode($_ENV[NotifierInput::DAYS_FOR_STATUS], true),
-    json_decode($_ENV[NotifierInput::JIRA_USERS_TO_IGNORE], true)
+$result = $jiraConnector->handle(JiraConnectorInput::new(
+    $_ENV[JiraConnectorInput::COMPANY_NAME],
+    $_ENV[JiraConnectorInput::JIRA_PROJECT_NAME],
+    json_decode($_ENV[JiraConnectorInput::DAYS_FOR_STATUS], true),
+    json_decode($_ENV[JiraConnectorInput::JIRA_USERS_TO_IGNORE], true)
 ));
 
 (new NotifierOutput(
