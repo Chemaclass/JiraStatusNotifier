@@ -29,7 +29,11 @@ final class JiraConnector
         $this->channels = $channels;
     }
 
-    /** @return array<string,ChannelResult> */
+    /**
+     * It passes the tickets by assignee (from Jira) to all its channels.
+     *
+     * @return array<string,ChannelResult>
+     */
     public function handle(JiraConnectorInput $input): array
     {
         $jiraBoard = new Board($input->daysForStatus());

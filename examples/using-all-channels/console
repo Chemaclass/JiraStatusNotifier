@@ -67,7 +67,5 @@ $result = $jiraConnector->handle(JiraConnectorInput::new(
     json_decode(getenv(JiraConnectorInput::JIRA_USERS_TO_IGNORE), true)
 ));
 
-(new NotifierOutput(
-    new EchoOutput(),
-    $twig
-))->write($result, 'output/channel-result.twig');
+(new NotifierOutput(new EchoOutput(), $twig))
+    ->write($result, 'output/channel-result.twig');
