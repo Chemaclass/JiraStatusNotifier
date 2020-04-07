@@ -17,3 +17,16 @@ Using composer: ```composer require chemaclass/scrum-master```
 * Using [Slack](examples/using-slack-channel) as notification channel
 * Using [Email](examples/using-email-channel) as notification channel
 * Using [Cli](examples/using-cli-channel) to render the tickets for each assignee without notifying anybody
+
+## Development
+
+### Requirements
+
+#### GNU Make 4.+ (for Makefile) [Install for Mac](https://stackoverflow.com/questions/43175529/updating-make-version-4-1-on-mac) | Optional
+
+Some make tasks to execute commands inside the docker container such:
+
+* `make bash` -> access into the bash
+* `make csfix` -> run the code style fixer (`.php_cs`)
+* `make composer ARGS="install"` -> run composer
+* `make tests ARGS="--filter=AddressGeneratorTest"` -> run PHPUnit
