@@ -12,7 +12,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class JiraTicketsFactory
 {
-    /** @var array */
+    /** @psalm-return array<int|string, string> */
     private $customFields;
 
     /**
@@ -24,13 +24,13 @@ final class JiraTicketsFactory
         $this->customFields = $customFields;
     }
 
-    /** @return JiraTicket[] */
+    /** @psalm-return list<JiraTicket> */
     public function fromJiraResponse(ResponseInterface $response): array
     {
         return $this->fromArrayIssues($response->toArray()['issues']);
     }
 
-    /** @return JiraTicket[] */
+    /** @psalm-return list<JiraTicket> */
     public function fromArrayIssues(array $issues): array
     {
         $jiraTickets = [];

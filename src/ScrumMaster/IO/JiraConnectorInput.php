@@ -30,17 +30,24 @@ final class JiraConnectorInput
         array $daysForStatus,
         array $jiraUsersToIgnore = []
     ): self {
-        $self = new self();
-        $self->companyName = $companyName;
-        $self->jiraProjectName = $jiraProjectName;
-        $self->daysForStatus = $daysForStatus;
-        $self->jiraUsersToIgnore = $jiraUsersToIgnore;
-
-        return $self;
+        return new self(
+            $companyName,
+            $jiraProjectName,
+            $daysForStatus,
+            $jiraUsersToIgnore
+        );
     }
 
-    private function __construct()
-    {
+    private function __construct(
+        string $companyName,
+        string $jiraProjectName,
+        array $daysForStatus,
+        array $jiraUsersToIgnore = []
+    ) {
+        $this->companyName = $companyName;
+        $this->jiraProjectName = $jiraProjectName;
+        $this->daysForStatus = $daysForStatus;
+        $this->jiraUsersToIgnore = $jiraUsersToIgnore;
     }
 
     public function companyName(): string

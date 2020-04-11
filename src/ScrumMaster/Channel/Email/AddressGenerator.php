@@ -16,6 +16,9 @@ final class AddressGenerator
         $this->byPassEmail = $byPassEmail;
     }
 
+    /**
+     * @psalm-return list<Address>
+     */
     public function forJiraTicket(JiraTicket $ticket): array
     {
         $personName = $ticket->assignee()->displayName();
