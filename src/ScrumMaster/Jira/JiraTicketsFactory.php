@@ -35,7 +35,7 @@ final class JiraTicketsFactory
     {
         $jiraTickets = [];
 
-        foreach ($issues ?? [] as $item) {
+        foreach ($issues as $item) {
             $jiraTickets[] = $this->newJiraTicket($item);
         }
 
