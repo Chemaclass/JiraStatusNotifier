@@ -80,7 +80,11 @@ final class ChannelResult
     /** @return string[] */
     private function peopleAssigned(): array
     {
-        $values = array_map(fn (ChannelIssue $issue): ?string => $issue->displayName(), $this->channelIssues);
+        $values = array_map(
+            fn (ChannelIssue $issue): string => $issue->displayName() ?? '',
+            $this->channelIssues
+        );
+
         $people = array_values(array_unique($values));
         sort($people);
 
