@@ -34,4 +34,20 @@ composer:
 			-c "cd /srv/scrum-master && composer $(ARGS)"
 	fi
 
-.PHONY: bash csfix tests composer
+psalm:
+	@if [[ -f /.dockerenv ]]; then
+		cd /srv/scrum-master && vendor/bin/psalm ${ARGS}
+	else
+		docker exec -ti -u dev scrum_master_php sh \
+			-c "cd /srv/scrum-master && vendor/bin/psalm ${ARGS}"
+	fi
+
+psalm-log:
+	@if [[ -f /.dockerenv ]]; then
+		cd /srv/scrum-master && vendor/bin/psalm --output-format=text --show-info=true > psalm.log
+	else
+		docker exec -ti -u dev scrum_master_php sh \
+			-c "cd /srv/scrum-master && vendor/bin/psalm --output-format=text --show-info=true > psalm.log"
+	fi
+
+.PHONY: bash csfix tests composer psalm psalm-log
