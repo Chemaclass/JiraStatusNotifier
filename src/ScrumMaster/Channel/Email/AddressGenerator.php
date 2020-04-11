@@ -42,6 +42,10 @@ final class AddressGenerator
 
     private function originalOrOverriddenEmail(JiraTicket $ticket): string
     {
+        if (!$this->byPassEmail) {
+            return $ticket->assignee()->key();
+        }
+
         $assigneeKey = $ticket->assignee()->key();
         $overriddenEmail = $this->byPassEmail->getByAssigneeKey($assigneeKey);
 

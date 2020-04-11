@@ -62,6 +62,12 @@ final class EnvKeys
 
     private function getKeyFromLine(string $line): string
     {
-        return mb_substr($line, 0, mb_strpos($line, '='));
+        $pos = mb_strpos($line, '=');
+
+        if (false === $pos) {
+            return '';
+        }
+
+        return mb_substr($line, 0, $pos);
     }
 }

@@ -81,7 +81,7 @@ final class ChannelResult
     private function peopleAssigned(): array
     {
         $values = array_map(
-            fn (ChannelIssue $issue): string => $issue->displayName() ?? '',
+            fn (ChannelIssue $issue): string => $issue->displayName(),
             $this->channelIssues
         );
 
