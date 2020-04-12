@@ -10,11 +10,11 @@ final class ChannelIssue
 
     private int $responseStatusCode;
 
-    private ?string $displayName;
+    private string $displayName;
 
     public static function withStatusCode(int $responseStatusCode): self
     {
-        return new self($responseStatusCode, null);
+        return new self($responseStatusCode, '');
     }
 
     public static function withAssignee(string $displayName): self
@@ -27,7 +27,7 @@ final class ChannelIssue
         return new self($responseStatusCode, $displayName);
     }
 
-    private function __construct(int $responseStatusCode, ?string $displayName)
+    private function __construct(int $responseStatusCode, string $displayName)
     {
         $this->responseStatusCode = $responseStatusCode;
         $this->displayName = $displayName;
@@ -38,7 +38,7 @@ final class ChannelIssue
         return $this->responseStatusCode;
     }
 
-    public function displayName(): ?string
+    public function displayName(): string
     {
         return $this->displayName;
     }

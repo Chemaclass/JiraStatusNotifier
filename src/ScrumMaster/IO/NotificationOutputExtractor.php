@@ -23,7 +23,7 @@ final class NotificationOutputExtractor
 
         /** @var ChannelIssue $channelIssue */
         foreach ($this->result->channelIssues() as $statusCode => $channelIssue) {
-            $notificationTitles[] = (null !== $channelIssue->displayName())
+            $notificationTitles[] = $channelIssue->displayName()
                 ? "$statusCode: {$channelIssue->displayName()}"
                 : $statusCode;
         }

@@ -43,7 +43,8 @@
         "phpunit/phpunit": "^8.5.0",
         "symfony/var-dumper": "^4.3",
         "symfony/google-mailer": "^5.0",
-        "vlucas/phpdotenv": "^3.6"
+        "vlucas/phpdotenv": "^3.6",
+        "vimeo/psalm": "^3.10"
     },
     "autoload": {
         "psr-4": {

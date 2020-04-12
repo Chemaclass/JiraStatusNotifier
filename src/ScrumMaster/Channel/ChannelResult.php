@@ -12,6 +12,7 @@ final class ChannelResult
     /** @var array<string, ChannelIssue> */
     private $channelIssues = [];
 
+    /** @param array<string, ChannelIssue> $channelIssues */
     public static function withIssues(array $channelIssues): self
     {
         $self = new self();
@@ -36,7 +37,7 @@ final class ChannelResult
         return $this->channelIssues;
     }
 
-    /** @return string[] */
+    /** @return array<string, string[]> */
     public function ticketsAssignedToPeople(): array
     {
         $tickets = [];
@@ -53,7 +54,10 @@ final class ChannelResult
             }
         }
 
-        return $this->replaceKey($tickets, $from = '', $to = 'None');
+        $tickets['None'] = $tickets[''];
+        unset($tickets['']);
+
+        return $tickets;
     }
 
     public function total(): int
@@ -80,18 +84,14 @@ final class ChannelResult
     /** @return string[] */
     private function peopleAssigned(): array
     {
-        $values = array_map(fn (ChannelIssue $issue): ?string => $issue->displayName(), $this->channelIssues);
+        $values = array_map(
+            fn (ChannelIssue $issue): string => $issue->displayName(),
+            $this->channelIssues
+        );
+
         $people = array_values(array_unique($values));
         sort($people);
 
         return $people;
-    }
-
-    private function replaceKey(array $tickets, string $from, string $to): array
-    {
-        $tickets[$to] = $tickets[$from];
-        unset($tickets[$from]);
-
-        return $tickets;
     }
 }

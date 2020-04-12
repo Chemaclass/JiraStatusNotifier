@@ -30,6 +30,7 @@ final class TicketsByAssignee
         $this->jiraUsersToIgnore = $jiraUsersToIgnore;
     }
 
+    /** @psalm-return array<string, array<array-key, JiraTicket>> */
     public function fetchFromBoard(Board $board): array
     {
         $ticketsByAssignee = [];
@@ -49,6 +50,7 @@ final class TicketsByAssignee
         return $ticketsByAssignee;
     }
 
+    /** @psalm-return array<string, array<string, JiraTicket>> */
     private function ticketsByAssigneeInStatus(string $statusName): array
     {
         $tickets = $this->jiraClient->getTickets($this->jqlUrlFactory, $statusName);
