@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-ScrumMaster
+JiraStatusNotifier
 
 Copyright (c) 2019, Jose Maria Valera Reales | @Chemaclass
 
