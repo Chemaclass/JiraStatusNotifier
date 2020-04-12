@@ -13,7 +13,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 trait JiraApiResource
 {
-    /** @return MockObject|HttpClientInterface */
+    /** @return HttpClientInterface|MockObject */
     private function mockJiraClient(array $issues)
     {
         $jiraResponse = $this->createMock(ResponseInterface::class);
