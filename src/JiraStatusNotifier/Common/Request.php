@@ -1,0 +1,10 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Chemaclass\JiraStatusNotifier\Common;
+
+interface Request
+{
+    public const HTTP_OK = 200;
+}

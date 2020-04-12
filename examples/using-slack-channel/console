@@ -8,15 +8,15 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
-use Chemaclass\ScrumMaster\Channel\MessageGenerator;
-use Chemaclass\ScrumMaster\Channel\Slack;
-use Chemaclass\ScrumMaster\Common\EnvKeys;
-use Chemaclass\ScrumMaster\IO\EchoOutput;
-use Chemaclass\ScrumMaster\IO\JiraConnectorInput;
-use Chemaclass\ScrumMaster\IO\NotifierOutput;
-use Chemaclass\ScrumMaster\Jira\JiraHttpClient;
-use Chemaclass\ScrumMaster\Jira\JiraTicketsFactory;
-use Chemaclass\ScrumMaster\JiraConnector;
+use Chemaclass\JiraStatusNotifier\Channel\MessageGenerator;
+use Chemaclass\JiraStatusNotifier\Channel\Slack;
+use Chemaclass\JiraStatusNotifier\Common\EnvKeys;
+use Chemaclass\JiraStatusNotifier\IO\EchoOutput;
+use Chemaclass\JiraStatusNotifier\IO\JiraConnectorInput;
+use Chemaclass\JiraStatusNotifier\IO\NotifierOutput;
+use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
+use Chemaclass\JiraStatusNotifier\Jira\JiraTicketsFactory;
+use Chemaclass\JiraStatusNotifier\JiraConnector;
 use Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 use Twig\Environment;
