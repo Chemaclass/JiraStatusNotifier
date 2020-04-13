@@ -12,12 +12,6 @@ This tool will notify the person assigned a JIRA-ticket if the ticket remains in
 
 Using composer: ```composer require chemaclass/jira-status-notifier```
 
-## Documentation
-
-* Using [Slack](examples/using-slack-channel) as notification channel
-* Using [Email](examples/using-email-channel) as notification channel
-* Using [Cli](examples/using-cli-channel) to render the tickets for each assignee without notifying anybody
-
 ## Development
 
 ### Requirements
@@ -29,4 +23,44 @@ Some make tasks to execute commands inside the docker container such:
 * `make bash` -> access into the bash
 * `make csfix` -> run the code style fixer (`.php_cs`)
 * `make composer ARGS="install"` -> run composer
-* `make tests ARGS="--filter=AddressGeneratorTest"` -> run PHPUnit
+* `make tests ARGS="--filter AddressGenerator"` -> run PHPUnit
+
+## Documentation
+
+* Using [Slack](examples/using-slack-channel) as notification channel
+* Using [Email](examples/using-email-channel) as notification channel
+* Using [Cli](examples/using-cli-channel) to render the tickets for each assignee without notifying anybody
+
+## Basic Example
+
+```php
+<?php declare(strict_types=1);
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+use Chemaclass\JiraStatusNotifier\Channel\Cli;
+use Chemaclass\JiraStatusNotifier\Channel\Email;
+use Chemaclass\JiraStatusNotifier\Channel\Slack;
+use Chemaclass\JiraStatusNotifier\IO\JiraConnectorInput;
+use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
+use Chemaclass\JiraStatusNotifier\JiraConnector;
+use Symfony\Component\HttpClient\HttpClient;
+
+$jiraConnector = new JiraConnector(
+    new JiraHttpClient(
+        HttpClient::create(['auth_basic' => ['jiraAPiLabel', 'jiraApiPassword']])
+    ), 
+    $channels = [
+        new Slack\Channel(/* ... */),
+        new Email\Channel(/* ... */),
+        new Cli\Channel(),
+    ]
+);
+
+$result = $jiraConnector->handle(JiraConnectorInput::new(
+    'companyName',
+    'jiraProjectName',
+    ['Todo' => 1, 'In Progress' => 2, 'In Review' => 1]
+));
+```
+
