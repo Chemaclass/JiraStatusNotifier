@@ -27,7 +27,7 @@ final class AddressGeneratorTest extends TestCase
     }
 
     /** @test */
-    public function sendCopyTo(): void
+    public function sendCopyToWithAssignee(): void
     {
         $jiraTicket = $this->newJiraTicket();
         $assignee = $jiraTicket->assignee();

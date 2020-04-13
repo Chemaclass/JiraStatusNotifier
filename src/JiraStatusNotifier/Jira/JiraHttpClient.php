@@ -11,12 +11,12 @@ final class JiraHttpClient
 {
     private HttpClientInterface $jiraClient;
 
-    private JiraTicketsFactory $tickets;
+    private JiraTicketsFactory $ticketsFactory;
 
-    public function __construct(HttpClientInterface $jiraClient, JiraTicketsFactory $tickets)
+    public function __construct(HttpClientInterface $jiraClient, ?JiraTicketsFactory $tickets = null)
     {
         $this->jiraClient = $jiraClient;
-        $this->tickets = $tickets;
+        $this->ticketsFactory = $tickets ?? new JiraTicketsFactory();
     }
 
     /** @return JiraTicket[] */
@@ -24,6 +24,6 @@ final class JiraHttpClient
     {
         $response = $this->jiraClient->request('GET', $urlFactory->buildUrl($status));
 
-        return $this->tickets->fromJiraResponse($response);
+        return $this->ticketsFactory->fromJiraResponse($response);
     }
 }
