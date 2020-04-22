@@ -40,17 +40,14 @@ final class JiraConnector
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());
         $result = [];
 
-        $ticketsByAssignee = new TicketsByAssignee(
+        $ticketsByAssignee = (new TicketsByAssignee(
             $this->jiraHttpClient,
             new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company)),
             $input->jiraUsersToIgnore()
-        );
+        ))->fetchFromBoard($jiraBoard);
 
         foreach ($this->channels as $channel) {
-            $result[get_class($channel)] = $channel->send(
-                $ticketsByAssignee->fetchFromBoard($jiraBoard),
-                $company
-            );
+            $result[get_class($channel)] = $channel->send($ticketsByAssignee, $company);
         }
 
         return $result;

@@ -13,15 +13,13 @@ final class BoardTest extends TestCase
     public function daysForStatus(): void
     {
         $board = new Board(['status1' => 1, 'status2' => 2]);
-        $this->assertEquals(2, $board->getDaysForStatus('status2'));
-        $this->assertEquals(Board::FALLBACK_VALUE_DEFAULT, $board->getDaysForStatus('statusNotFound'));
+        self::assertEquals(2, $board->getDaysForStatus('status2'));
     }
 
     /** @test */
     public function daysForStatusWhenStatusNotFound(): void
     {
-        $fallbackValue = 9999;
-        $board = new Board(['status1' => 1], $fallbackValue);
-        $this->assertEquals($fallbackValue, $board->getDaysForStatus('statusNotFound'));
+        $board = new Board(['status1' => 1]);
+        self::assertEquals(0, $board->getDaysForStatus('statusNotFound'));
     }
 }
