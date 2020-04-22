@@ -37,18 +37,16 @@ $jiraHttpClient = new JiraHttpClient(
     new JiraTicketsFactory(['customfield_10005' => 'StoryPoints'])
 );
 
-$channels = [
-    new Email\Channel(
-        new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),
-        new MessageGenerator(new DateTimeImmutable(), $twig, 'email-template.twig'),
-        new Email\AddressGenerator((new ByPassEmail())
-            ->setSendEmailsToAssignee(false) // <- OverriddenEmails wont have effect as long as this is false
-            ->setOverriddenEmails(json_decode(getenv('OVERRIDDEN_EMAILS'), true))
-            ->setSendCopyTo(getenv('MAILER_USERNAME')))
-    ),
-];
+$channel = new Email\Channel(
+    new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),
+    new MessageGenerator(new DateTimeImmutable(), $twig, 'email-template.twig'),
+    new Email\AddressGenerator((new ByPassEmail())
+        ->setSendEmailsToAssignee(false) // <- OverriddenEmails wont have effect as long as this is false
+        ->setOverriddenEmails(json_decode(getenv('OVERRIDDEN_EMAILS'), true))
+        ->setSendCopyTo(getenv('MAILER_USERNAME')))
+);
 
-$jiraConnector = new JiraConnector($jiraHttpClient, ...$channels);
+$jiraConnector = new JiraConnector($jiraHttpClient, $channel);
 
 $result = $jiraConnector->handle(JiraConnectorInput::new(
     $_ENV[JiraConnectorInput::COMPANY_NAME],
