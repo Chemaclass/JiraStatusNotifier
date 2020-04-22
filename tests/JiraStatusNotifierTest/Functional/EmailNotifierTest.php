@@ -90,16 +90,14 @@ final class EmailNotifierTest extends TestCase
 
         $jiraConnector = new JiraConnector(
             new JiraHttpClient($this->mockJiraClient($jiraIssues), new JiraTicketsFactory()),
-            [
-                new Channel(
-                    new Mailer($transport),
-                    $this->messageGenerator(),
-                    new AddressGenerator((new ByPassEmail())->setOverriddenEmails([
-                        'user.1.jira' => 'user.3@email.com',
-                        'user.2.jira' => 'user.3@email.com',
-                    ]))
-                ),
-            ]
+            new Channel(
+                new Mailer($transport),
+                $this->messageGenerator(),
+                new AddressGenerator((new ByPassEmail())->setOverriddenEmails([
+                    'user.1.jira' => 'user.3@email.com',
+                    'user.2.jira' => 'user.3@email.com',
+                ]))
+            )
         );
 
         $jiraConnector->handle($this->jiraConnectorInput());
@@ -123,9 +121,7 @@ final class EmailNotifierTest extends TestCase
                 ]),
                 new JiraTicketsFactory()
             ),
-            [
-                new Channel(new Mailer($transport), $this->messageGenerator()),
-            ]
+            new Channel(new Mailer($transport), $this->messageGenerator()),
         );
 
         $results = $jiraConnector->handle($this->jiraConnectorInput());
@@ -153,9 +149,7 @@ final class EmailNotifierTest extends TestCase
                 ]),
                 new JiraTicketsFactory()
             ),
-            [
-                new Email\Channel(new Mailer($transport), $this->messageGenerator()),
-            ]
+            new Email\Channel(new Mailer($transport), $this->messageGenerator())
         );
 
         $jiraConnector->handle($this->jiraConnectorInput());
@@ -178,12 +172,10 @@ final class EmailNotifierTest extends TestCase
                 $this->mockJiraClient($jiraIssues),
                 new JiraTicketsFactory()
             ),
-            [
-                new Email\Channel(
-                    new Mailer($this->createMock(TransportInterface::class)),
-                    $this->messageGenerator()
-                ),
-            ]
+            new Email\Channel(
+                new Mailer($this->createMock(TransportInterface::class)),
+                $this->messageGenerator()
+            )
         );
     }
 

@@ -70,7 +70,7 @@ final class CliNotifierTest extends TestCase
     {
         return new JiraConnector(
             new JiraHttpClient($this->mockJiraClient($jiraIssues), new JiraTicketsFactory()),
-            [new Cli\Channel()]
+            new Cli\Channel()
         );
     }
 }

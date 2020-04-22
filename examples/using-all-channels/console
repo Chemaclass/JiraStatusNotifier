@@ -58,7 +58,7 @@ $channels = [
     new Cli\Channel(),
 ];
 
-$jiraConnector = new JiraConnector($jiraHttpClient, $channels);
+$jiraConnector = new JiraConnector($jiraHttpClient, ...$channels);
 
 $result = $jiraConnector->handle(JiraConnectorInput::new(
     getenv(JiraConnectorInput::COMPANY_NAME),

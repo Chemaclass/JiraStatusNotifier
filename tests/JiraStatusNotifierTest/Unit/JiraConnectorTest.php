@@ -57,7 +57,7 @@ final class JiraConnectorTest extends TestCase
 
         return new JiraConnector(
             new JiraHttpClient($this->mockJiraClient([]), new JiraTicketsFactory()),
-            [$channel]
+            $channel
         );
     }
 }
