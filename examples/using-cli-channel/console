@@ -31,7 +31,7 @@ $jiraHttpClient = new JiraHttpClient(
     new JiraTicketsFactory(['customfield_10005' => 'StoryPoints'])
 );
 
-$jiraConnector = new JiraConnector($jiraHttpClient, [new Cli\Channel()]);
+$jiraConnector = new JiraConnector($jiraHttpClient, new Cli\Channel());
 
 $result = $jiraConnector->handle(JiraConnectorInput::new(
     getenv(JiraConnectorInput::COMPANY_NAME),

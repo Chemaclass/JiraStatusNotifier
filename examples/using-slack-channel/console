@@ -34,17 +34,15 @@ $jiraHttpClient = new JiraHttpClient(
     new JiraTicketsFactory(['customfield_10005' => 'StoryPoints'])
 );
 
-$channels = [
-    new Slack\Channel(
-        new Slack\HttpClient(HttpClient::create([
-            'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
-        ])),
-        Slack\JiraMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
-        new MessageGenerator(new DateTimeImmutable(), $twig, 'slack-template.twig')
-    ),
-];
+$channel = new Slack\Channel(
+    new Slack\HttpClient(HttpClient::create([
+        'auth_bearer' => getenv('SLACK_BOT_USER_OAUTH_ACCESS_TOKEN'),
+    ])),
+    Slack\JiraMapping::jiraNameWithSlackId(json_decode(getenv('SLACK_MAPPING_IDS'), true)),
+    new MessageGenerator(new DateTimeImmutable(), $twig, 'slack-template.twig')
+);
 
-$jiraConnector = new JiraConnector($jiraHttpClient, $channels);
+$jiraConnector = new JiraConnector($jiraHttpClient, $channel);
 
 $result = $jiraConnector->handle(JiraConnectorInput::new(
     $_ENV[JiraConnectorInput::COMPANY_NAME],

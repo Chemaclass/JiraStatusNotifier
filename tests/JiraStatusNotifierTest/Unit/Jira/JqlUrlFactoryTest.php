@@ -25,18 +25,4 @@ final class JqlUrlFactoryTest extends TestCase
         $expected .= ' AND NOT status changed after -2d';
         $this->assertEquals($expected, $factory->buildUrl('statusName'));
     }
-
-    /** @test */
-    public function buildForAnUnknownStatus(): void
-    {
-        $factory = new JqlUrlFactory(
-            new Board(['status' => 2], $fallbackValue = 99),
-            JqlUrlBuilder::inOpenSprints(Company::withName('company'))
-        );
-
-        $expected = 'https://company.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
-        $expected .= " AND status IN ('unknown-status')";
-        $expected .= ' AND NOT status changed after -99d';
-        $this->assertEquals($expected, $factory->buildUrl('unknown-status'));
-    }
 }

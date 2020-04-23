@@ -13,18 +13,16 @@ use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
 use Chemaclass\JiraStatusNotifier\Jira\JqlUrlBuilder;
 use Chemaclass\JiraStatusNotifier\Jira\JqlUrlFactory;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Company;
-use Webmozart\Assert\Assert;
 
 final class JiraConnector
 {
     private JiraHttpClient $jiraHttpClient;
 
-    /** @var ChannelInterface[] */
-    private $channels;
+    /** @psalm-param list<ChannelInterface> */
+    private array $channels;
 
-    public function __construct(JiraHttpClient $jiraHttpClient, array $channels)
+    public function __construct(JiraHttpClient $jiraHttpClient, ChannelInterface...$channels)
     {
-        Assert::allIsInstanceOf($channels, ChannelInterface::class);
         $this->jiraHttpClient = $jiraHttpClient;
         $this->channels = $channels;
     }
@@ -40,17 +38,14 @@ final class JiraConnector
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());
         $result = [];
 
-        $ticketsByAssignee = new TicketsByAssignee(
+        $ticketsByAssignee = (new TicketsByAssignee(
             $this->jiraHttpClient,
             new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company)),
             $input->jiraUsersToIgnore()
-        );
+        ))->fetchFromBoard($jiraBoard);
 
         foreach ($this->channels as $channel) {
-            $result[get_class($channel)] = $channel->send(
-                $ticketsByAssignee->fetchFromBoard($jiraBoard),
-                $company
-            );
+            $result[get_class($channel)] = $channel->send($ticketsByAssignee, $company);
         }
 
         return $result;
