@@ -7,7 +7,6 @@ namespace Chemaclass\JiraStatusNotifier\Channel;
 use Chemaclass\JiraStatusNotifier\Jira\Board;
 use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
 use Chemaclass\JiraStatusNotifier\Jira\JqlUrlFactory;
-use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 use function in_array;
 
 final class TicketsByAssigneeClient
@@ -28,7 +27,6 @@ final class TicketsByAssigneeClient
         $this->jiraUsersToIgnore = $jiraUsersToIgnore;
     }
 
-    /** @psalm-return array<string, array<array-key, JiraTicket>> */
     public function fetchFromBoard(Board $board): TicketsByAssignee
     {
         $ticketsByAssignee = new TicketsByAssignee();

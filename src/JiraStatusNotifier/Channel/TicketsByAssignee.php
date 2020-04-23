@@ -8,7 +8,7 @@ use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 
 final class TicketsByAssignee
 {
-    /** @psalm-prop array<string, list<JiraTicket>> */
+    /** @psalm-var array<string, list<JiraTicket>> */
     private array $list = [];
 
     public function add(JiraTicket $ticket): self

@@ -25,8 +25,6 @@ final class MessageGenerator
 
     public function forJiraTickets(string $companyName, JiraTicket...$tickets): string
     {
-        uksort($tickets, 'strnatcasecmp');
-
         return $this->twig->render(
             $this->templateName,
             [
