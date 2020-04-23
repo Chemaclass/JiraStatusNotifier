@@ -6,7 +6,7 @@ namespace Chemaclass\JiraStatusNotifier;
 
 use Chemaclass\JiraStatusNotifier\Channel\ChannelInterface;
 use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;
-use Chemaclass\JiraStatusNotifier\Channel\TicketsByAssignee;
+use Chemaclass\JiraStatusNotifier\Channel\TicketsByAssigneeClient;
 use Chemaclass\JiraStatusNotifier\IO\JiraConnectorInput;
 use Chemaclass\JiraStatusNotifier\Jira\Board;
 use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
@@ -38,14 +38,14 @@ final class JiraConnector
         $company = Company::withNameAndProject($input->companyName(), $input->jiraProjectName());
         $result = [];
 
-        $ticketsByAssignee = (new TicketsByAssignee(
+        $ticketsByAssignee = (new TicketsByAssigneeClient(
             $this->jiraHttpClient,
             new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company)),
             $input->jiraUsersToIgnore()
         ))->fetchFromBoard($jiraBoard);
 
         foreach ($this->channels as $channel) {
-            $result[get_class($channel)] = $channel->send($ticketsByAssignee, $company);
+            $result[get_class($channel)] = $channel->send($company, $ticketsByAssignee);
         }
 
         return $result;

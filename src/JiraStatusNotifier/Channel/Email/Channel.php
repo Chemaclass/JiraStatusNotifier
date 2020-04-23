@@ -8,8 +8,10 @@ use Chemaclass\JiraStatusNotifier\Channel\ChannelInterface;
 use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;
 use Chemaclass\JiraStatusNotifier\Channel\MessageGenerator;
 use Chemaclass\JiraStatusNotifier\Channel\ReadModel\ChannelIssue;
+use Chemaclass\JiraStatusNotifier\Channel\TicketsByAssignee;
 use Chemaclass\JiraStatusNotifier\Common\Request;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Company;
+use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
@@ -32,12 +34,12 @@ final class Channel implements ChannelInterface
         $this->addressGenerator = $addresses ?? new AddressGenerator();
     }
 
-    public function send(array $ticketsByAssignee, Company $company): ChannelResult
+    public function send(Company $company, TicketsByAssignee $ticketsByAssignee): ChannelResult
     {
         $result = new ChannelResult();
 
-        foreach ($ticketsByAssignee as $assigneeKey => $tickets) {
-            $responseCode = $this->sendEmail($tickets, $company);
+        foreach ($ticketsByAssignee->list() as $assigneeKey => $tickets) {
+            $responseCode = $this->sendEmail($company, ...$tickets);
 
             foreach ($tickets as $ticket) {
                 $issue = ChannelIssue::withCodeAndAssignee($responseCode, $ticket->assignee()->displayName());
@@ -48,7 +50,7 @@ final class Channel implements ChannelInterface
         return $result;
     }
 
-    private function sendEmail(array $tickets, Company $company): int
+    private function sendEmail(Company $company, JiraTicket...$tickets): int
     {
         try {
             $ticket = $tickets[array_key_first($tickets)];
@@ -57,13 +59,13 @@ final class Channel implements ChannelInterface
                 ->to(...$this->addressGenerator->forJiraTicket($ticket))
                 ->subject('Scrum Master Reminder')
                 ->addFrom('scrum.master@noreply.com')
-                ->html($this->messageGenerator->forJiraTickets($tickets, $company->companyName()));
+                ->html($this->messageGenerator->forJiraTickets($company->companyName(), ...$tickets));
 
             $this->mailer->send($email);
 
             return Request::HTTP_OK;
         } catch (TransportExceptionInterface $e) {
-            return (int) $e->getCode();
+            return (int)$e->getCode();
         }
     }
 }

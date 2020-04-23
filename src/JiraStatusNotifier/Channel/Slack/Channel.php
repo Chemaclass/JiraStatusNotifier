@@ -8,7 +8,9 @@ use Chemaclass\JiraStatusNotifier\Channel\ChannelInterface;
 use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;
 use Chemaclass\JiraStatusNotifier\Channel\MessageGenerator;
 use Chemaclass\JiraStatusNotifier\Channel\ReadModel\ChannelIssue;
+use Chemaclass\JiraStatusNotifier\Channel\TicketsByAssignee;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Company;
+use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 
 final class Channel implements ChannelInterface
 {
@@ -28,12 +30,12 @@ final class Channel implements ChannelInterface
         $this->messageGenerator = $messageGenerator;
     }
 
-    public function send(array $ticketsByAssignee, Company $company): ChannelResult
+    public function send(Company $company, TicketsByAssignee $ticketsByAssignee): ChannelResult
     {
         $result = new ChannelResult();
 
-        foreach ($ticketsByAssignee as $assigneeKey => $tickets) {
-            $responseCode = $this->postToSlack($tickets, $company);
+        foreach ($ticketsByAssignee->list() as $assigneeKey => $tickets) {
+            $responseCode = $this->postToSlack($company, ...$tickets);
 
             foreach ($tickets as $ticket) {
                 $issue = ChannelIssue::withCodeAndAssignee($responseCode, $ticket->assignee()->displayName());
@@ -44,13 +46,13 @@ final class Channel implements ChannelInterface
         return $result;
     }
 
-    private function postToSlack(array $tickets, Company $company): int
+    private function postToSlack(Company $company, JiraTicket...$tickets): int
     {
         $ticket = $tickets[array_key_first($tickets)];
 
         $response = $this->slackClient->postToChannel(
             $this->slackMapping->toSlackId($ticket->assignee()->name()),
-            $this->messageGenerator->forJiraTickets($tickets, $company->companyName())
+            $this->messageGenerator->forJiraTickets($company->companyName(), ...$tickets)
         );
 
         return $response->getStatusCode();
