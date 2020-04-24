@@ -7,7 +7,6 @@ namespace Chemaclass\JiraStatusNotifier\Channel;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 use DateTimeImmutable;
 use Twig;
-use Webmozart\Assert\Assert;
 
 final class MessageGenerator
 {
@@ -24,11 +23,8 @@ final class MessageGenerator
         $this->templateName = $templateName;
     }
 
-    public function forJiraTickets(array $tickets, string $companyName): string
+    public function forJiraTickets(string $companyName, JiraTicket...$tickets): string
     {
-        Assert::allIsInstanceOf($tickets, JiraTicket::class);
-        uksort($tickets, 'strnatcasecmp');
-
         return $this->twig->render(
             $this->templateName,
             [

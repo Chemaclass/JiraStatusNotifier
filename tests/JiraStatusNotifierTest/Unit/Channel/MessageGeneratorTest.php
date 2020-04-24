@@ -8,28 +8,12 @@ use Chemaclass\JiraStatusNotifier\Channel\MessageGenerator;
 use Chemaclass\JiraStatusNotifier\Jira\JiraTicketsFactory;
 use Chemaclass\JiraStatusNotifierTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Twig;
 
 final class MessageGeneratorTest extends TestCase
 {
     use JiraApiResource;
-
-    /** @test */
-    public function forJiraTicketsWrongType(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $generator = new MessageGenerator(
-            new DateTimeImmutable(),
-            $this->createMock(Twig\Environment::class),
-            'template-name.twig'
-        );
-
-        $invalidTypes = [new \stdClass()];
-        $generator->forJiraTickets($invalidTypes, 'Any company name');
-    }
 
     /** @test */
     public function forJiraTickets(): void
@@ -52,6 +36,6 @@ final class MessageGeneratorTest extends TestCase
         );
 
         $generator = new MessageGenerator($now, $twigMock, $templateName);
-        $generator->forJiraTickets($tickets, $companyName);
+        $generator->forJiraTickets($companyName, ...$tickets);
     }
 }

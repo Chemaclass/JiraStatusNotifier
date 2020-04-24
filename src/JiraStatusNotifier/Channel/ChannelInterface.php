@@ -8,5 +8,5 @@ use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Company;
 
 interface ChannelInterface
 {
-    public function send(array $ticketsByAssignee, Company $company): ChannelResult;
+    public function send(Company $company, TicketsByAssignee $ticketsByAssignee): ChannelResult;
 }

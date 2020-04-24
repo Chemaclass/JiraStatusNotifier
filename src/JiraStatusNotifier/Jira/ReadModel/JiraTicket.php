@@ -14,8 +14,7 @@ final class JiraTicket
 
     private Assignee $assignee;
 
-    /** @var array */
-    private $customFields;
+    private array $customFields;
 
     public function __construct(
         string $title,
