@@ -24,6 +24,7 @@ final class TicketsByAssignee
         return $this;
     }
 
+    /** @psalm-return array<string, list<JiraTicket>> */
     public function list(): array
     {
         return $this->list;
