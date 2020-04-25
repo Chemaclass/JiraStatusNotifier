@@ -2,32 +2,32 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\JiraStatusNotifierTests\Unit\Channel;
+namespace Chemaclass\JiraStatusNotifierTests\Unit\IgnoreStrategy;
 
-use Chemaclass\JiraStatusNotifier\Channel\IgnoreUsersPolicy;
+use Chemaclass\JiraStatusNotifier\IgnoreStrategy\IgnoreStrategy;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Assignee;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\TicketStatus;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
-final class IgnoreUsersPolicyTest extends TestCase
+final class IgnoreStrategyTest extends TestCase
 {
     /** @test */
     public function shouldIgnore(): void
     {
-        $policy = new IgnoreUsersPolicy('assigneeKey1', 'assigneeKey2');
-        self::assertTrue($policy->shouldIgnore($this->newTicket('assigneeKey1')));
+        $ignoreStrategy = IgnoreStrategy::byAssigneeKey('key1', 'key2');
+        self::assertTrue($ignoreStrategy->shouldIgnoreTicket($this->newTicket('key1')));
     }
 
     /** @test */
     public function shouldNotIgnore(): void
     {
-        $policy = new IgnoreUsersPolicy('assigneeKey1', 'assigneeKey2');
-        self::assertFalse($policy->shouldIgnore($this->newTicket('assigneeKey3')));
+        $policy = IgnoreStrategy::byAssigneeKey('key1', 'key2');
+        self::assertFalse($policy->shouldIgnoreTicket($this->newTicket('key3')));
     }
 
-    private function newTicket(string $assigneeKey): JiraTicket
+    private function newTicket(string $key): JiraTicket
     {
         return new JiraTicket(
             'The title',
@@ -35,7 +35,7 @@ final class IgnoreUsersPolicyTest extends TestCase
             new TicketStatus('In Progress', new DateTimeImmutable()),
             new Assignee(
                 'assignee.name',
-                $assigneeKey,
+                $key,
                 'Full Name',
                 'any@example.com'
             )
