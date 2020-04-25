@@ -12,7 +12,7 @@ use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
 use Chemaclass\JiraStatusNotifier\Jira\JqlUrlBuilder;
 use Chemaclass\JiraStatusNotifier\Jira\JqlUrlFactory;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Company;
-use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\FilterStrategy\TicketFilter;
+use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\StrategyFilter\TicketFilter;
 use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\TicketsByAssigneeClient;
 
 final class JiraConnector

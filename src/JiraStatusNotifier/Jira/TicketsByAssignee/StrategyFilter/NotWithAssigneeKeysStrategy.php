@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\FilterStrategy;
+namespace Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\StrategyFilter;
 
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 
 /** @psalm-immutable */
-final class FilterNotWithAssigneeKeys implements FilterStrategy
+final class NotWithAssigneeKeysStrategy implements StrategyFilter
 {
     /** @psalm-return list<string> */
     private array $assigneeKeys;

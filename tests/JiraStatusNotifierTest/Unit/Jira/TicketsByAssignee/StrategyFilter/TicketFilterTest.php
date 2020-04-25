@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\JiraStatusNotifierTests\Unit\Jira\TicketsByAssignee\FilterStrategy;
+namespace Chemaclass\JiraStatusNotifierTests\Unit\Jira\TicketsByAssignee\StrategyFilter;
 
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Assignee;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\TicketStatus;
-use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\FilterStrategy\TicketFilter;
+use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\StrategyFilter\TicketFilter;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
