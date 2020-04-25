@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\JiraStatusNotifier\IgnoreStrategy;
+namespace Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\FilterStrategy;
 
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 
 /** @psalm-immutable */
-final class IgnoreByAssigneeKey implements IgnoreStrategy
+final class FilterByAssigneeKey implements FilterStrategy
 {
     /** @psalm-return list<string> */
     private array $assigneeKeys;
@@ -17,8 +17,8 @@ final class IgnoreByAssigneeKey implements IgnoreStrategy
         $this->assigneeKeys = $assigneeKeys;
     }
 
-    public function shouldIgnore(JiraTicket $ticket): bool
+    public function isValidTicket(JiraTicket $ticket): bool
     {
-        return in_array($ticket->assignee()->key(), $this->assigneeKeys);
+        return !in_array($ticket->assignee()->key(), $this->assigneeKeys);
     }
 }

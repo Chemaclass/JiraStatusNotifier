@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\JiraStatusNotifier\Channel;
+namespace Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee;
 
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 

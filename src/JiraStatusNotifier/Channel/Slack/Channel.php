@@ -8,9 +8,9 @@ use Chemaclass\JiraStatusNotifier\Channel\ChannelInterface;
 use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;
 use Chemaclass\JiraStatusNotifier\Channel\MessageGenerator;
 use Chemaclass\JiraStatusNotifier\Channel\ReadModel\ChannelIssue;
-use Chemaclass\JiraStatusNotifier\Channel\TicketsByAssignee;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Company;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
+use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\TicketsByAssignee;
 
 final class Channel implements ChannelInterface
 {

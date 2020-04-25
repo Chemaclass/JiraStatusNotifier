@@ -8,10 +8,10 @@ use Chemaclass\JiraStatusNotifier\Channel\ChannelInterface;
 use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;
 use Chemaclass\JiraStatusNotifier\Channel\MessageGenerator;
 use Chemaclass\JiraStatusNotifier\Channel\ReadModel\ChannelIssue;
-use Chemaclass\JiraStatusNotifier\Channel\TicketsByAssignee;
 use Chemaclass\JiraStatusNotifier\Common\Request;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Company;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
+use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\TicketsByAssignee;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
@@ -65,7 +65,7 @@ final class Channel implements ChannelInterface
 
             return Request::HTTP_OK;
         } catch (TransportExceptionInterface $e) {
-            return (int) $e->getCode();
+            return (int)$e->getCode();
         }
     }
 }

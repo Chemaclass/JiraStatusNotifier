@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\JiraStatusNotifier\Channel;
+namespace Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee;
 
-use Chemaclass\JiraStatusNotifier\IgnoreStrategy\TicketIgnorer;
 use Chemaclass\JiraStatusNotifier\Jira\Board;
 use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
 use Chemaclass\JiraStatusNotifier\Jira\JqlUrlFactory;
+use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\FilterStrategy\TicketFilter;
 
 final class TicketsByAssigneeClient
 {
@@ -15,12 +15,12 @@ final class TicketsByAssigneeClient
 
     private JqlUrlFactory $jqlUrlFactory;
 
-    private TicketIgnorer $ignoreTickets;
+    private TicketFilter $ignoreTickets;
 
     public function __construct(
         JiraHttpClient $jiraClient,
         JqlUrlFactory $jqlUrlFactory,
-        TicketIgnorer $ignoreTickets
+        TicketFilter $ignoreTickets
     ) {
         $this->jiraClient = $jiraClient;
         $this->jqlUrlFactory = $jqlUrlFactory;
