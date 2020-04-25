@@ -7,7 +7,7 @@ namespace Chemaclass\JiraStatusNotifier\IgnoreStrategy;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 
 /** @psalm-immutable */
-final class IgnoreByAssigneeKey implements IgnoreStrategyInterface
+final class IgnoreByAssigneeKey implements IgnoreStrategy
 {
     /** @psalm-return list<string> */
     private array $assigneeKeys;
