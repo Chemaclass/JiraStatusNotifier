@@ -7,7 +7,7 @@ namespace Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\FilterStrategy;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 
 /** @psalm-immutable */
-final class FilterByAssigneeKey implements FilterStrategy
+final class FilterNotWithAssigneeKeys implements FilterStrategy
 {
     /** @psalm-return list<string> */
     private array $assigneeKeys;

@@ -12,7 +12,7 @@ final class TicketFilter
 
     public static function notWithAssigneeKeys(string...$assigneeKeys): self
     {
-        return new self(new FilterByAssigneeKey(...$assigneeKeys));
+        return new self(new FilterNotWithAssigneeKeys(...$assigneeKeys));
     }
 
     private function __construct(FilterStrategy $ignoreStrategy)
