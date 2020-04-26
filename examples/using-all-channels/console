@@ -10,7 +10,6 @@ require dirname(__DIR__) . '/../vendor/autoload.php';
 
 use Chemaclass\JiraStatusNotifier\Channel\Cli;
 use Chemaclass\JiraStatusNotifier\Channel\Email;
-use Chemaclass\JiraStatusNotifier\Channel\Email\ByPassEmail;
 use Chemaclass\JiraStatusNotifier\Channel\MessageGenerator;
 use Chemaclass\JiraStatusNotifier\Channel\Slack;
 use Chemaclass\JiraStatusNotifier\Common\EnvKeys;
@@ -43,9 +42,7 @@ $channels = [
     new Email\Channel(
         new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),
         new MessageGenerator(new DateTimeImmutable(), $twig, 'email-template.twig'),
-        new Email\AddressGenerator(
-
-        )
+        new Email\AddressGenerator(json_decode(getenv('JIRA_IDS_TO_EMAIL'), true))
     ),
     new Slack\Channel(
         new Slack\HttpClient(HttpClient::create([

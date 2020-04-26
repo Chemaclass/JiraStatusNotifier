@@ -9,7 +9,6 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
 use Chemaclass\JiraStatusNotifier\Channel\Email;
-use Chemaclass\JiraStatusNotifier\Channel\Email\ByPassEmail;
 use Chemaclass\JiraStatusNotifier\Channel\MessageGenerator;
 use Chemaclass\JiraStatusNotifier\Common\EnvKeys;
 use Chemaclass\JiraStatusNotifier\IO\EchoOutput;
