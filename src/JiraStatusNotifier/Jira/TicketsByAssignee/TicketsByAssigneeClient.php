@@ -7,6 +7,7 @@ namespace Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee;
 use Chemaclass\JiraStatusNotifier\Jira\Board;
 use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
 use Chemaclass\JiraStatusNotifier\Jira\JqlUrlFactory;
+use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\StrategyFilter\TicketFilter;
 
 final class TicketsByAssigneeClient

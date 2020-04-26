@@ -9,48 +9,23 @@ use Symfony\Component\Mime\Address;
 
 final class AddressGenerator
 {
-    private ?ByPassEmail $byPassEmail;
+    private array $jiraIdsToEmail;
 
-    public function __construct(?ByPassEmail $byPassEmail = null)
+    public function __construct(array $jiraIdsToEmail)
     {
-        $this->byPassEmail = $byPassEmail;
+        $this->jiraIdsToEmail = $jiraIdsToEmail;
     }
 
-    /** @psalm-return list<Address> */
-    public function forJiraTicket(JiraTicket $ticket): array
+    public function forJiraTicket(JiraTicket $ticket): ?Address
     {
-        $personName = $ticket->assignee()->displayName();
+        $assignee = $ticket->assignee();
+        $email = $this->jiraIdsToEmail[$assignee->accountId()] ?? '';
 
-        if (!$this->byPassEmail) {
-            return [new Address($ticket->assignee()->email(), $personName)];
+        if (!$email) {
+            return null;
         }
 
-        $addresses = [];
-
-        if ($this->byPassEmail->isSendEmailsToAssignee()) {
-            $addresses[] = new Address($this->originalOrOverriddenEmail($ticket), $personName);
-        }
-
-        if (!empty($this->byPassEmail->getSendCopyTo())) {
-            $addresses[] = new Address($this->byPassEmail->getSendCopyTo(), $personName);
-        }
-
-        return $addresses;
+        return new Address($email, $assignee->displayName());
     }
 
-    private function originalOrOverriddenEmail(JiraTicket $ticket): string
-    {
-        if (!$this->byPassEmail) {
-            return $ticket->assignee()->key();
-        }
-
-        $assigneeKey = $ticket->assignee()->key();
-        $overriddenEmail = $this->byPassEmail->getByAssigneeKey($assigneeKey);
-
-        if ($overriddenEmail) {
-            return $overriddenEmail;
-        }
-
-        return $ticket->assignee()->email();
-    }
 }

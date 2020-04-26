@@ -70,10 +70,8 @@ final class JiraTicketsFactory
         }
 
         return new Assignee(
-            $assignee['name'] ?? '',
-            $assignee['key'] ?? '',
-            $assignee['displayName'] ?? '',
-            $assignee['emailAddress'] ?? ''
+            $assignee['accountId'],
+            $assignee['displayName']
         );
     }
 

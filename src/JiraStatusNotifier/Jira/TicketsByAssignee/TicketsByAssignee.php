@@ -15,11 +15,11 @@ final class TicketsByAssignee
     {
         $assignee = $ticket->assignee();
 
-        if (!isset($this->list[$assignee->key()])) {
-            $this->list[$assignee->key()] = [];
+        if (!isset($this->list[$assignee->accountId()])) {
+            $this->list[$assignee->accountId()] = [];
         }
 
-        $this->list[$assignee->key()][] = $ticket;
+        $this->list[$assignee->accountId()][] = $ticket;
 
         return $this;
     }

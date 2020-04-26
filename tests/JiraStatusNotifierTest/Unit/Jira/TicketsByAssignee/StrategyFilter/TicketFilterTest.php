@@ -16,29 +16,24 @@ final class TicketFilterTest extends TestCase
     /** @test */
     public function shouldIgnore(): void
     {
-        $ignoreStrategy = TicketFilter::notWithAssigneeKeys('key1', 'key2');
-        self::assertTrue($ignoreStrategy->shouldIgnore($this->newTicket('key1')));
+        $filter = TicketFilter::notWithAssigneeKeys('key1', 'key2');
+        self::assertTrue($filter->shouldIgnore($this->newTicket('key1')));
     }
 
     /** @test */
     public function shouldNotIgnore(): void
     {
-        $policy = TicketFilter::notWithAssigneeKeys('key1', 'key2');
-        self::assertFalse($policy->shouldIgnore($this->newTicket('key3')));
+        $filter = TicketFilter::notWithAssigneeKeys('key1', 'key2');
+        self::assertFalse($filter->shouldIgnore($this->newTicket('key3')));
     }
 
-    private function newTicket(string $key): JiraTicket
+    private function newTicket(string $accountId): JiraTicket
     {
         return new JiraTicket(
             'The title',
             'KEY-N',
             new TicketStatus('In Progress', new DateTimeImmutable()),
-            new Assignee(
-                'assignee.name',
-                $key,
-                'Full Name',
-                'any@example.com'
-            )
+            new Assignee($accountId, 'Display Full Name')
         );
     }
 }

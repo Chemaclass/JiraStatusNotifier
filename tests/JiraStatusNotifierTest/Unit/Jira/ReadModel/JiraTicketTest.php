@@ -23,12 +23,7 @@ final class JiraTicketTest extends TestCase
                 'statusName',
                 (new DateTimeImmutable())->setTime(0, 0, 0)
             ),
-            new Assignee(
-                'assigneeName',
-                'assignee.key',
-                'Assignee Display Name',
-                'assignee@email.com'
-            ),
+            new Assignee('accountId_!@#$', 'Display Full Name'),
             ['real_key' => 'customKey']
         );
     }
@@ -59,12 +54,7 @@ final class JiraTicketTest extends TestCase
     /** @test */
     public function assignee(): void
     {
-        self::assertEquals(new Assignee(
-            'assigneeName',
-            'assignee.key',
-            'Assignee Display Name',
-            'assignee@email.com'
-        ), $this->ticket->assignee());
+        self::assertEquals(new Assignee('accountId_!@#$', 'Display Full Name'), $this->ticket->assignee());
     }
 
     /** @test */

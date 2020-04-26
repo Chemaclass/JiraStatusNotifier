@@ -51,7 +51,7 @@ final class Channel implements ChannelInterface
         $ticket = $tickets[array_key_first($tickets)];
 
         $response = $this->slackClient->postToChannel(
-            $this->slackMapping->toSlackId($ticket->assignee()->name()),
+            $this->slackMapping->toSlackId($ticket->assignee()->accountId()),
             $this->messageGenerator->forJiraTickets($company->companyName(), ...$tickets)
         );
 

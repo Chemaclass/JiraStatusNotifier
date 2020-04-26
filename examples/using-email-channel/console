@@ -40,10 +40,7 @@ $jiraHttpClient = new JiraHttpClient(
 $channel = new Email\Channel(
     new Mailer(new GmailSmtpTransport(getenv('MAILER_USERNAME'), getenv('MAILER_PASSWORD'))),
     new MessageGenerator(new DateTimeImmutable(), $twig, 'email-template.twig'),
-    new Email\AddressGenerator((new ByPassEmail())
-        ->setSendEmailsToAssignee(false) // <- OverriddenEmails wont have effect as long as this is false
-        ->setOverriddenEmails(json_decode(getenv('OVERRIDDEN_EMAILS'), true))
-        ->setSendCopyTo(getenv('MAILER_USERNAME')))
+    new Email\AddressGenerator(json_decode(getenv('JIRA_IDS_TO_EMAIL'), true))
 );
 
 $jiraConnector = new JiraConnector($jiraHttpClient, $channel);
