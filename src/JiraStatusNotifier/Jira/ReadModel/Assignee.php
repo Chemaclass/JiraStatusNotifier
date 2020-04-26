@@ -35,5 +35,4 @@ final class Assignee
     {
         return $this->displayName;
     }
-
 }

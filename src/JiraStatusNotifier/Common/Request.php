@@ -7,5 +7,6 @@ namespace Chemaclass\JiraStatusNotifier\Common;
 interface Request
 {
     public const HTTP_OK = 200;
+
     public const HTTP_BAD_REQUEST = 400;
 }

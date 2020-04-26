@@ -70,7 +70,7 @@ final class Channel implements ChannelInterface
 
             return Request::HTTP_OK;
         } catch (TransportExceptionInterface $e) {
-            return (int)$e->getCode();
+            return (int) $e->getCode();
         }
     }
 }

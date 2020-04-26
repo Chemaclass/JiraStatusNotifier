@@ -27,5 +27,4 @@ final class AddressGenerator
 
         return new Address($email, $assignee->displayName());
     }
-
 }
