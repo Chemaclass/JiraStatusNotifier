@@ -6,13 +6,14 @@ namespace Chemaclass\JiraStatusNotifier;
 
 use Chemaclass\JiraStatusNotifier\Channel\ChannelInterface;
 use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;
-use Chemaclass\JiraStatusNotifier\Channel\TicketsByAssigneeClient;
 use Chemaclass\JiraStatusNotifier\IO\JiraConnectorInput;
 use Chemaclass\JiraStatusNotifier\Jira\Board;
 use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
 use Chemaclass\JiraStatusNotifier\Jira\JqlUrlBuilder;
 use Chemaclass\JiraStatusNotifier\Jira\JqlUrlFactory;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Company;
+use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\StrategyFilter\TicketFilter;
+use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\TicketsByAssigneeClient;
 
 final class JiraConnector
 {
@@ -41,7 +42,7 @@ final class JiraConnector
         $ticketsByAssignee = (new TicketsByAssigneeClient(
             $this->jiraHttpClient,
             new JqlUrlFactory($jiraBoard, JqlUrlBuilder::inOpenSprints($company)),
-            $input->jiraUsersToIgnore()
+            TicketFilter::notWithAssigneeKeys(...$input->jiraUsersToIgnore())
         ))->fetchFromBoard($jiraBoard);
 
         foreach ($this->channels as $channel) {

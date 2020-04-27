@@ -6,53 +6,33 @@ namespace Chemaclass\JiraStatusNotifier\Jira\ReadModel;
 
 final class Assignee
 {
-    private string $name;
-
-    private string $key;
+    private string $accountId;
 
     private string $displayName;
-
-    private string $email;
 
     public static function empty(): self
     {
         return new self(
-            $name = '',
-            $key = '',
-            $displayName = '',
-            $email = ''
+            $accountId = '',
+            $displayName = ''
         );
     }
 
     public function __construct(
-        string $name,
-        string $key,
-        string $displayName,
-        string $email
+        string $accountId,
+        string $displayName
     ) {
-        $this->name = $name;
-        $this->key = $key;
+        $this->accountId = $accountId;
         $this->displayName = $displayName;
-        $this->email = $email;
     }
 
-    public function name(): string
+    public function accountId(): string
     {
-        return $this->name;
-    }
-
-    public function key(): string
-    {
-        return $this->key;
+        return $this->accountId;
     }
 
     public function displayName(): string
     {
         return $this->displayName;
-    }
-
-    public function email(): string
-    {
-        return $this->email;
     }
 }

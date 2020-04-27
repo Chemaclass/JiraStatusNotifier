@@ -50,17 +50,15 @@ $jiraConnector = new JiraConnector(
     new JiraHttpClient(
         HttpClient::create(['auth_basic' => ['jiraAPiLabel', 'jiraApiPassword']])
     ), 
-    $channels = [
-        new Slack\Channel(/* ... */),
-        new Email\Channel(/* ... */),
-        new Cli\Channel(),
-    ]
+    new Slack\Channel(/* ... */),
+    new Email\Channel(/* ... */),
+    new Cli\Channel()
 );
 
 $result = $jiraConnector->handle(JiraConnectorInput::new(
-    'companyName',
-    'jiraProjectName',
-    ['Todo' => 1, 'In Progress' => 2, 'In Review' => 1]
+    'company-name',
+    'Jira Project Name',
+    ['To Do' => 3, 'In Progress' => 2, 'In Review' => 1]
 ));
 ```
 

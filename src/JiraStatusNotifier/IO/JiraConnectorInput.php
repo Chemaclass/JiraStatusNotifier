@@ -18,11 +18,11 @@ final class JiraConnectorInput
 
     private string $jiraProjectName;
 
-    /** @var array */
-    private $daysForStatus;
+    /** @psalm-var array<string,int> */
+    private array $daysForStatus;
 
-    /** @var array */
-    private $jiraUsersToIgnore;
+    /** @psalm-var list<string> */
+    private array $jiraUsersToIgnore;
 
     public static function new(
         string $companyName,
@@ -60,11 +60,13 @@ final class JiraConnectorInput
         return $this->jiraProjectName;
     }
 
+    /** @psalm-return array<string,int> */
     public function daysForStatus(): array
     {
         return $this->daysForStatus;
     }
 
+    /** @psalm-return list<string> */
     public function jiraUsersToIgnore(): array
     {
         return $this->jiraUsersToIgnore;

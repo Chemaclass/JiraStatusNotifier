@@ -8,10 +8,10 @@ use Chemaclass\JiraStatusNotifier\Channel\ChannelInterface;
 use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;
 use Chemaclass\JiraStatusNotifier\Channel\MessageGenerator;
 use Chemaclass\JiraStatusNotifier\Channel\ReadModel\ChannelIssue;
-use Chemaclass\JiraStatusNotifier\Channel\TicketsByAssignee;
 use Chemaclass\JiraStatusNotifier\Common\Request;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Company;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
+use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\TicketsByAssignee;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
@@ -27,11 +27,11 @@ final class Channel implements ChannelInterface
     public function __construct(
         Mailer $mailer,
         MessageGenerator $messageGenerator,
-        ?AddressGenerator $addresses = null
+        AddressGenerator $addressGenerator
     ) {
         $this->mailer = $mailer;
         $this->messageGenerator = $messageGenerator;
-        $this->addressGenerator = $addresses ?? new AddressGenerator();
+        $this->addressGenerator = $addressGenerator;
     }
 
     public function send(Company $company, TicketsByAssignee $ticketsByAssignee): ChannelResult
@@ -54,11 +54,16 @@ final class Channel implements ChannelInterface
     {
         try {
             $ticket = $tickets[array_key_first($tickets)];
+            $emailTo = $this->addressGenerator->forJiraTicket($ticket);
+
+            if (!$emailTo) {
+                return Request::HTTP_BAD_REQUEST;
+            }
 
             $email = (new Email())
-                ->to(...$this->addressGenerator->forJiraTicket($ticket))
-                ->subject('Scrum Master Reminder')
-                ->addFrom('scrum.master@noreply.com')
+                ->to($emailTo)
+                ->subject('Jira Status Notifier')
+                ->addFrom('jira.status.notifier@noreply.com')
                 ->html($this->messageGenerator->forJiraTickets($company->companyName(), ...$tickets));
 
             $this->mailer->send($email);

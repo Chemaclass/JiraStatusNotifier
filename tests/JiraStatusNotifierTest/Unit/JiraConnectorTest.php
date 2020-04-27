@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\JiraStatusNotifierTests\Unit\Command;
+namespace Chemaclass\JiraStatusNotifierTests\Unit;
 
 use Chemaclass\JiraStatusNotifier\Channel\ChannelInterface;
 use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;

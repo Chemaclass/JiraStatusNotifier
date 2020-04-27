@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chemaclass\JiraStatusNotifierTests\Unit\Channel\Email;
 
 use Chemaclass\JiraStatusNotifier\Channel\Email\AddressGenerator;
-use Chemaclass\JiraStatusNotifier\Channel\Email\ByPassEmail;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Assignee;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\TicketStatus;
@@ -16,56 +15,34 @@ use Symfony\Component\Mime\Address;
 final class AddressGeneratorTest extends TestCase
 {
     /** @test */
-    public function byDefaultGoesToAssignee(): void
+    public function forJiraTicketWithAssignee(): void
     {
-        $jiraTicket = $this->newJiraTicket();
-        $assignee = $jiraTicket->assignee();
+        $assignee = new Assignee('acountId_!@#$', 'Display Full Name');
+        $jiraIdsToEmail = [$assignee->accountId() => 'any@email.com'];
+        $ticket = $this->newJiraTicket($assignee);
 
-        self::assertEquals([
-            new Address($assignee->email(), $assignee->displayName()),
-        ], (new AddressGenerator())->forJiraTicket($jiraTicket));
+        self::assertEquals(
+            new Address('any@email.com', $assignee->displayName()),
+            (new AddressGenerator($jiraIdsToEmail))->forJiraTicket($ticket)
+        );
     }
 
     /** @test */
-    public function sendCopyToWithAssignee(): void
+    public function forJiraTicketWithoutAssignee(): void
     {
-        $jiraTicket = $this->newJiraTicket();
-        $assignee = $jiraTicket->assignee();
-        $generator = new AddressGenerator((new ByPassEmail())->setSendCopyTo('copy@to.me'));
+        $jiraIdsToEmail = ['acountId_!@#$' => 'any@email.com'];
+        $ticket = $this->newJiraTicket(Assignee::empty());
 
-        self::assertEquals([
-            new Address($assignee->email(), $assignee->displayName()),
-            new Address('copy@to.me', $assignee->displayName()),
-        ], $generator->forJiraTicket($jiraTicket));
+        self::assertNull((new AddressGenerator($jiraIdsToEmail))->forJiraTicket($ticket));
     }
 
-    /** @test */
-    public function sendCopyToWithoutAssignee(): void
-    {
-        $jiraTicket = $this->newJiraTicket();
-        $assignee = $jiraTicket->assignee();
-
-        $generator = new AddressGenerator((new ByPassEmail())
-            ->setSendCopyTo('copy@to.me')
-            ->setSendEmailsToAssignee(false));
-
-        self::assertEquals([
-            new Address('copy@to.me', $assignee->displayName()),
-        ], $generator->forJiraTicket($jiraTicket));
-    }
-
-    private function newJiraTicket(): JiraTicket
+    private function newJiraTicket(Assignee $assignee): JiraTicket
     {
         return new JiraTicket(
-            $title = 'Ticket Title',
-            $key = 'CST-KEY',
+            'Ticket Title',
+            'KEY-N',
             new TicketStatus('IN QA', new DateTimeImmutable()),
-            new Assignee(
-                $name = 'assignee.name',
-                $key = 'assignee-key',
-                $displayName = 'Full Name',
-                $email = 'any@example.com'
-            )
+            $assignee
         );
     }
 }

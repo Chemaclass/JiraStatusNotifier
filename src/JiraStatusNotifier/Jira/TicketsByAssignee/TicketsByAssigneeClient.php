@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chemaclass\JiraStatusNotifier\Channel;
+namespace Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee;
 
 use Chemaclass\JiraStatusNotifier\Jira\Board;
 use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
 use Chemaclass\JiraStatusNotifier\Jira\JqlUrlFactory;
-use function in_array;
+use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\StrategyFilter\TicketFilter;
 
 final class TicketsByAssigneeClient
 {
@@ -15,16 +15,16 @@ final class TicketsByAssigneeClient
 
     private JqlUrlFactory $jqlUrlFactory;
 
-    private array $jiraUsersToIgnore;
+    private TicketFilter $ignoreTickets;
 
     public function __construct(
         JiraHttpClient $jiraClient,
         JqlUrlFactory $jqlUrlFactory,
-        array $jiraUsersToIgnore
+        TicketFilter $ignoreTickets
     ) {
         $this->jiraClient = $jiraClient;
         $this->jqlUrlFactory = $jqlUrlFactory;
-        $this->jiraUsersToIgnore = $jiraUsersToIgnore;
+        $this->ignoreTickets = $ignoreTickets;
     }
 
     public function fetchFromBoard(Board $board): TicketsByAssignee
@@ -35,7 +35,7 @@ final class TicketsByAssigneeClient
             $tickets = $this->jiraClient->getTickets($this->jqlUrlFactory, $statusName);
 
             foreach ($tickets as $ticket) {
-                if (in_array($ticket->assignee()->key(), $this->jiraUsersToIgnore)) {
+                if ($this->ignoreTickets->shouldIgnore($ticket)) {
                     continue;
                 }
 

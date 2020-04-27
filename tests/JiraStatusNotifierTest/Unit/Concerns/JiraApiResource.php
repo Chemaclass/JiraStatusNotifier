@@ -27,9 +27,8 @@ trait JiraApiResource
     }
 
     private function createAJiraIssueAsArray(
-        string $assigneeKey,
+        string $assigneeId,
         string $key,
-        string $email = 'user@email.jira',
         string $statusName = 'In Progress'
     ): array {
         return [
@@ -42,8 +41,7 @@ trait JiraApiResource
                 'statuscategorychangedate' => '2019-06-15T10:35:00+00',
                 'assignee' => [
                     'name' => 'Real Name',
-                    'key' => $assigneeKey,
-                    'emailAddress' => $email,
+                    'accountId' => $assigneeId,
                     'displayName' => 'display.name.jira',
                 ],
             ],

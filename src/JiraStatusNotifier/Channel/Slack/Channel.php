@@ -8,9 +8,9 @@ use Chemaclass\JiraStatusNotifier\Channel\ChannelInterface;
 use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;
 use Chemaclass\JiraStatusNotifier\Channel\MessageGenerator;
 use Chemaclass\JiraStatusNotifier\Channel\ReadModel\ChannelIssue;
-use Chemaclass\JiraStatusNotifier\Channel\TicketsByAssignee;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Company;
 use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
+use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\TicketsByAssignee;
 
 final class Channel implements ChannelInterface
 {
@@ -51,7 +51,7 @@ final class Channel implements ChannelInterface
         $ticket = $tickets[array_key_first($tickets)];
 
         $response = $this->slackClient->postToChannel(
-            $this->slackMapping->toSlackId($ticket->assignee()->name()),
+            $this->slackMapping->toSlackId($ticket->assignee()->accountId()),
             $this->messageGenerator->forJiraTickets($company->companyName(), ...$tickets)
         );
 
