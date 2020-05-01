@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chemaclass\JiraStatusNotifier\Common\Exception;
 
+/** @psalm-immutable */
 final class MissingKeysException extends \Exception
 {
     public function __construct(array $missingKeys)

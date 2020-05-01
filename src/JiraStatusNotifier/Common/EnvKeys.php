@@ -6,9 +6,10 @@ namespace Chemaclass\JiraStatusNotifier\Common;
 
 use Chemaclass\JiraStatusNotifier\Common\Exception\MissingKeysException;
 
+/** @psalm-immutable */
 final class EnvKeys
 {
-    /** @var array */
+    /** @psalm-var list<string> */
     private $envVars;
 
     public static function create(array $envVars): self

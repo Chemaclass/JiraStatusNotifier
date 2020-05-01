@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chemaclass\JiraStatusNotifier\IO;
 
+/** @psalm-immutable */
 final class JiraConnectorInput
 {
     public const COMPANY_NAME = 'COMPANY_NAME';

@@ -38,9 +38,7 @@ Some make tasks to execute commands inside the docker container such:
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-use Chemaclass\JiraStatusNotifier\Channel\Cli;
-use Chemaclass\JiraStatusNotifier\Channel\Email;
-use Chemaclass\JiraStatusNotifier\Channel\Slack;
+use Chemaclass\JiraStatusNotifier\Channel\{Cli, Email, Slack};
 use Chemaclass\JiraStatusNotifier\IO\JiraConnectorInput;
 use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
 use Chemaclass\JiraStatusNotifier\JiraConnector;
