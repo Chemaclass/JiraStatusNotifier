@@ -8,11 +8,11 @@
 
 This tool will notify the person assigned a JIRA-ticket if the ticket remains in the same status for more than `N` days.
 
-## Installation
+## Installation as vendor
 
 Using composer: ```composer require chemaclass/jira-status-notifier```
 
-## Development
+## Development and contribution
 
 ### Requirements
 
@@ -24,6 +24,16 @@ Some make tasks to execute commands inside the docker container such:
 * `make csfix` -> run the code style fixer (`.php_cs`)
 * `make composer ARGS="install"` -> run composer
 * `make tests ARGS="--filter AddressGenerator"` -> run PHPUnit
+
+### Your first try!
+
+1. Clone/Fork the project and `cd` inside the repository
+2. `docker-compose up`
+3. `make bash` or `docker exec -ti -u dev jira_status_notifier_php bash` 
+4. `cd examples/using-cli-channel`
+5. `cp .env.dist .env`
+6. Update the [`.env` values](docu/mandatory-parameters.md)
+7. `php console` or `./console`
 
 ## Documentation
 

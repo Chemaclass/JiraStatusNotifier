@@ -34,8 +34,8 @@ a slack notification will be sent to the responsible person.
 
 ### JIRA_USERS_TO_IGNORE (optional)
 
-Value example: `'["any.jira.user.key","another.jira.user.key"]'`
+Value example: `'["any.jira.account_id","another.jira.account_id"]'`
 
-Prevent sending any notifications to the users listed by their jira user-key.
+Prevent sending any notifications to the users listed by their jira account_id.
 
 This is optional. Default value: `'[]'`

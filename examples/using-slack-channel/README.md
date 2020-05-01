@@ -2,7 +2,7 @@
 
 ## Parameters
 
-Apart of the [mandatory parameters](../../docu/README.md), you will need:
+Apart from the [mandatory parameters](../../docu/README.md), you will need:
 
 #### SLACK_BOT_USER_OAUTH_ACCESS_TOKEN
 
@@ -10,7 +10,7 @@ You can create your own Slack App here: https://api.slack.com/apps (inside "Oaut
 
 #### SLACK_MAPPING_IDS
 
-Value example: `'{"fallback":"slack.group.id", "jira.person.id":"slack.member.id"}'`
+Value example: `'{"fallback":"slack.group.id", "jira.account_id":"slack.member.id", ...}'`
 
 It is the mapping between the "person.id" from JIRA to the "channel name" or "person member_id" in slack .
 

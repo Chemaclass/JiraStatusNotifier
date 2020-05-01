@@ -14,7 +14,7 @@ to use a [3rd party transport](https://symfony.com/doc/current/mailer.html#using
 
 ## Parameters
 
-Apart of the [mandatory parameters](../../docu/README.md), you will need:
+Apart from the [mandatory parameters](../../docu/README.md), you will need:
 
 #### MAILER_USERNAME
 
@@ -24,11 +24,11 @@ Value example: `your@email.com`
 
 Value example: `1he-p@$w0rd`
 
-#### OVERRIDDEN_EMAILS
+#### JIRA_IDS_TO_EMAIL
 
-Value example: `['jira.user.key': 'other@email.com']`
+Value example: `{'jira.user.account_id': 'his/her@email.com', ...}`
 
-It will "override" the email destination from the user which will receive
+It will set the email destination from the user which will receive
 the email as a notification.
 
 ## References
