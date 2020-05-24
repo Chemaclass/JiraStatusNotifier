@@ -1,6 +1,5 @@
 {% set firstTicket = tickets | first %}
 {% set assignee = firstTicket.assignee %}
-{% set assigneeProfile = "https://" ~ companyName ~ ".atlassian.net/jira/people/" ~ assignee.accountId %}
 
 {% if assignee.accountId %}
     {% set assigneeProfile = "https://" ~ companyName ~ ".atlassian.net/jira/people/" ~ assignee.accountId %}
