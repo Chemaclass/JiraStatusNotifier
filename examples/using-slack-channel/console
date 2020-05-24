@@ -45,10 +45,10 @@ $channel = new Slack\Channel(
 $jiraConnector = new JiraConnector($jiraHttpClient, $channel);
 
 $result = $jiraConnector->handle(JiraConnectorInput::new(
-    $_ENV[JiraConnectorInput::COMPANY_NAME],
-    $_ENV[JiraConnectorInput::JIRA_PROJECT_NAME],
-    json_decode($_ENV[JiraConnectorInput::DAYS_FOR_STATUS], true),
-    json_decode($_ENV[JiraConnectorInput::JIRA_USERS_TO_IGNORE], true)
+    getenv(JiraConnectorInput::COMPANY_NAME),
+    getenv(JiraConnectorInput::JIRA_PROJECT_NAME),
+    json_decode(getenv(JiraConnectorInput::DAYS_FOR_STATUS), true),
+    json_decode(getenv(JiraConnectorInput::JIRA_USERS_TO_IGNORE), true)
 ));
 
 (new NotifierOutput(new EchoOutput(), $twig))
