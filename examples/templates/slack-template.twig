@@ -1,20 +1,20 @@
 {% set firstTicket = tickets | first %}
 {% set assignee = firstTicket.assignee %}
+{% set assigneeProfile = "https://" ~ companyName ~ ".atlassian.net/jira/people/" ~ assignee.accountId %}
 
 {% if assignee.accountId %}
-    {% set salutation = "Hey, " ~ assignee.displayName ~ " (" ~ assignee.accountId ~ ")" %}
+    {% set assigneeProfile = "https://" ~ companyName ~ ".atlassian.net/jira/people/" ~ assignee.accountId %}
+    Hey <{{ assigneeProfile }}|{{ assignee.displayName }}>, please have a look
 {% else %}
-    {% set salutation = 'Hey Team' %}
+    Hey Team, please have a look
 {% endif %}
 
-{{ salutation }}, please have a look
 
 {% for ticket in tickets %}
-    {% set status = ticket.status %}
-    {% set daysDiff = status.changeDate.diff(now).days %}
-    {% set url = "https://" ~ companyName ~ ".atlassian.net/browse/" ~ ticket.key %}
-    {% set dayWord = (daysDiff > 1) ? 'days' : 'day' %}
-
+{% set status = ticket.status %}
+{% set daysDiff = status.changeDate.diff(now).days %}
+{% set url = "https://" ~ companyName ~ ".atlassian.net/browse/" ~ ticket.key %}
+{% set dayWord = (daysDiff > 1) ? 'days' : 'day' %}
 > [<{{ url }}|{{ ticket.key }}>] {{ ticket.title | raw }}
 {{ ticket.customFields['StoryPoints'] }} *SP* | *Current status*: {{ status.name }} since {{ daysDiff }} {{ dayWord }}
 {% endfor %}
