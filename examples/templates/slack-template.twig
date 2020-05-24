@@ -1,8 +1,8 @@
 {% set firstTicket = tickets | first %}
 {% set assignee = firstTicket.assignee %}
 
-{% if assignee.key %}
-    {% set salutation = "Hey, " ~ assignee.displayName ~ "(" ~ assignee.name ~ ")" %}
+{% if assignee.accountId %}
+    {% set salutation = "Hey, " ~ assignee.displayName ~ " (" ~ assignee.accountId ~ ")" %}
 {% else %}
     {% set salutation = 'Hey Team' %}
 {% endif %}
