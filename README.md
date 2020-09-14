@@ -16,24 +16,24 @@ Using composer: ```composer require chemaclass/jira-status-notifier```
 
 ### Requirements
 
-#### GNU Make 4.+ (for Makefile) [Install for Mac](https://stackoverflow.com/questions/43175529/updating-make-version-4-1-on-mac) | Optional
-
-Some make tasks to execute commands inside the docker container such:
-
-* `make bash` -> access into the bash
-* `make csfix` -> run the code style fixer (`.php_cs`)
-* `make composer ARGS="install"` -> run composer
-* `make tests ARGS="--filter AddressGenerator"` -> run PHPUnit
-
 ### Your first try!
 
 1. Clone/Fork the project and `cd` inside the repository
 2. `docker-compose up`
-3. `make bash` or `docker exec -ti -u dev jira_status_notifier_php bash` 
+3. `docker exec -ti -u dev jira_status_notifier_php bash` 
 4. `cd examples/using-cli-channel`
 5. `cp .env.dist .env`
 6. Update the [`.env` values](docu/mandatory-parameters.md)
-7. `php console` or `./console`
+7. `php console`
+
+### Composer scripts
+
+```
+composer test      # execute phpunit tests
+composer csfix     # run php-cs-fixer fix
+composer psalm     # display psalm errors
+composer psalm-log # generate a file with psalm suggestions
+```
 
 ## Documentation
 
@@ -69,4 +69,3 @@ $result = $jiraConnector->handle(JiraConnectorInput::new(
     ['To Do' => 3, 'In Progress' => 2, 'In Review' => 1]
 ));
 ```
-
