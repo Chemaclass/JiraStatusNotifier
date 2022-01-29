@@ -46,7 +46,6 @@ final class JiraConnector
     {
         $jiraBoard = new Board($this->input->getDaysForStatus());
         $company = Company::withNameAndProject($this->input->getCompanyName(), $this->input->getJiraProjectName());
-        $result = [];
 
         $ticketsByAssignee = (new TicketsByAssigneeClient(
             $this->jiraHttpClient,
@@ -54,10 +53,17 @@ final class JiraConnector
             TicketFilter::notWithAssigneeKeys(...$this->input->getJiraUsersToIgnore())
         ))->fetchFromBoard($jiraBoard);
 
+        return $this->send($company, $ticketsByAssignee);
+    }
+
+    private function send(
+        Company $company,
+        TicketsByAssignee $ticketsByAssignee
+    ): array {
+        $result = [];
         foreach ($this->channels as $channel) {
             $result[get_class($channel)] = $channel->send($company, $ticketsByAssignee);
         }
-
         return $result;
     }
 }
