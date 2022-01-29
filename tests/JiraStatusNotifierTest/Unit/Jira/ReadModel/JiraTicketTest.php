@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Chemaclass\JiraStatusNotifierTests\Unit\Jira\ReadModel;
 
-use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Assignee;
-use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
-use Chemaclass\JiraStatusNotifier\Jira\ReadModel\TicketStatus;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\ReadModel\Assignee;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\ReadModel\JiraTicket;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\ReadModel\TicketStatus;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
@@ -28,19 +28,25 @@ final class JiraTicketTest extends TestCase
         );
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function title(): void
     {
         self::assertSame('title', $this->ticket->title());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function key(): void
     {
         self::assertSame('key', $this->ticket->key());
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function status(): void
     {
         self::assertSame('statusName', $this->ticket->status()->name());
@@ -51,14 +57,18 @@ final class JiraTicketTest extends TestCase
         );
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function assignee(): void
     {
         self::assertEquals(new Assignee('accountId_!@#$', 'Display Full Name'), $this->ticket->assignee());
     }
 
-    /** @test */
-    public function customFields(): void
+    /**
+     * @test
+     */
+    public function custom_fields(): void
     {
         self::assertSame(['real_key' => 'customKey'], $this->ticket->customFields());
     }

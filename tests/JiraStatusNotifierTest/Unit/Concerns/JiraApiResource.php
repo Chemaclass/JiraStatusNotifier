@@ -8,12 +8,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * @method createMock($originalClassName): MockObject
- */
 trait JiraApiResource
 {
-    /** @return HttpClientInterface|MockObject */
+    /**
+     * @return HttpClientInterface|MockObject
+     */
     private function mockJiraClient(array $issues)
     {
         $jiraResponse = $this->createMock(ResponseInterface::class);

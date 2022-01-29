@@ -8,39 +8,25 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/../vendor/autoload.php';
 
-use Chemaclass\JiraStatusNotifier\Channel\Cli;
-use Chemaclass\JiraStatusNotifier\Common\EnvKeys;
-use Chemaclass\JiraStatusNotifier\IO\EchoOutput;
-use Chemaclass\JiraStatusNotifier\IO\JiraConnectorInput;
-use Chemaclass\JiraStatusNotifier\IO\NotifierOutput;
-use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
-use Chemaclass\JiraStatusNotifier\Jira\JiraTicketsFactory;
-use Chemaclass\JiraStatusNotifier\JiraConnector;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\Cli\CliChannel;
+use Chemaclass\JiraStatusNotifier\Domain\Common\EnvKeys;
+use Chemaclass\JiraStatusNotifier\JiraStatusNotifierFacade;
 use Dotenv\Dotenv;
-use Symfony\Component\HttpClient\HttpClient;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
+use Gacela\Framework\Gacela;
 
 Dotenv::create(__DIR__)->load();
 EnvKeys::create((array)getenv())->validate(file_get_contents(__DIR__ . '/.env.dist'));
 
-$jiraHttpClient = new JiraHttpClient(
-    HttpClient::create([
-        'auth_basic' => [getenv('JIRA_API_LABEL'), getenv('JIRA_API_PASSWORD')],
-    ]),
-    new JiraTicketsFactory(['customfield_10005' => 'StoryPoints'])
-);
+Gacela::bootstrap(__DIR__, [
+    'config' => [
+        'type' => 'env',
+        'path' => '.env',
+    ],
+]);
 
-$jiraConnector = new JiraConnector($jiraHttpClient, new Cli\Channel());
+$facade = new JiraStatusNotifierFacade();
+$result = $facade->handle([
+    CliChannel::class,
+]);
 
-$result = $jiraConnector->handle(JiraConnectorInput::new(
-    getenv(JiraConnectorInput::COMPANY_NAME),
-    getenv(JiraConnectorInput::JIRA_PROJECT_NAME),
-    json_decode(getenv(JiraConnectorInput::DAYS_FOR_STATUS), true),
-    json_decode(getenv(JiraConnectorInput::JIRA_USERS_TO_IGNORE), true)
-));
-
-(new NotifierOutput(
-    new EchoOutput(),
-    new Environment(new FilesystemLoader('../templates'))
-))->write($result, 'output/cli-template.twig');
+$facade->renderOutput($result);

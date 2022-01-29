@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Chemaclass\JiraStatusNotifierTests\Functional;
 
-use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;
-use Chemaclass\JiraStatusNotifier\Channel\Email;
-use Chemaclass\JiraStatusNotifier\Channel\Email\AddressGenerator;
-use Chemaclass\JiraStatusNotifier\Channel\Email\Channel;
-use Chemaclass\JiraStatusNotifier\Channel\MessageGenerator;
-use Chemaclass\JiraStatusNotifier\Channel\ReadModel\ChannelIssue;
-use Chemaclass\JiraStatusNotifier\IO\JiraConnectorInput;
-use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
-use Chemaclass\JiraStatusNotifier\Jira\JiraTicketsFactory;
-use Chemaclass\JiraStatusNotifier\JiraConnector;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\ChannelResult;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\Email;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\Email\AddressGenerator;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\Email\EmailChannel;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\MessageGenerator;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\ReadModel\ChannelIssue;
+use Chemaclass\JiraStatusNotifier\Domain\IO\JiraConnectorInput;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\JiraHttpClient;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\JiraTicketsFactory;
+use Chemaclass\JiraStatusNotifier\Domain\JiraConnector;
 use Chemaclass\JiraStatusNotifierTests\Unit\Concerns\JiraApiResource;
 use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -27,61 +27,68 @@ final class EmailNotifierTest extends TestCase
 {
     use JiraApiResource;
 
-    /** @test */
-    public function zeroNotificationsWereSent(): void
+    /**
+     * @test
+     */
+    public function zero_notifications_were_sent(): void
     {
-        $jiraConnector = $this->emailNotifierCommandWithJiraTickets([], []);
-        $result = $jiraConnector->handle($this->jiraConnectorInput());
+        $jiraConnector = $this->createJiraConnector([], []);
+        $result = $jiraConnector->handle();
         /** @var ChannelResult $channelResult */
-        $channelResult = $result[Email\Channel::class];
+        $channelResult = $result[Email\EmailChannel::class];
         $this->assertEmpty($channelResult->channelIssues());
     }
 
-    /** @test */
-    public function twoSuccessfulNotificationsWereSent(): void
+    /**
+     * @test
+     */
+    public function two_successful_notifications_were_sent(): void
     {
-        $jiraConnector = $this->emailNotifierCommandWithJiraTickets(
-            [
+        $jiraConnector = $this->createJiraConnector(
+            jiraIssues: [
                 $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111'),
                 $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222'),
             ],
-            [
+            jiraIdsToEmail: [
                 'user.1.jira' => '1@email.com',
                 'user.2.jira' => '2@email.com',
             ]
         );
 
-        $result = $jiraConnector->handle($this->jiraConnectorInput());
+        $result = $jiraConnector->handle();
         /** @var ChannelResult $channelResult */
-        $channelResult = $result[Email\Channel::class];
+        $channelResult = $result[Email\EmailChannel::class];
         $this->assertEquals(['KEY-111', 'KEY-222'], array_keys($channelResult->channelIssues()));
     }
 
-    /** @test */
-    public function ignoredUserShouldNotReceiveAnyNotification(): void
+    /**
+     * @test
+     */
+    public function ignored_user_should_not_receive_any_notification(): void
     {
-        $jiraConnector = $this->emailNotifierCommandWithJiraTickets(
-            [
+        $jiraConnector = $this->createJiraConnector(
+            jiraIssues: [
                 $this->createAJiraIssueAsArray('user.1.jira', 'KEY-111'),
                 $this->createAJiraIssueAsArray('user.2.jira', 'KEY-222'),
             ],
-            [
+            jiraIdsToEmail: [
                 'user.1.jira' => '1@email.com',
                 'user.2.jira' => '2@email.com',
-            ]
+            ],
+            jiraUsersToIgnore: ['user.1.jira']
         );
 
-        $result = $jiraConnector->handle(
-            $this->jiraConnectorInput($usersToIgnore = ['user.1.jira'])
-        );
+        $result = $jiraConnector->handle();
 
         /** @var ChannelResult $channelResult */
-        $channelResult = $result[Email\Channel::class];
+        $channelResult = $result[Email\EmailChannel::class];
         $this->assertEquals(['KEY-222'], array_keys($channelResult->channelIssues()));
     }
 
-    /** @test */
-    public function ensureProperResponseStatusCodePerIssue(): void
+    /**
+     * @test
+     */
+    public function ensure_proper_response_status_code_per_issue(): void
     {
         $code = 12345;
 
@@ -98,21 +105,30 @@ final class EmailNotifierTest extends TestCase
                 ]),
                 new JiraTicketsFactory()
             ),
-            new Channel(new Mailer($transport), $this->messageGenerator(), new AddressGenerator([
-                'user.1.jira' => '1@email.com',
-            ])),
+            $this->createJiraConnectorInput(),
+            [
+                new EmailChannel(
+                    new Mailer($transport),
+                    $this->createMessageGenerator(),
+                    new AddressGenerator([
+                        'user.1.jira' => '1@email.com',
+                    ])
+                ),
+            ],
         );
 
-        $results = $jiraConnector->handle($this->jiraConnectorInput());
+        $results = $jiraConnector->handle();
         /** @var ChannelResult $channelResult */
-        $channelResult = $results[Email\Channel::class];
+        $channelResult = $results[Email\EmailChannel::class];
         /** @var ChannelIssue $issue */
         $issue = $channelResult->channelIssues()['KEY-111'];
         self::assertEquals($code, $issue->responseStatusCode());
     }
 
-    /** @test */
-    public function sameUserReceiveOneSingleNotification(): void
+    /**
+     * @test
+     */
+    public function same_user_receive_one_single_notification(): void
     {
         /** @var MockObject|TransportInterface $transport */
         $transport = $this->createMock(TransportInterface::class);
@@ -128,45 +144,50 @@ final class EmailNotifierTest extends TestCase
                 ]),
                 new JiraTicketsFactory()
             ),
-            new Email\Channel(
-                new Mailer($transport),
-                $this->messageGenerator(),
-                new Email\AddressGenerator([
-                    'user.1.jira' => 'email1@a.com',
-                    'user.2.jira' => 'email2@a.com',
-                ])
-            )
+            $this->createJiraConnectorInput(),
+            [
+                new Email\EmailChannel(
+                    new Mailer($transport),
+                    $this->createMessageGenerator(),
+                    new Email\AddressGenerator([
+                        'user.1.jira' => 'email1@a.com',
+                        'user.2.jira' => 'email2@a.com',
+                    ])
+                ),
+            ]
         );
 
-        $jiraConnector->handle($this->jiraConnectorInput());
+        $jiraConnector->handle();
     }
 
-    private function jiraConnectorInput(array $jiraUsersToIgnore = []): JiraConnectorInput
-    {
-        return JiraConnectorInput::new(
-            'company.name',
-            'Jira project name',
-            ['status1' => 1, 'status2' => 2],
-            $jiraUsersToIgnore
-        );
-    }
-
-    private function emailNotifierCommandWithJiraTickets(array $jiraIssues, array $jiraIdsToEmail): JiraConnector
-    {
+    private function createJiraConnector(
+        array $jiraIssues,
+        array $jiraIdsToEmail,
+        array $jiraUsersToIgnore = []
+    ): JiraConnector {
         return new JiraConnector(
-            new JiraHttpClient(
-                $this->mockJiraClient($jiraIssues),
-                new JiraTicketsFactory()
-            ),
-            new Email\Channel(
-                new Mailer($this->createMock(TransportInterface::class)),
-                $this->messageGenerator(),
-                new AddressGenerator($jiraIdsToEmail)
-            )
+            new JiraHttpClient($this->mockJiraClient($jiraIssues), new JiraTicketsFactory()),
+            $this->createJiraConnectorInput($jiraUsersToIgnore),
+            [
+                new Email\EmailChannel(
+                    new Mailer($this->createMock(TransportInterface::class)),
+                    $this->createMessageGenerator(),
+                    new AddressGenerator($jiraIdsToEmail)
+                ),
+            ]
         );
     }
 
-    private function messageGenerator(): MessageGenerator
+    private function createJiraConnectorInput(array $jiraUsersToIgnore = []): JiraConnectorInput
+    {
+        return (new JiraConnectorInput())
+            ->setCompanyName('company.name')
+            ->setJiraProjectName('Jira project name')
+            ->setDaysForStatus(['status1' => 1, 'status2' => 2])
+            ->setJiraUsersToIgnore($jiraUsersToIgnore);
+    }
+
+    private function createMessageGenerator(): MessageGenerator
     {
         return new MessageGenerator(
             new DateTimeImmutable(),

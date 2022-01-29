@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace Chemaclass\JiraStatusNotifierTests\Unit\IO;
 
-use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;
-use Chemaclass\JiraStatusNotifier\Channel\ReadModel\ChannelIssue;
-use Chemaclass\JiraStatusNotifier\IO\NotifierOutput;
-use Chemaclass\JiraStatusNotifier\IO\OutputInterface;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\ChannelResult;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\ReadModel\ChannelIssue;
+use Chemaclass\JiraStatusNotifier\Domain\IO\NotifierOutputRenderer;
+use Chemaclass\JiraStatusNotifier\Domain\IO\OutputInterface;
 use PHPUnit\Framework\TestCase;
 use Twig;
 
 final class NotifierOutputTest extends TestCase
 {
-    /** @test */
-    public function renderTemplate(): void
+    /**
+     * @test
+     */
+    public function render_template(): void
     {
         $templatePath = 'any_template_path';
         $channelName = 'any_channel_name';
@@ -35,7 +37,7 @@ final class NotifierOutputTest extends TestCase
             ]
         );
 
-        $output = new NotifierOutput($this->createMock(OutputInterface::class), $twig);
-        $output->write([$channelName => $result], $templatePath);
+        $output = new NotifierOutputRenderer($this->createMock(OutputInterface::class), $twig, $templatePath);
+        $output->write([$channelName => $result]);
     }
 }

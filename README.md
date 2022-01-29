@@ -48,19 +48,19 @@ composer psalm-log # generate a file with psalm suggestions
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-use Chemaclass\JiraStatusNotifier\Channel\{Cli, Email, Slack};
-use Chemaclass\JiraStatusNotifier\IO\JiraConnectorInput;
-use Chemaclass\JiraStatusNotifier\Jira\JiraHttpClient;
-use Chemaclass\JiraStatusNotifier\JiraConnector;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\{Cli, Email, Slack};
+use Chemaclass\JiraStatusNotifier\Domain\IO\JiraConnectorInput;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\JiraHttpClient;
+use Chemaclass\JiraStatusNotifier\Domain\JiraConnector;
 use Symfony\Component\HttpClient\HttpClient;
 
 $jiraConnector = new JiraConnector(
     new JiraHttpClient(
         HttpClient::create(['auth_basic' => ['jiraAPiLabel', 'jiraApiPassword']])
     ), 
-    new Slack\Channel(/* ... */),
-    new Email\Channel(/* ... */),
-    new Cli\Channel()
+    new Slack\SlackChannel(/* ... */),
+    new Email\EmailChannel(/* ... */),
+    new Cli\CliChannel()
 );
 
 $result = $jiraConnector->handle(JiraConnectorInput::new(

@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Chemaclass\JiraStatusNotifierTests\Unit\IO;
 
-use Chemaclass\JiraStatusNotifier\Channel\ChannelResult;
-use Chemaclass\JiraStatusNotifier\Channel\ReadModel\ChannelIssue;
-use Chemaclass\JiraStatusNotifier\IO\NotificationOutputExtractor;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\ChannelResult;
+use Chemaclass\JiraStatusNotifier\Domain\Channel\ReadModel\ChannelIssue;
+use Chemaclass\JiraStatusNotifier\Domain\IO\NotificationOutputExtractor;
 use PHPUnit\Framework\TestCase;
 
 final class NotificationOutputExtractorTest extends TestCase
 {
-    /** @test */
-    public function writeFromSlackNotifierOutput(): void
+    /**
+     * @test
+     */
+    public function write_from_slack_notifier_output(): void
     {
         $result = (new ChannelResult())
             ->addChannelIssue('K-1', ChannelIssue::withStatusCode(100))

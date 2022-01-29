@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Chemaclass\JiraStatusNotifierTests\Unit\Jira\TicketsByAssignee;
 
-use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Assignee;
-use Chemaclass\JiraStatusNotifier\Jira\ReadModel\JiraTicket;
-use Chemaclass\JiraStatusNotifier\Jira\ReadModel\TicketStatus;
-use Chemaclass\JiraStatusNotifier\Jira\TicketsByAssignee\TicketsByAssignee;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\ReadModel\Assignee;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\ReadModel\JiraTicket;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\ReadModel\TicketStatus;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\TicketsByAssignee\TicketsByAssignee;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 final class TicketsByAssigneeTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     */
     public function add(): void
     {
         $ticket1 = $this->newJiraTicket('assigneeId1', 'KEY-1');

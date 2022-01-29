@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Chemaclass\JiraStatusNotifierTests\Unit\IO;
 
-use Chemaclass\JiraStatusNotifier\IO\EchoOutput;
+use Chemaclass\JiraStatusNotifier\Domain\IO\EchoOutput;
 use PHPUnit\Framework\TestCase;
 
 final class EchoOutputTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     */
     public function write(): void
     {
         $echoOutput = new EchoOutput();
@@ -18,7 +20,9 @@ final class EchoOutputTest extends TestCase
         $this->expectOutputString('foo');
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function writeln(): void
     {
         $echoOutput = new EchoOutput();

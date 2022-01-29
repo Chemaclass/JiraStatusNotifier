@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Chemaclass\JiraStatusNotifierTests\Unit\Jira;
 
-use Chemaclass\JiraStatusNotifier\Jira\JqlUrlBuilder;
-use Chemaclass\JiraStatusNotifier\Jira\ReadModel\Company;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\JqlUrlBuilder;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\ReadModel\Company;
 use PHPUnit\Framework\TestCase;
 
 final class JqlUrlBuilderTest extends TestCase
 {
-    /** @test */
-    public function inOpenSprints(): void
+    /**
+     * @test
+     */
+    public function in_open_sprints(): void
     {
         $this->assertEquals(
             'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()',
@@ -21,8 +23,10 @@ final class JqlUrlBuilderTest extends TestCase
         );
     }
 
-    /** @test */
-    public function forAnyProject(): void
+    /**
+     * @test
+     */
+    public function for_any_project(): void
     {
         $expected = 'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
         $expected .= " AND project IN ('AnyProject')";
@@ -35,8 +39,10 @@ final class JqlUrlBuilderTest extends TestCase
         );
     }
 
-    /** @test */
-    public function forReviewStatus(): void
+    /**
+     * @test
+     */
+    public function for_review_status(): void
     {
         $expected = 'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
         $expected .= " AND status IN ('In Review')";
@@ -49,8 +55,10 @@ final class JqlUrlBuilderTest extends TestCase
         );
     }
 
-    /** @test */
-    public function statusDidNotChangeSinceDays(): void
+    /**
+     * @test
+     */
+    public function status_did_not_change_since_days(): void
     {
         $expected = 'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
         $expected .= ' AND NOT status changed after -1d';
@@ -63,8 +71,10 @@ final class JqlUrlBuilderTest extends TestCase
         );
     }
 
-    /** @test */
-    public function statusDidNotChangeSince2Days(): void
+    /**
+     * @test
+     */
+    public function status_did_not_change_since2_days(): void
     {
         $expected = 'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
         $expected .= " AND status IN ('IN QA')";
@@ -80,8 +90,10 @@ final class JqlUrlBuilderTest extends TestCase
         );
     }
 
-    /** @test */
-    public function statusDidNotChangeSince2DaysAfter10DaysWeekend(): void
+    /**
+     * @test
+     */
+    public function status_did_not_change_since2_days_after10_days_weekend(): void
     {
         $expected = 'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
         $expected .= " AND status IN ('IN QA')";
@@ -97,8 +109,10 @@ final class JqlUrlBuilderTest extends TestCase
         );
     }
 
-    /** @test */
-    public function statusDidNotChangeSince0DaysAfter10DaysWeekend(): void
+    /**
+     * @test
+     */
+    public function status_did_not_change_since0_days_after10_days_weekend(): void
     {
         $expected = 'https://company-name.atlassian.net/rest/api/3/search?jql=sprint in openSprints()';
         $expected .= " AND status IN ('IN QA')";

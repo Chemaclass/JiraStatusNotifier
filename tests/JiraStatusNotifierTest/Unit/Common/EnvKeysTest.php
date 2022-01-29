@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Chemaclass\JiraStatusNotifierTests\Unit\Common;
 
-use Chemaclass\JiraStatusNotifier\Common\EnvKeys;
-use Chemaclass\JiraStatusNotifier\Common\Exception\MissingKeysException;
+use Chemaclass\JiraStatusNotifier\Domain\Common\EnvKeys;
+use Chemaclass\JiraStatusNotifier\Domain\Common\Exception\MissingKeysException;
 use PHPUnit\Framework\TestCase;
 
 final class EnvKeysTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     */
     public function valid(): void
     {
         $content = <<<ENV
@@ -31,7 +33,9 @@ ENV;
         self::assertTrue(true);//No exception was thrown
     }
 
-    /** @test */
+    /**
+     * @test
+     */
     public function invalid(): void
     {
         $content = <<<ENV
