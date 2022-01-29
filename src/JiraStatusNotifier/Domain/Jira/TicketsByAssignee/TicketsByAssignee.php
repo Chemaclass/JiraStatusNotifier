@@ -25,7 +25,7 @@ final class TicketsByAssignee
     }
 
     /**
-     * @psalm-return array<string, list<JiraTicket>>
+     * @return array<string, list<JiraTicket>>
      */
     public function list(): array
     {

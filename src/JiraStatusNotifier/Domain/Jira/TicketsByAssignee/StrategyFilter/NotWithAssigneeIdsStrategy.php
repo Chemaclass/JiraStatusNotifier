@@ -6,10 +6,10 @@ namespace Chemaclass\JiraStatusNotifier\Domain\Jira\TicketsByAssignee\StrategyFi
 
 use Chemaclass\JiraStatusNotifier\Domain\Jira\ReadModel\JiraTicket;
 
-/** @psalm-immutable */
+/**@psalm-immutable */
 final class NotWithAssigneeIdsStrategy implements StrategyFilter
 {
-    /** @psalm-return list<string> */
+    /** @var list<string> */
     private array $assigneeIds;
 
     public function __construct(string ...$assigneeIds)
@@ -19,6 +19,6 @@ final class NotWithAssigneeIdsStrategy implements StrategyFilter
 
     public function isValidTicket(JiraTicket $ticket): bool
     {
-        return !in_array($ticket->assignee()->accountId(), $this->assigneeIds);
+        return !in_array($ticket->assignee()->accountId(), $this->assigneeIds, true);
     }
 }

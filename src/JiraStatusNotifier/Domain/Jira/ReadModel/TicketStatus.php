@@ -18,6 +18,11 @@ final class TicketStatus
         $this->changeDate = $changeDate;
     }
 
+    public static function empty(): self
+    {
+        return new self('', new DateTimeImmutable());
+    }
+
     public function name(): string
     {
         return $this->name;

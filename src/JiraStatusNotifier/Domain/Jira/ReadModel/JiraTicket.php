@@ -30,6 +30,16 @@ final class JiraTicket
         $this->customFields = $customFields;
     }
 
+    public static function empty(): self
+    {
+        return new self(
+            '',
+            '',
+            TicketStatus::empty(),
+            Assignee::empty(),
+        );
+    }
+
     public function title(): string
     {
         return $this->title;

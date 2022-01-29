@@ -39,7 +39,7 @@ final class EmailChannel implements ChannelInterface
         $result = new ChannelResult();
 
         foreach ($ticketsByAssignee->list() as $assigneeKey => $tickets) {
-            $responseCode = $this->sendEmail($company, ...$tickets);
+            $responseCode = $this->sendEmail($company, $tickets);
 
             foreach ($tickets as $ticket) {
                 $issue = ChannelIssue::withCodeAndAssignee($responseCode, $ticket->assignee()->displayName());
@@ -50,10 +50,13 @@ final class EmailChannel implements ChannelInterface
         return $result;
     }
 
-    private function sendEmail(Company $company, JiraTicket ...$tickets): int
+    /**
+     * @param list<JiraTicket> $tickets
+     */
+    private function sendEmail(Company $company, array $tickets): int
     {
         try {
-            $ticket = $tickets[array_key_first($tickets)];
+            $ticket = $tickets[0] ?? JiraTicket::empty();
             $emailTo = $this->addressGenerator->forJiraTicket($ticket);
 
             if (!$emailTo) {
@@ -70,7 +73,7 @@ final class EmailChannel implements ChannelInterface
 
             return Request::HTTP_OK;
         } catch (TransportExceptionInterface $e) {
-            return (int) $e->getCode();
+            return (int)$e->getCode();
         }
     }
 }
