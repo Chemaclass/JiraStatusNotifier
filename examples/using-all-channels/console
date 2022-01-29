@@ -27,6 +27,7 @@ Gacela::bootstrap(__DIR__, [
 ]);
 
 $facade = new JiraStatusNotifierFacade();
+
 $result = $facade->handle([
     CliChannel::class,
     SlackChannel::class,

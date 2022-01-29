@@ -44,28 +44,13 @@ composer psalm-log # generate a file with psalm suggestions
 ## Basic Example
 
 ```php
-<?php declare(strict_types=1);
+$facade = new JiraStatusNotifierFacade();
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+$result = $facade->handle([
+    CliChannel::class,
+    SlackChannel::class,
+    EmailChannel::class,
+]);
 
-use Chemaclass\JiraStatusNotifier\Domain\Channel\{Cli, Email, Slack};
-use Chemaclass\JiraStatusNotifier\Domain\IO\JiraConnectorInput;
-use Chemaclass\JiraStatusNotifier\Domain\Jira\JiraHttpClient;
-use Chemaclass\JiraStatusNotifier\Domain\JiraConnector;
-use Symfony\Component\HttpClient\HttpClient;
-
-$jiraConnector = new JiraConnector(
-    new JiraHttpClient(
-        HttpClient::create(['auth_basic' => ['jiraAPiLabel', 'jiraApiPassword']])
-    ), 
-    new Slack\SlackChannel(/* ... */),
-    new Email\EmailChannel(/* ... */),
-    new Cli\CliChannel()
-);
-
-$result = $jiraConnector->handle(JiraConnectorInput::new(
-    'company-name',
-    'Jira Project Name',
-    ['To Do' => 3, 'In Progress' => 2, 'In Review' => 1]
-));
+$facade->renderOutput($result);
 ```
