@@ -14,6 +14,7 @@ use Chemaclass\JiraStatusNotifier\Domain\Jira\JqlUrlFactory;
 use Chemaclass\JiraStatusNotifier\Domain\Jira\ReadModel\Company;
 use Chemaclass\JiraStatusNotifier\Domain\Jira\TicketsByAssignee\StrategyFilter\TicketFilter;
 use Chemaclass\JiraStatusNotifier\Domain\Jira\TicketsByAssignee\TicketsByAssigneeClient;
+use use Chemaclass\JiraStatusNotifier\Domain\Jira\TicketsByAssignee\TicketsByAssignee;
 
 final class JiraConnector
 {
@@ -56,10 +57,8 @@ final class JiraConnector
         return $this->send($company, $ticketsByAssignee);
     }
 
-    private function send(
-        Company $company,
-        TicketsByAssignee $ticketsByAssignee
-    ): array {
+    private function send(Company $company, TicketsByAssignee $ticketsByAssignee): array
+    {
         $result = [];
         foreach ($this->channels as $channel) {
             $result[get_class($channel)] = $channel->send($company, $ticketsByAssignee);
