@@ -1,8 +1,0 @@
-jira_status_notifier_php:
-  build: .
-  dockerfile: devops/dev/php.dockerfile
-  container_name: jira_status_notifier_php
-  hostname: php
-  volumes:
-    - .:/srv/jira-status-notifier:delegated
-    - ~/.ssh:/home/dev/.ssh
