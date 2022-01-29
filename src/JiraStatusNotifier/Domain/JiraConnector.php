@@ -13,8 +13,8 @@ use Chemaclass\JiraStatusNotifier\Domain\Jira\JqlUrlBuilder;
 use Chemaclass\JiraStatusNotifier\Domain\Jira\JqlUrlFactory;
 use Chemaclass\JiraStatusNotifier\Domain\Jira\ReadModel\Company;
 use Chemaclass\JiraStatusNotifier\Domain\Jira\TicketsByAssignee\StrategyFilter\TicketFilter;
-use Chemaclass\JiraStatusNotifier\Domain\Jira\TicketsByAssignee\TicketsByAssigneeClient;
 use Chemaclass\JiraStatusNotifier\Domain\Jira\TicketsByAssignee\TicketsByAssignee;
+use Chemaclass\JiraStatusNotifier\Domain\Jira\TicketsByAssignee\TicketsByAssigneeClient;
 
 final class JiraConnector
 {
