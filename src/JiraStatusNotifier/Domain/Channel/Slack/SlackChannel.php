@@ -35,7 +35,7 @@ final class SlackChannel implements ChannelInterface
         $result = new ChannelResult();
 
         foreach ($ticketsByAssignee->list() as $assigneeKey => $tickets) {
-            $responseCode = $this->postToSlack($company, ...$tickets);
+            $responseCode = $this->postToSlack($company, $tickets);
 
             foreach ($tickets as $ticket) {
                 $issue = ChannelIssue::withCodeAndAssignee($responseCode, $ticket->assignee()->displayName());
@@ -46,9 +46,12 @@ final class SlackChannel implements ChannelInterface
         return $result;
     }
 
-    private function postToSlack(Company $company, JiraTicket ...$tickets): int
+    /**
+     * @param list<JiraTicket> $tickets
+     */
+    private function postToSlack(Company $company, array $tickets): int
     {
-        $ticket = $tickets[array_key_first($tickets)];
+        $ticket = $tickets[0] ?? JiraTicket::empty();
 
         $response = $this->slackClient->postToChannel(
             $this->slackMapping->toSlackId($ticket->assignee()->accountId()),

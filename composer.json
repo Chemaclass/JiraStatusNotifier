@@ -37,7 +37,7 @@
         "symfony/http-client": "^4.3",
         "symfony/mailer": "^5.0",
         "twig/twig": "^3.0",
-        "gacela-project/gacela": "^0.11.0"
+        "gacela-project/gacela": "dev-master"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.5",

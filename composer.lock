@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "acf61ebc63cb96ff2b9050501cdda436",
+    "content-hash": "3722036f79237063059054b784926421",
     "packages": [
         {
             "name": "doctrine/lexer",
@@ -152,16 +152,16 @@
         },
         {
             "name": "gacela-project/gacela",
-            "version": "0.11.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gacela-project/gacela.git",
-                "reference": "90055fbe869c931fa96f7a96122019ac557fd3f5"
+                "reference": "4d1f261aa4a0b026f4ff948fbe7b916253545816"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gacela-project/gacela/zipball/90055fbe869c931fa96f7a96122019ac557fd3f5",
-                "reference": "90055fbe869c931fa96f7a96122019ac557fd3f5",
+                "url": "https://api.github.com/repos/gacela-project/gacela/zipball/4d1f261aa4a0b026f4ff948fbe7b916253545816",
+                "reference": "4d1f261aa4a0b026f4ff948fbe7b916253545816",
                 "shasum": ""
             },
             "require": {
@@ -171,15 +171,16 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.5",
-                "phpbench/phpbench": "^1.1",
+                "phpbench/phpbench": "^1.2",
                 "phpstan/phpstan": "^1.4",
                 "phpunit/phpunit": "^9.5",
-                "symfony/var-dumper": "^5.3",
-                "vimeo/psalm": "^4.10"
+                "symfony/var-dumper": "^5.4",
+                "vimeo/psalm": "^4.19"
             },
             "suggest": {
                 "gacela-project/gacela-yaml-config-reader": "Allows to read yml/yaml config files"
             },
+            "default-branch": true,
             "bin": [
                 "gacela"
             ],
@@ -204,6 +205,7 @@
                 }
             ],
             "description": "Gacela Framework",
+            "homepage": "https://gacela-project.com/",
             "keywords": [
                 "kernel",
                 "modular",
@@ -211,9 +213,9 @@
             ],
             "support": {
                 "issues": "https://github.com/gacela-project/gacela/issues",
-                "source": "https://github.com/gacela-project/gacela/tree/0.11.0"
+                "source": "https://github.com/gacela-project/gacela/tree/master"
             },
-            "time": "2022-01-18T21:14:47+00:00"
+            "time": "2022-01-29T18:04:13+00:00"
         },
         {
             "name": "psr/container",
@@ -5796,7 +5798,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "gacela-project/gacela": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
